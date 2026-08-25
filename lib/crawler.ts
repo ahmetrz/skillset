@@ -1,4 +1,5 @@
-import { db, ensureSchema, getState, markSkillError, setState, storeSkillContent, upsertDiscoveredSkill } from './db';
+import { classifySkill } from './classifier';
+import { db, ensureSchema, getState, markSkillError, setState, storeClassification, storeSkillContent, upsertDiscoveredSkill } from './db';
 import { fetchLeaderboardPage, fetchLegacyDownload, fetchSkillDetail, findSkillMd, searchSkills } from './skills-api';
 
 const SEARCH_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789-';
@@ -19,58 +20,51 @@ async function ensureSearchQueue() {
   const statements = [];
   for (const a of SEARCH_CHARS) {
     for (const b of SEARCH_CHARS) {
-      statements.push({
-        sql: `INSERT OR IGNORE INTO search_queries(query, depth) VALUES (?, 2)`,
-        args: [`${a}${b}`],
-      });
+      statements.push({ sql: `INSERT OR IGNORE INTO search_queries(query, depth) VALUES (?, 2)`, args: [`${a}${b}`] });
     }
   }
-  for (let i = 0; i < statements.length; i += 100) {
-    await db().batch(statements.slice(i, i + 100), 'write');
-  }
+  for (let i = 0; i < statements.length; i += 100) await db().batch(statements.slice(i, i + 100), 'write');
 }
 
 export async function discoverLeaderboardBatch() {
   await ensureSchema();
   const page = Number((await getState('leaderboard_page')) ?? '0');
   const response = await fetchLeaderboardPage(page, 500);
-
-  for (const skill of response.data) {
-    await upsertDiscoveredSkill(skill, 'skills.sh:leaderboard');
-  }
-
+  for (const skill of response.data) await upsertDiscoveredSkill(skill, 'skills.sh:leaderboard');
   await setState('leaderboard_total_reported', String(response.pagination.total));
   await setState('leaderboard_page', String(page + 1));
   if (!response.pagination.hasMore) await setState('leaderboard_complete', 'true');
-
-  return {
-    phase: 'leaderboard',
-    page,
-    fetched: response.data.length,
-    totalReported: response.pagination.total,
-    hasMore: response.pagination.hasMore,
-  };
+  return { phase: 'leaderboard', page, fetched: response.data.length, totalReported: response.pagination.total, hasMore: response.pagination.hasMore };
 }
 
 async function fetchOneSkill(id: string) {
   try {
     let detail;
-    try {
-      detail = await fetchSkillDetail(id);
-    } catch {
-      detail = await fetchLegacyDownload(id);
-    }
+    try { detail = await fetchSkillDetail(id); }
+    catch { detail = await fetchLegacyDownload(id); }
 
     const file = findSkillMd(detail.files);
     if (!file) throw new Error('SKILL.md not present in snapshot');
 
+    const meta = await db().execute({ sql: `SELECT name, source FROM skills WHERE id = ?`, args: [id] });
+    const row = meta.rows[0];
+    const classification = classifySkill({
+      id,
+      name: row?.name?.toString() ?? null,
+      source: row?.source?.toString() ?? null,
+      skillMd: file.contents,
+    });
+
+    await storeClassification(id, classification);
     await storeSkillContent({
       id,
       hash: detail.hash ?? null,
       skillMd: file.contents,
       sourcePath: file.path,
+      keepBody: classification.decision !== 'OUT_OF_SCOPE',
     });
-    return { ok: true as const, id };
+
+    return { ok: true as const, id, decision: classification.decision, categories: classification.categories };
   } catch (error) {
     await markSkillError(id, error);
     return { ok: false as const, id, error: error instanceof Error ? error.message : String(error) };
@@ -88,17 +82,17 @@ export async function fetchContentBatch(limit = 100, concurrency = 20) {
   let cursor = 0;
   const results: Awaited<ReturnType<typeof fetchOneSkill>>[] = [];
   const workers = Array.from({ length: Math.min(concurrency, ids.length || 1) }, async () => {
-    while (cursor < ids.length) {
-      const index = cursor++;
-      results.push(await fetchOneSkill(ids[index]!));
-    }
+    while (cursor < ids.length) results.push(await fetchOneSkill(ids[cursor++]!));
   });
   await Promise.all(workers);
 
+  const successful = results.filter((r) => r.ok);
   return {
-    phase: 'content',
-    attempted: ids.length,
-    complete: results.filter((r) => r.ok).length,
+    phase: 'content-classify', attempted: ids.length,
+    complete: successful.length,
+    keep: successful.filter((r) => r.ok && r.decision === 'KEEP').length,
+    review: successful.filter((r) => r.ok && r.decision === 'REVIEW').length,
+    outOfScope: successful.filter((r) => r.ok && r.decision === 'OUT_OF_SCOPE').length,
     errors: results.filter((r) => !r.ok).length,
   };
 }
@@ -106,7 +100,6 @@ export async function fetchContentBatch(limit = 100, concurrency = 20) {
 export async function discoverSearchBatch(batchSize = 8) {
   await ensureSchema();
   await ensureSearchQueue();
-
   const rows = await db().execute({
     sql: `SELECT query, depth FROM search_queries WHERE status = 'pending' ORDER BY depth, query LIMIT ?`,
     args: [Math.max(1, Math.min(batchSize, 25))],
@@ -114,26 +107,20 @@ export async function discoverSearchBatch(batchSize = 8) {
 
   let discovered = 0;
   let saturated = 0;
-
   for (const row of rows.rows) {
     const query = String(row.query);
     const depth = Number(row.depth);
     try {
       const response = await searchSkills(query, 200);
-      for (const skill of response.data) {
-        await upsertDiscoveredSkill(skill, `skills.sh:search:${query}`);
-      }
+      for (const skill of response.data) await upsertDiscoveredSkill(skill, `skills.sh:search:${query}`);
       discovered += response.data.length;
-
       if (response.data.length >= 200 && depth < 4) {
         saturated++;
         const children = [...SEARCH_CHARS].map((char) => ({
-          sql: `INSERT OR IGNORE INTO search_queries(query, depth) VALUES (?, ?)`,
-          args: [`${query}${char}`, depth + 1],
+          sql: `INSERT OR IGNORE INTO search_queries(query, depth) VALUES (?, ?)`, args: [`${query}${char}`, depth + 1],
         }));
         await db().batch(children, 'write');
       }
-
       await db().execute({
         sql: `UPDATE search_queries SET status = 'complete', result_count = ?, processed_at = ?, error = NULL WHERE query = ?`,
         args: [response.data.length, new Date().toISOString(), query],
@@ -145,24 +132,15 @@ export async function discoverSearchBatch(batchSize = 8) {
       });
     }
   }
-
   const remaining = await db().execute(`SELECT COUNT(*) AS n FROM search_queries WHERE status = 'pending'`);
-  return {
-    phase: 'search-expansion',
-    queriesProcessed: rows.rows.length,
-    resultRowsSeen: discovered,
-    saturatedQueries: saturated,
-    pendingQueries: Number(remaining.rows[0]?.n ?? 0),
-  };
+  return { phase: 'search-expansion', queriesProcessed: rows.rows.length, resultRowsSeen: discovered, saturatedQueries: saturated, pendingQueries: Number(remaining.rows[0]?.n ?? 0) };
 }
 
 export async function runAutoBatch() {
   await ensureSchema();
   const leaderboardComplete = (await getState('leaderboard_complete')) === 'true';
   if (!leaderboardComplete) return discoverLeaderboardBatch();
-
   const pending = await db().execute(`SELECT COUNT(*) AS n FROM skills WHERE retrieval_status = 'discovered'`);
   if (Number(pending.rows[0]?.n ?? 0) > 0) return fetchContentBatch(100, 20);
-
   return discoverSearchBatch(8);
 }
