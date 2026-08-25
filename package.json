@@ -9,9 +9,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.15",
-    "@vercel/oidc": "^3.0.2",
-    "next": "^15.5.0",
+    "@libsql/client": "^0.17.4",
+    "@vercel/oidc": "^3.8.5",
+    "next": "^16.3.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
