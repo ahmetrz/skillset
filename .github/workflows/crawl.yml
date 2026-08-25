@@ -1,0 +1,61 @@
+name: Crawl skills corpus
+
+on:
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: Number of crawl batches
+        required: false
+        default: '240'
+  schedule:
+    - cron: '17 1 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Validate configuration
+        env:
+          CRAWL_URL: ${{ vars.CRAWL_URL }}
+          CRAWL_SECRET: ${{ secrets.CRAWL_SECRET }}
+        run: |
+          test -n "$CRAWL_URL" || (echo "Missing repository variable CRAWL_URL" && exit 1)
+          test -n "$CRAWL_SECRET" || (echo "Missing repository secret CRAWL_SECRET" && exit 1)
+
+      - name: Run resumable crawler
+        env:
+          CRAWL_URL: ${{ vars.CRAWL_URL }}
+          CRAWL_SECRET: ${{ secrets.CRAWL_SECRET }}
+          ITERATIONS: ${{ github.event.inputs.iterations || '240' }}
+        run: |
+          set -euo pipefail
+          base="${CRAWL_URL%/}"
+          for i in $(seq 1 "$ITERATIONS"); do
+            echo "Batch $i/$ITERATIONS"
+            response=$(curl --fail-with-body --silent --show-error \
+              --retry 4 --retry-all-errors --retry-delay 2 \
+              -H "Authorization: Bearer $CRAWL_SECRET" \
+              "$base/api/crawl?mode=auto")
+            echo "$response" | jq -c .
+
+            phase=$(echo "$response" | jq -r '.result.phase // ""')
+            processed=$(echo "$response" | jq -r '.result.queriesProcessed // -1')
+            pending=$(echo "$response" | jq -r '.result.pendingQueries // -1')
+            if [ "$phase" = "search-expansion" ] && [ "$processed" = "0" ] && [ "$pending" = "0" ]; then
+              echo "Current discovery queue is complete."
+              break
+            fi
+
+            sleep 10
+          done
+
+      - name: Print corpus status
+        if: always()
+        env:
+          CRAWL_URL: ${{ vars.CRAWL_URL }}
+        run: |
+          curl --silent --show-error "${CRAWL_URL%/}/api/status" | jq . || true
