@@ -14,7 +14,7 @@ begin
   select net.http_post(
     url := 'https://elnsqdpbxjcrudvwdzbs.supabase.co/functions/v1/skillset-codeload-repo',
     headers := jsonb_build_object('Content-Type','application/json'),
-    body := jsonb_build_object('token',t::text,'limit',4),
+    body := jsonb_build_object('token',t::text,'limit',5),
     timeout_milliseconds := 60000
   ) into req_id;
   return req_id;
