@@ -8,8 +8,9 @@ This directory mirrors the crawler currently running on Supabase.
 2. skills.sh public all-time leaderboard pagination (`skillset-leaderboard-seed`)
 3. skills.sh owner search expansion (`skillset-owner-search`)
 4. recursive GitHub repository discovery of every `SKILL.md` (`skillset-repo-discovery`)
-5. skills.sh download/content retrieval (`skillset-content-batch`)
-6. gzip + SHA-256 content-addressed storage (`skillset-migrate-storage`)
+5. skills.sh download/content retrieval for GitHub-backed sources (`skillset-content-batch`)
+6. RFC-style well-known content retrieval for non-GitHub publishers (`skillset-wellknown-content`)
+7. gzip + SHA-256 content-addressed storage (`skillset-migrate-storage`)
 
 The sources deliberately overlap. Coverage is built by unioning independent discovery paths rather than treating one API as authoritative.
 
@@ -28,26 +29,30 @@ A database-side capacity guard stops content/repository workers before estimated
 The production runtime currently uses pg_cron:
 
 - storage migration: every minute
-- content batch: every minute
+- GitHub-backed content batch: every minute
 - repository discovery: every 2 minutes
 - leaderboard seed: every minute until complete
 - owner search: every minute
+- well-known content batch: every 2 minutes
 
 Calls are made through `pg_net`. Each trigger creates a short-lived single-use token in `skillset.job_tokens`; Edge Functions consume the token before doing work. No application secret is committed here.
 
 Repository discovery resolves the GitHub tree through `git/trees/HEAD?recursive=1`, then uses the returned commit SHA for raw content URLs. This avoids a separate repository-metadata API call and keeps GitHub API usage to one call per repository.
 
+Non-GitHub publishers are separated from the GitHub content queue. The well-known worker probes the preferred `/.well-known/agent-skills/<skill>/SKILL.md` path and then the legacy `/.well-known/skills/<skill>/SKILL.md` path. HTML responses are rejected instead of being stored as skill content.
+
 ## Retry policy
 
 Content retrieval is bounded. `retrieval_attempts` is incremented atomically when a row is claimed.
 
-- HTTP 404: fail fast; repository discovery may still recover the skill independently.
+- HTTP 404: fail fast for the GitHub download endpoint; repository discovery may still recover the skill independently.
 - HTTP 429: delayed retry, capped at six attempts.
 - HTTP 5xx/timeouts: delayed retry, capped at three attempts.
 - missing `SKILL.md` in a download snapshot: two attempts.
+- unresolved well-known content: bounded by the same attempt counter instead of retrying forever.
 
 This prevents an unreachable record from cycling forever through the queue.
 
 ## Important coverage note
 
-`/api/skills/all-time/{page}` is a public leaderboard endpoint, not proof of the entire skills ecosystem. Public search ignores `page`/`offset`. The crawler therefore combines leaderboard, owner expansion, historical snapshot, and repository-level discovery. A corpus count must not be described as complete unless independent coverage evidence supports that claim.
+`/api/skills/all-time/{page}` is a public leaderboard endpoint, not proof of the entire skills ecosystem. Public search ignores `page`/`offset`. The crawler therefore combines leaderboard, owner expansion, historical snapshot, repository-level discovery, and non-GitHub well-known retrieval. A corpus count must not be described as complete unless independent coverage evidence supports that claim.
