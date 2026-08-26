@@ -29,11 +29,13 @@ The production runtime currently uses pg_cron:
 
 - storage migration: every minute
 - content batch: every minute
-- repository discovery: every 3 minutes
+- repository discovery: every 2 minutes
 - leaderboard seed: every minute until complete
 - owner search: every minute
 
 Calls are made through `pg_net`. Each trigger creates a short-lived single-use token in `skillset.job_tokens`; Edge Functions consume the token before doing work. No application secret is committed here.
+
+Repository discovery resolves the GitHub tree through `git/trees/HEAD?recursive=1`, then uses the returned commit SHA for raw content URLs. This avoids a separate repository-metadata API call and keeps GitHub API usage to one call per repository.
 
 ## Retry policy
 
