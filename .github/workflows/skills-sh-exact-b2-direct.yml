@@ -33,9 +33,10 @@ jobs:
       B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
       B2_BUCKET: ${{ secrets.B2_BUCKET }}
       B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
-      SKILLS_SH_BATCH_SIZE: '32'
-      SKILLS_SH_CONCURRENCY: '16'
-      SKILLS_SH_MAX_BATCHES: '300'
+      SKILLS_SH_BATCH_SIZE: '8'
+      SKILLS_SH_CONCURRENCY: '4'
+      SKILLS_SH_MAX_BATCHES: '40'
+      SKILLS_SH_ARCHIVE_TIMEOUT_MS: '120000'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
