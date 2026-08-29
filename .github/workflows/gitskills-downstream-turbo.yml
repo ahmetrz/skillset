@@ -76,13 +76,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2]
+        lane: [1,2,3,4]
     steps:
       - name: Stream-drain projection
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=8; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             for ((j=1;j<=WIDTH;j++)); do
               (
@@ -109,13 +109,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2]
+        lane: [1,2,3]
     steps:
       - name: Stream-drain rubric
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=6; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             for ((j=1;j<=WIDTH;j++)); do
               (
@@ -142,13 +142,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2]
+        lane: [1,2,3]
     steps:
       - name: Stream-drain final
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=6; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             for ((j=1;j<=WIDTH;j++)); do
               (
