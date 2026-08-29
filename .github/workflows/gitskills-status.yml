@@ -33,6 +33,15 @@ jobs:
           node-version: '22'
       - run: npm install --no-audit --no-fund
       - run: npm install --no-save --no-audit --no-fund @aws-sdk/client-s3@3
+      - name: Quiesce legacy v1 workers without losing rows
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { createClient } from '@libsql/client';
+          const c=createClient({url:process.env.TURSO_DATABASE_URL,authToken:process.env.TURSO_AUTH_TOKEN});
+          const r=await c.execute(`UPDATE gitskills_shards SET attempts=8 WHERE status<>'done' AND attempts<8`);
+          console.log(JSON.stringify({event:'quiesce_v1',rowsAffected:r.rowsAffected}));
+          NODE
       - name: Print live Turso checkpoint
         run: node scripts/gitskills-b2-worker.mjs --status
       - name: Diagnose non-done shards
@@ -41,6 +50,6 @@ jobs:
           node --input-type=module <<'NODE'
           import { createClient } from '@libsql/client';
           const c=createClient({url:process.env.TURSO_DATABASE_URL,authToken:process.env.TURSO_AUTH_TOKEN});
-          const r=await c.execute(`SELECT status, attempts, substr(COALESCE(error,''),1,240) AS error, COUNT(*) AS n FROM gitskills_shards WHERE status <> 'done' AND (status='error' OR attempts>=8) GROUP BY status,attempts,error ORDER BY n DESC LIMIT 30`);
+          const r=await c.execute(`SELECT status,attempts,substr(COALESCE(error,''),1,240) AS error,COUNT(*) AS n FROM gitskills_shards WHERE status<>'done' GROUP BY status,attempts,error ORDER BY n DESC LIMIT 30`);
           console.log(JSON.stringify({event:'diagnostic',rows:r.rows}));
           NODE
