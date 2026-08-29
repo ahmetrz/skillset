@@ -1,5 +1,5 @@
 name: GitSkills downstream turbo
-# hold final fanout at a safe 12-15 workers after v4 rollout
+# keep the downstream drain inside one six-hour execution window
 
 on:
   push:
@@ -84,7 +84,7 @@ jobs:
 
   projection:
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
@@ -140,7 +140,7 @@ jobs:
 
   rubric:
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
@@ -196,7 +196,7 @@ jobs:
 
   final:
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
