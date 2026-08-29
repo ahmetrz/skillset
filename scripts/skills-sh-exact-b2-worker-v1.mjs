@@ -12,9 +12,9 @@ let CONCURRENCY = Math.max(1, Math.min(Number(process.env.SKILLS_SH_CONCURRENCY 
 const MIN_CONCURRENCY = Math.max(4, Math.min(Number(process.env.SKILLS_SH_MIN_CONCURRENCY || 12), CONCURRENCY));
 const MAX_CONCURRENCY = Math.max(CONCURRENCY, Math.min(Number(process.env.SKILLS_SH_MAX_CONCURRENCY || 24), 32));
 const MAX_BATCHES = Math.max(1, Math.min(Number(process.env.SKILLS_SH_MAX_BATCHES || 200), 1000));
-const MAX_SKILL_BYTES = 16 * 1024 * 1024;
-const MAX_TOTAL_SKILL_BYTES = 256 * 1024 * 1024;
-const MAX_SKILL_FILES = 10000;
+const MAX_SKILL_BYTES = 64 * 1024 * 1024;
+const MAX_TOTAL_SKILL_BYTES = 512 * 1024 * 1024;
+const MAX_SKILL_FILES = 50000;
 const UA = 'skillset-skills-sh-external-b2/1.0';
 
 function need(n){const v=process.env[n]; if(!v) throw new Error('Missing '+n); return v;}
