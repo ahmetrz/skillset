@@ -16,6 +16,7 @@ const MAX_SKILL_BYTES = 64 * 1024 * 1024;
 const MAX_TOTAL_SKILL_BYTES = 512 * 1024 * 1024;
 const MAX_SKILL_FILES = 50000;
 const UA = 'skillset-skills-sh-external-b2/1.0';
+const ARCHIVE_TIMEOUT_MS = Math.max(45000, Math.min(Number(process.env.SKILLS_SH_ARCHIVE_TIMEOUT_MS || 45000), 180000));
 
 function need(n){const v=process.env[n]; if(!v) throw new Error('Missing '+n); return v;}
 if(!SUPABASE_KEY) throw new Error('Missing SUPABASE_PUBLISHABLE_KEY');
@@ -80,7 +81,7 @@ async function openArchive(owner,repo){
   ];
   let lastStatus=0;
   for(const url of urls){
-    const r=await fetch(url,{headers:{'user-agent':UA},redirect:'follow',signal:AbortSignal.timeout(45000)});
+    const r=await fetch(url,{headers:{'user-agent':UA},redirect:'follow',signal:AbortSignal.timeout(ARCHIVE_TIMEOUT_MS)});
     lastStatus=r.status;
     if(r.ok && r.body) return {response:r,url};
     if(r.status===404) continue;
