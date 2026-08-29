@@ -31,9 +31,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=8
-          MIN_WIDTH=4
-          MAX_WIDTH=12
+          WIDTH=2
+          MIN_WIDTH=2
+          MAX_WIDTH=4
           CLEAN=0
           BAD=0
           tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
@@ -47,9 +47,11 @@ jobs:
               ) &
             done
             wait || true
-            bad=0
+            bad=0; limited=0
             for ((j=1;j<=round_width;j++)); do
-              code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1))
+              code=$(cat "$tmp/$round-$j.code"); body=$(cat "$tmp/$round-$j.body" 2>/dev/null || true)
+              if grep -q 'capacity_limited:' <<<"$body"; then limited=$((limited+1))
+              elif [[ "$code" != 200 && "$code" != 201 ]] || grep -Eq '"ok"[[:space:]]*:[[:space:]]*false' <<<"$body"; then bad=$((bad+1)); fi
               rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
             done
             status='{}'
@@ -58,9 +60,15 @@ jobs:
             fi
             terminal=$(jq -r '.analysis.terminal // 0' <<<"$status")
             open=$(jq -r '.analysis.open // 999999' <<<"$status")
-            echo "analysis lane=${{ matrix.lane }} round=$round width=$WIDTH open=$open terminal=$terminal bad=$bad"
+            echo "analysis lane=${{ matrix.lane }} round=$round width=$WIDTH open=$open terminal=$terminal limited=$limited bad=$bad"
             (( terminal > 0 )) && { echo "analysis terminal errors" >&2; exit 1; }
             (( open == 0 )) && break
+            if (( limited > 0 )); then
+              CLEAN=0; BAD=0
+              if (( WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-1)); fi
+              sleep 1
+              continue
+            fi
             if (( bad == 0 )); then
               CLEAN=$((CLEAN+1)); BAD=0
               if (( CLEAN>=4 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); CLEAN=0; fi
@@ -85,7 +93,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=8; MIN_WIDTH=6; MAX_WIDTH=12; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=4; MIN_WIDTH=4; MAX_WIDTH=6; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
@@ -96,19 +104,30 @@ jobs:
               ) &
             done
             wait || true
-            bad=0
-            for ((j=1;j<=round_width;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
+            bad=0; limited=0
+            for ((j=1;j<=round_width;j++)); do
+              code=$(cat "$tmp/$round-$j.code"); body=$(cat "$tmp/$round-$j.body" 2>/dev/null || true)
+              if grep -q 'capacity_limited:' <<<"$body"; then limited=$((limited+1))
+              elif [[ "$code" != 200 && "$code" != 201 ]] || grep -Eq '"ok"[[:space:]]*:[[:space:]]*false' <<<"$body"; then bad=$((bad+1)); fi
+              rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
+            done
             status='{}'
             if (( round % 10 == 0 )); then
               status=$(curl -sS --connect-timeout 5 --max-time 8 "$STATUS_URL" || echo '{}')
             fi
             a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); t=$(jq -r '.projection.terminal // 0' <<<"$status")
-            echo "projection lane=${{ matrix.lane }} round=$round analysis_open=$a projection_open=$p terminal=$t bad=$bad"
+            echo "projection lane=${{ matrix.lane }} round=$round analysis_open=$a projection_open=$p terminal=$t limited=$limited bad=$bad"
             (( t > 0 )) && exit 1
             (( a == 0 && p == 0 )) && break
+            if (( limited > 0 )); then
+              CLEAN=0; BAD=0
+              if (( WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-1)); fi
+              sleep 1
+              continue
+            fi
             if (( bad == 0 )); then
               CLEAN=$((CLEAN+1)); BAD=0
-              if (( CLEAN>=4 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); ((WIDTH>MAX_WIDTH))&&WIDTH=$MAX_WIDTH; CLEAN=0; fi
+              if (( CLEAN>=3 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); ((WIDTH>MAX_WIDTH))&&WIDTH=$MAX_WIDTH; CLEAN=0; fi
               sleep 0.03
             else
               CLEAN=0; BAD=$((BAD+1))
@@ -130,7 +149,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=6; MIN_WIDTH=4; MAX_WIDTH=10; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=5; MIN_WIDTH=4; MAX_WIDTH=6; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
@@ -141,19 +160,30 @@ jobs:
               ) &
             done
             wait || true
-            bad=0
-            for ((j=1;j<=round_width;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
+            bad=0; limited=0
+            for ((j=1;j<=round_width;j++)); do
+              code=$(cat "$tmp/$round-$j.code"); body=$(cat "$tmp/$round-$j.body" 2>/dev/null || true)
+              if grep -q 'capacity_limited:' <<<"$body"; then limited=$((limited+1))
+              elif [[ "$code" != 200 && "$code" != 201 ]] || grep -Eq '"ok"[[:space:]]*:[[:space:]]*false' <<<"$body"; then bad=$((bad+1)); fi
+              rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
+            done
             status='{}'
             if (( round % 10 == 0 )); then
               status=$(curl -sS --connect-timeout 5 --max-time 8 "$STATUS_URL" || echo '{}')
             fi
             a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); r=$(jq -r '.rubric.open // 999999' <<<"$status"); t=$(jq -r '.rubric.terminal // 0' <<<"$status")
-            echo "rubric lane=${{ matrix.lane }} round=$round opens=$a/$p/$r terminal=$t bad=$bad"
+            echo "rubric lane=${{ matrix.lane }} round=$round opens=$a/$p/$r terminal=$t limited=$limited bad=$bad"
             (( t > 0 )) && exit 1
             (( a == 0 && p == 0 && r == 0 )) && break
+            if (( limited > 0 )); then
+              CLEAN=0; BAD=0
+              if (( WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-1)); fi
+              sleep 1
+              continue
+            fi
             if (( bad == 0 )); then
               CLEAN=$((CLEAN+1)); BAD=0
-              if (( CLEAN>=4 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); ((WIDTH>MAX_WIDTH))&&WIDTH=$MAX_WIDTH; CLEAN=0; fi
+              if (( CLEAN>=3 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); ((WIDTH>MAX_WIDTH))&&WIDTH=$MAX_WIDTH; CLEAN=0; fi
               sleep 0.03
             else
               CLEAN=0; BAD=$((BAD+1))
@@ -175,7 +205,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=6; MIN_WIDTH=4; MAX_WIDTH=10; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=6; MIN_WIDTH=4; MAX_WIDTH=8; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
@@ -186,19 +216,30 @@ jobs:
               ) &
             done
             wait || true
-            bad=0
-            for ((j=1;j<=round_width;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
+            bad=0; limited=0
+            for ((j=1;j<=round_width;j++)); do
+              code=$(cat "$tmp/$round-$j.code"); body=$(cat "$tmp/$round-$j.body" 2>/dev/null || true)
+              if grep -q 'capacity_limited:' <<<"$body"; then limited=$((limited+1))
+              elif [[ "$code" != 200 && "$code" != 201 ]] || grep -Eq '"ok"[[:space:]]*:[[:space:]]*false' <<<"$body"; then bad=$((bad+1)); fi
+              rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
+            done
             status='{}'
             if (( round % 10 == 0 )); then
               status=$(curl -sS --connect-timeout 5 --max-time 8 "$STATUS_URL" || echo '{}')
             fi
             a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); r=$(jq -r '.rubric.open // 999999' <<<"$status"); f=$(jq -r '.final.open // 999999' <<<"$status"); t=$(jq -r '.final.terminal // 0' <<<"$status")
-            echo "final lane=${{ matrix.lane }} round=$round opens=$a/$p/$r/$f terminal=$t bad=$bad"
+            echo "final lane=${{ matrix.lane }} round=$round opens=$a/$p/$r/$f terminal=$t limited=$limited bad=$bad"
             (( t > 0 )) && exit 1
             (( a == 0 && p == 0 && r == 0 && f == 0 )) && break
+            if (( limited > 0 )); then
+              CLEAN=0; BAD=0
+              if (( WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-1)); fi
+              sleep 1
+              continue
+            fi
             if (( bad == 0 )); then
               CLEAN=$((CLEAN+1)); BAD=0
-              if (( CLEAN>=4 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); ((WIDTH>MAX_WIDTH))&&WIDTH=$MAX_WIDTH; CLEAN=0; fi
+              if (( CLEAN>=3 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); ((WIDTH>MAX_WIDTH))&&WIDTH=$MAX_WIDTH; CLEAN=0; fi
               sleep 0.03
             else
               CLEAN=0; BAD=$((BAD+1))

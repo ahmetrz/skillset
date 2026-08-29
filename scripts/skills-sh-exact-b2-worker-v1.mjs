@@ -1,5 +1,5 @@
 import { createClient } from '@libsql/client';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, HeadObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import tar from 'tar-stream';
 import { createGunzip, gzipSync } from 'node:zlib';
 import { Readable } from 'node:stream';
@@ -17,6 +17,7 @@ const MAX_TOTAL_SKILL_BYTES = 512 * 1024 * 1024;
 const MAX_SKILL_FILES = 50000;
 const UA = 'skillset-skills-sh-external-b2/1.0';
 const ARCHIVE_TIMEOUT_MS = Math.max(45000, Math.min(Number(process.env.SKILLS_SH_ARCHIVE_TIMEOUT_MS || 45000), 180000));
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 
 function need(n){const v=process.env[n]; if(!v) throw new Error('Missing '+n); return v;}
 if(!SUPABASE_KEY) throw new Error('Missing SUPABASE_PUBLISHABLE_KEY');
@@ -65,12 +66,44 @@ async function retry(label,fn,attempts=4){
       if(i===attempts-1) break;
       const m=String(e?.message||e);
       if(/archive_not_found/i.test(m)) break;
+      // A timed-out archive is generally a very large repository. Repeating the
+      // same multi-GB download is wasteful; process only SKILL.md blobs instead.
+      if(/aborted due to timeout|aborterror|operation was aborted/i.test(m)) break;
       const delay=Math.min((/429|503|504|timeout/i.test(m)?1500:500)*(2**i),12000)+Math.floor(Math.random()*300);
       console.warn(JSON.stringify({event:'retry',label,attempt:i+1,delay,error:m.slice(0,240)}));
       await sleep(delay);
     }
   }
   throw last;
+}
+
+async function githubJson(path){
+  const headers={'user-agent':UA,'accept':'application/vnd.github+json'};
+  if(GITHUB_TOKEN) headers.authorization='Bearer '+GITHUB_TOKEN;
+  const r=await fetch('https://api.github.com'+path,{headers,signal:AbortSignal.timeout(30000)});
+  const text=await r.text();
+  if(!r.ok) throw new Error('github_api_'+r.status+':'+text.slice(0,500));
+  try{return JSON.parse(text)}catch{throw new Error('github_api_invalid_json')}
+}
+
+async function extractSkillsViaGitHubApi(owner,repo){
+  const repoInfo=await githubJson(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`);
+  const branch=String(repoInfo.default_branch||'main');
+  const tree=await githubJson(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/git/trees/${encodeURIComponent(branch)}?recursive=1`);
+  if(tree.truncated) throw new Error('github_tree_truncated');
+  const entries=(Array.isArray(tree.tree)?tree.tree:[]).filter(x=>x?.type==='blob'&&/(^|\/)SKILL\.md$/i.test(String(x.path||'')));
+  if(entries.length>MAX_SKILL_FILES) throw new Error('repo_skill_files_oversize:'+entries.length);
+  let total=0;
+  return await mapLimit(entries,Math.min(CONCURRENCY,8),async entry=>{
+    if(Number(entry.size||0)>MAX_SKILL_BYTES) throw new Error('skill_file_oversize:'+entry.path+':'+entry.size);
+    const blob=await githubJson(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/git/blobs/${encodeURIComponent(entry.sha)}`);
+    if(blob.encoding!=='base64'||typeof blob.content!=='string') throw new Error('github_blob_encoding:'+entry.path);
+    const bytes=Buffer.from(blob.content.replace(/\s/g,''),'base64');
+    if(bytes.length>MAX_SKILL_BYTES) throw new Error('skill_file_oversize:'+entry.path+':'+bytes.length);
+    total+=bytes.length;
+    if(total>MAX_TOTAL_SKILL_BYTES) throw new Error('repo_skill_bytes_oversize:'+total);
+    return {path:String(entry.path),bytes};
+  });
 }
 
 async function openArchive(owner,repo){
@@ -154,26 +187,41 @@ async function finishBatch(results){
 
 async function record(item,status,{discovered=0,path=null,digest=null,bytes=0,error=null}={}){
   const t=new Date().toISOString();
+  const conflict=status==='error'
+    ? `ON CONFLICT(source) DO UPDATE SET status=excluded.status,discovered_skills=excluded.discovered_skills,
+      b2_path=excluded.b2_path,pack_sha256=excluded.pack_sha256,bytes=excluded.bytes,error=excluded.error,updated_at=excluded.updated_at
+      WHERE skills_sh_external_exact_v1.status NOT IN ('done','not_found')`
+    : `ON CONFLICT(source) DO UPDATE SET status=excluded.status,discovered_skills=excluded.discovered_skills,
+      b2_path=excluded.b2_path,pack_sha256=excluded.pack_sha256,bytes=excluded.bytes,error=excluded.error,updated_at=excluded.updated_at`;
   await turso.execute({sql:`
     INSERT INTO skills_sh_external_exact_v1(source,owner,repo,bucket_id,repo_index,status,discovered_skills,b2_path,pack_sha256,bytes,error,updated_at)
     VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
-    ON CONFLICT(source) DO UPDATE SET status=excluded.status,discovered_skills=excluded.discovered_skills,
-      b2_path=excluded.b2_path,pack_sha256=excluded.pack_sha256,bytes=excluded.bytes,error=excluded.error,updated_at=excluded.updated_at
+    ${conflict}
   `,args:[item.source,item.owner,item.repo,Number(item.bucket_id||0),Number(item.repo_index||0),status,discovered,path,digest,bytes,error,t]});
 }
 
 async function processOne(item){
   try{
-    const {response}=await retry('archive:'+item.source,()=>openArchive(item.owner,item.repo),4);
-    const files=await extractSkills(response);
+    let files;
+    let transport='github-archive-direct-b2';
+    try{
+      const {response}=await retry('archive:'+item.source,()=>openArchive(item.owner,item.repo),4);
+      files=await extractSkills(response);
+    }catch(archiveError){
+      const msg=String(archiveError?.message||archiveError);
+      if(!/aborted due to timeout|aborterror|operation was aborted|oversize/i.test(msg)) throw archiveError;
+      files=await retry('github_api_fallback:'+item.source,()=>extractSkillsViaGitHubApi(item.owner,item.repo),3);
+      transport='github-api-tree-blob-fallback';
+      console.log(JSON.stringify({event:'exact_fallback',source:item.source,reason:msg.slice(0,180),skills:files.length}));
+    }
     const packed=files.map(f=>({
-      path:f.path.replace(/^[^/]+\//,''),
+      path:transport==='github-archive-direct-b2'?f.path.replace(/^[^/]+\//,''):f.path,
       contentHash:sha256(f.bytes),
       originalBytes:f.bytes.length,
       contentBase64:f.bytes.toString('base64')
     }));
     const payload={
-      version:1,source:'skills.sh',transport:'github-archive-direct-b2',
+      version:1,source:'skills.sh',transport,
       repoSource:item.source,owner:item.owner,repo:item.repo,
       generatedAt:new Date().toISOString(),files:packed
     };
@@ -200,6 +248,41 @@ async function processOne(item){
   }
 }
 
+async function supabaseQueueRow(source){
+  const u=new URL(SUPABASE_URL+'/rest/v1/skills_sh_d3_archive_queue_v1');
+  u.searchParams.set('select','source,status,discovered_skills,storage_path,error');
+  u.searchParams.set('source','eq.'+source);
+  const r=await fetch(u,{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY,'Accept-Profile':'skillset'},signal:AbortSignal.timeout(30000)});
+  const text=await r.text();
+  if(!r.ok) throw new Error('reconcile_rest_'+r.status+':'+text.slice(0,400));
+  const rows=JSON.parse(text);
+  return Array.isArray(rows)?rows[0]:null;
+}
+
+async function reconcileExternalState(){
+  const q=await turso.execute(`SELECT source,owner,repo,bucket_id,repo_index FROM skills_sh_external_exact_v1 WHERE status='error' ORDER BY source`);
+  const results=await mapLimit(q.rows,8,async item=>{
+    const remote=await supabaseQueueRow(String(item.source));
+    if(!remote) return {source:item.source,outcome:'missing_queue'};
+    if(remote.status==='not_found'){
+      await record(item,'not_found',{error:remote.error||'archive_not_found'});
+      return {source:item.source,outcome:'not_found'};
+    }
+    if(remote.status!=='done') return {source:item.source,outcome:'still_open'};
+    const key=`skills-sh/exact-b2-v1/bucket-${String(item.bucket_id||0).padStart(2,'0')}/${String(item.repo_index||0).padStart(7,'0')}-${safe(item.owner)}-${safe(item.repo)}.json.gz`;
+    try{
+      const head=await b2.send(new HeadObjectCommand({Bucket:bucket,Key:key}));
+      const digest=head.Metadata?.sha256||null;
+      const bytes=Number(head.ContentLength||0);
+      await record(item,'done',{discovered:Number(remote.discovered_skills||0),path:'b2://'+bucket+'/'+key,digest,bytes});
+      return {source:item.source,outcome:'done'};
+    }catch{return {source:item.source,outcome:'missing_b2_object'}}
+  });
+  const summary={};for(const x of results)summary[x.outcome]=(summary[x.outcome]||0)+1;
+  console.log(JSON.stringify({event:'reconcile',checked:results.length,summary}));
+  return summary;
+}
+
 async function mapLimit(items,limit,fn){
   let next=0; const out=new Array(items.length);
   await Promise.all(Array.from({length:Math.min(limit,items.length||1)},async()=>{
@@ -215,6 +298,7 @@ async function status(){
 
 async function main(){
   await ensureSchema();
+  if(process.argv.includes('--reconcile')){await reconcileExternalState();console.log(JSON.stringify({event:'status',rows:await status()}));return;}
   if(process.argv.includes('--status')){console.log(JSON.stringify({event:'status',rows:await status()}));return;}
   let empty=0, completed=0, failures=0, cleanBatches=0;
   for(let b=0;b<MAX_BATCHES;b++){
