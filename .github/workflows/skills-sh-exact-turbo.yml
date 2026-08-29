@@ -18,49 +18,169 @@ env:
   BASE: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1
 
 jobs:
-  exact:
+  d3-archive:
     runs-on: ubuntu-24.04
     timeout-minutes: 65
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - { lane: archive-1, endpoint: skills-sh-storage-archive-v1, calls: 500 }
-          - { lane: archive-2, endpoint: skills-sh-storage-archive-v1, calls: 500 }
-          - { lane: archive-3, endpoint: skills-sh-storage-archive-v1, calls: 500 }
-          - { lane: archive-4, endpoint: skills-sh-storage-archive-v1, calls: 500 }
-          - { lane: archive-5, endpoint: skills-sh-storage-archive-v1, calls: 500 }
-          - { lane: archive-6, endpoint: skills-sh-storage-archive-v1, calls: 500 }
-          - { lane: archive-7, endpoint: skills-sh-storage-archive-v1, calls: 500 }
-          - { lane: archive-8, endpoint: skills-sh-storage-archive-v1, calls: 500 }
-          - { lane: normalize-1, endpoint: skills-sh-eval-normalize-v1, calls: 700 }
-          - { lane: normalize-2, endpoint: skills-sh-eval-normalize-v1, calls: 700 }
-          - { lane: normalize-3, endpoint: skills-sh-eval-normalize-v1, calls: 700 }
-          - { lane: normalize-4, endpoint: skills-sh-eval-normalize-v1, calls: 700 }
-          - { lane: normalize-5, endpoint: skills-sh-eval-normalize-v1, calls: 700 }
-          - { lane: normalize-6, endpoint: skills-sh-eval-normalize-v1, calls: 700 }
-          - { lane: normalize-7, endpoint: skills-sh-eval-normalize-v1, calls: 700 }
-          - { lane: normalize-8, endpoint: skills-sh-eval-normalize-v1, calls: 700 }
+        lane: [1,2,3,4]
     steps:
-      - name: Drain exact-content stage
+      - name: Drain D3 exact-content queue with local fanout
         shell: bash
-        env:
-          ENDPOINT: ${{ matrix.endpoint }}
-          MAX_CALLS: ${{ matrix.calls }}
         run: |
           set -euo pipefail
-          empty=0; failures=0; successes=0
-          for ((i=1;i<=MAX_CALLS;i++)); do
-            body=$(mktemp)
-            code=$(curl -sS --connect-timeout 8 --max-time 55 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/$ENDPOINT" || true)
-            text=$(cat "$body" 2>/dev/null || true); rm -f "$body"
-            echo "[${{ matrix.lane }}][$i] HTTP $code ${text:0:420}"
-            if [[ "$code" == 200 || "$code" == 201 ]]; then
-              failures=0
-              if grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$text"; then empty=$((empty+1)); (( empty>=4 )) && break; else empty=0; successes=$((successes+1)); fi
+          WIDTH=8
+          MAX_ROUNDS=900
+          empty_rounds=0
+          bad_rounds=0
+          total_success=0
+          tmpdir=$(mktemp -d)
+          trap 'rm -rf "$tmpdir"' EXIT
+
+          call_one() {
+            key="$1"
+            body="$tmpdir/$key.body"
+            meta="$tmpdir/$key.meta"
+            code=$(curl -sS --connect-timeout 8 --max-time 58 -o "$body" -w '%{http_code}'               -X POST -H 'Content-Type: application/json' -d '{}'               "$BASE/skills-sh-d3-archive-v1" || true)
+            printf '%s' "$code" > "$meta"
+            return 0
+          }
+
+          for ((round=1; round<=MAX_ROUNDS; round++)); do
+            keys=()
+            for ((j=1; j<=WIDTH; j++)); do
+              key="r$round-c$j"
+              keys+=("$key")
+              call_one "$key" &
+            done
+            wait
+
+            empty=0
+            bad=0
+            for key in "${keys[@]}"; do
+              code=$(cat "$tmpdir/$key.meta")
+              text=$(cat "$tmpdir/$key.body" 2>/dev/null || true)
+              echo "[d3 lane=${{ matrix.lane }}][round=$round][$key] HTTP $code ${text:0:320}"
+              if [[ "$code" == 200 || "$code" == 201 ]]; then
+                if grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$text"; then
+                  empty=$((empty+1))
+                else
+                  total_success=$((total_success+1))
+                fi
+              else
+                bad=$((bad+1))
+              fi
+              rm -f "$tmpdir/$key.meta" "$tmpdir/$key.body"
+            done
+
+            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
+            (( empty_rounds >= 3 )) && break
+
+            if (( bad * 2 >= WIDTH )); then
+              bad_rounds=$((bad_rounds+1))
+              sleep $((bad_rounds*3))
             else
-              failures=$((failures+1)); (( failures>=6 )) && exit 1; sleep $((failures*2))
+              bad_rounds=0
+              sleep 0.10
             fi
-            sleep 0.25
+            if (( bad_rounds >= 4 )); then
+              echo "fail-closed: sustained D3 archive failure ratio" >&2
+              exit 1
+            fi
           done
-          echo "lane=${{ matrix.lane }} successes=$successes"
+          echo "d3 lane=${{ matrix.lane }} successes=$total_success"
+
+  legacy-archive:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [1,2]
+    steps:
+      - name: Drain legacy exact archive with local fanout
+        shell: bash
+        run: |
+          set -euo pipefail
+          WIDTH=4
+          MAX_ROUNDS=500
+          empty_rounds=0
+          tmpdir=$(mktemp -d)
+          trap 'rm -rf "$tmpdir"' EXIT
+          for ((round=1; round<=MAX_ROUNDS; round++)); do
+            for ((j=1; j<=WIDTH; j++)); do
+              (
+                body="$tmpdir/$round-$j.body"
+                code=$(curl -sS --connect-timeout 8 --max-time 58 -o "$body" -w '%{http_code}'                   -X POST -H 'Content-Type: application/json' -d '{}'                   "$BASE/skills-sh-storage-archive-v1" || true)
+                printf '%s' "$code" > "$tmpdir/$round-$j.meta"
+              ) &
+            done
+            wait || true
+            empty=0
+            for ((j=1; j<=WIDTH; j++)); do
+              code=$(cat "$tmpdir/$round-$j.meta")
+              text=$(cat "$tmpdir/$round-$j.body" 2>/dev/null || true)
+              echo "[legacy lane=${{ matrix.lane }}][round=$round][$j] HTTP $code ${text:0:280}"
+              if [[ "$code" == 200 || "$code" == 201 ]] && grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$text"; then empty=$((empty+1)); fi
+              rm -f "$tmpdir/$round-$j.meta" "$tmpdir/$round-$j.body"
+            done
+            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
+            (( empty_rounds >= 3 )) && break
+            sleep 0.15
+          done
+
+  normalize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [1,2]
+    steps:
+      - name: Drain normalize queue with local fanout
+        shell: bash
+        run: |
+          set -euo pipefail
+          WIDTH=8
+          MAX_ROUNDS=700
+          empty_rounds=0
+          bad_rounds=0
+          tmpdir=$(mktemp -d)
+          trap 'rm -rf "$tmpdir"' EXIT
+          for ((round=1; round<=MAX_ROUNDS; round++)); do
+            for ((j=1; j<=WIDTH; j++)); do
+              (
+                body="$tmpdir/$round-$j.body"
+                code=$(curl -sS --connect-timeout 8 --max-time 40 -o "$body" -w '%{http_code}'                   -X POST -H 'Content-Type: application/json' -d '{}'                   "$BASE/skills-sh-eval-normalize-v1" || true)
+                printf '%s' "$code" > "$tmpdir/$round-$j.meta"
+              ) &
+            done
+            wait || true
+            empty=0
+            bad=0
+            for ((j=1; j<=WIDTH; j++)); do
+              code=$(cat "$tmpdir/$round-$j.meta")
+              text=$(cat "$tmpdir/$round-$j.body" 2>/dev/null || true)
+              echo "[normalize lane=${{ matrix.lane }}][round=$round][$j] HTTP $code ${text:0:280}"
+              if [[ "$code" == 200 || "$code" == 201 ]]; then
+                if grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$text"; then empty=$((empty+1)); fi
+              else
+                bad=$((bad+1))
+              fi
+              rm -f "$tmpdir/$round-$j.meta" "$tmpdir/$round-$j.body"
+            done
+            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
+            (( empty_rounds >= 3 )) && break
+            if (( bad * 2 >= WIDTH )); then
+              bad_rounds=$((bad_rounds+1))
+              sleep $((bad_rounds*2))
+            else
+              bad_rounds=0
+              sleep 0.10
+            fi
+            if (( bad_rounds >= 4 )); then
+              echo "fail-closed: sustained normalize failures" >&2
+              exit 1
+            fi
+          done
