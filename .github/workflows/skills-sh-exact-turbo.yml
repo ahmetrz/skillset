@@ -31,6 +31,9 @@ jobs:
         run: |
           set -euo pipefail
           WIDTH=16
+          MIN_WIDTH=8
+          MAX_WIDTH=32
+          CLEAN_ROUNDS=0
           MAX_ROUNDS=600
           empty_rounds=0
           bad_rounds=0
@@ -48,8 +51,9 @@ jobs:
           }
 
           for ((round=1; round<=MAX_ROUNDS; round++)); do
+            round_width=$WIDTH
             keys=()
-            for ((j=1; j<=WIDTH; j++)); do
+            for ((j=1; j<=round_width; j++)); do
               key="r$round-c$j"
               keys+=("$key")
               call_one "$key" &
@@ -74,15 +78,28 @@ jobs:
               rm -f "$tmpdir/$key.meta" "$tmpdir/$key.body"
             done
 
-            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
+            if (( empty == round_width )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
             (( empty_rounds >= 3 )) && break
 
-            if (( bad * 2 >= WIDTH )); then
-              bad_rounds=$((bad_rounds+1))
-              sleep $((bad_rounds*3))
-            else
+            if (( bad == 0 )); then
               bad_rounds=0
-              sleep 0.10
+              CLEAN_ROUNDS=$((CLEAN_ROUNDS+1))
+              if (( CLEAN_ROUNDS >= 3 && WIDTH < MAX_WIDTH )); then
+                WIDTH=$((WIDTH+4))
+                (( WIDTH > MAX_WIDTH )) && WIDTH=$MAX_WIDTH
+                CLEAN_ROUNDS=0
+                echo "adaptive fanout increased to $WIDTH"
+              fi
+              sleep 0.05
+            else
+              CLEAN_ROUNDS=0
+              bad_rounds=$((bad_rounds+1))
+              if (( bad * 4 >= round_width && WIDTH > MIN_WIDTH )); then
+                WIDTH=$((WIDTH-4))
+                (( WIDTH < MIN_WIDTH )) && WIDTH=$MIN_WIDTH
+                echo "adaptive fanout reduced to $WIDTH"
+              fi
+              sleep $((bad_rounds*2))
             fi
             if (( bad_rounds >= 4 )); then
               echo "fail-closed: sustained D3 archive failure ratio" >&2
