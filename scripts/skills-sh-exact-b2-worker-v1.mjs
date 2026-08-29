@@ -8,7 +8,9 @@ import { createHash } from 'node:crypto';
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cxvvfgwdqgxczxmomztw.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
 const BATCH_SIZE = Math.max(1, Math.min(Number(process.env.SKILLS_SH_BATCH_SIZE || 32), 128));
-const CONCURRENCY = Math.max(1, Math.min(Number(process.env.SKILLS_SH_CONCURRENCY || 16), 32));
+let CONCURRENCY = Math.max(1, Math.min(Number(process.env.SKILLS_SH_CONCURRENCY || 16), 32));
+const MIN_CONCURRENCY = Math.max(4, Math.min(Number(process.env.SKILLS_SH_MIN_CONCURRENCY || 12), CONCURRENCY));
+const MAX_CONCURRENCY = Math.max(CONCURRENCY, Math.min(Number(process.env.SKILLS_SH_MAX_CONCURRENCY || 24), 32));
 const MAX_BATCHES = Math.max(1, Math.min(Number(process.env.SKILLS_SH_MAX_BATCHES || 200), 1000));
 const MAX_SKILL_BYTES = 16 * 1024 * 1024;
 const MAX_TOTAL_SKILL_BYTES = 256 * 1024 * 1024;
@@ -207,7 +209,7 @@ async function status(){
 async function main(){
   await ensureSchema();
   if(process.argv.includes('--status')){console.log(JSON.stringify({event:'status',rows:await status()}));return;}
-  let empty=0, completed=0, failures=0;
+  let empty=0, completed=0, failures=0, cleanBatches=0;
   for(let b=0;b<MAX_BATCHES;b++){
     const claimed=await retry('claim',()=>rpc('skillset_skills_sh_d3_archive_claim_batch_external_v1',{p_limit:BATCH_SIZE}),5);
     const items=Array.isArray(claimed)?claimed:[];
@@ -217,7 +219,23 @@ async function main(){
     const ok=results.filter(x=>x?.ok).length;
     const bad=results.length-ok;
     completed+=ok; failures+=bad;
-    console.log(JSON.stringify({event:'batch',batch:b+1,claimed:items.length,ok,bad,completed,failures}));
+
+    if(bad===0){
+      cleanBatches++;
+      if(cleanBatches>=3 && CONCURRENCY<MAX_CONCURRENCY){
+        CONCURRENCY=Math.min(MAX_CONCURRENCY,CONCURRENCY+4);
+        cleanBatches=0;
+        console.log(JSON.stringify({event:'adaptive_up',concurrency:CONCURRENCY}));
+      }
+    }else{
+      cleanBatches=0;
+      if(bad*5>=items.length && CONCURRENCY>MIN_CONCURRENCY){
+        CONCURRENCY=Math.max(MIN_CONCURRENCY,CONCURRENCY-4);
+        console.warn(JSON.stringify({event:'adaptive_down',concurrency:CONCURRENCY,bad,total:items.length}));
+      }
+    }
+
+    console.log(JSON.stringify({event:'batch',batch:b+1,claimed:items.length,ok,bad,completed,failures,concurrency:CONCURRENCY}));
     if(bad>Math.ceil(items.length*0.25)){
       console.error(JSON.stringify({event:'breaker',reason:'failure_ratio',bad,total:items.length}));
       process.exitCode=2; break;
