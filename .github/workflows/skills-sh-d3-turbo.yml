@@ -17,11 +17,11 @@ concurrency:
 jobs:
   d3:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
-        lane: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        lane: [1, 2, 3, 4, 5, 6]
     steps:
       - name: Drain D3 lane ${{ matrix.lane }}
         shell: bash
@@ -31,7 +31,7 @@ jobs:
           empties=0
           failures=0
           successes=0
-          for ((i=1;i<=180;i++)); do
+          for ((i=1;i<=220;i++)); do
             body="$(mktemp)"
             code="$(curl -sS --connect-timeout 8 --max-time 35 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$url" || true)"
             text="$(cat "$body" 2>/dev/null || true)"
@@ -41,7 +41,7 @@ jobs:
               failures=0
               if grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$text"; then
                 empties=$((empties+1))
-                if (( empties >= 3 )); then
+                if (( empties >= 4 )); then
                   echo "D3 drained"
                   break
                 fi
@@ -51,12 +51,12 @@ jobs:
               fi
             else
               failures=$((failures+1))
-              if (( failures >= 4 )); then
-                echo "fail-closed after four consecutive failures" >&2
+              if (( failures >= 5 )); then
+                echo "fail-closed after five consecutive failures" >&2
                 exit 1
               fi
               sleep $((failures * 2))
             fi
-            sleep 0.5
+            sleep 0.75
           done
           echo "lane=${{ matrix.lane }} successes=$successes empties=$empties"
