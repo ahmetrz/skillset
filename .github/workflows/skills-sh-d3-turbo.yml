@@ -1,0 +1,62 @@
+name: skills.sh D3 turbo
+
+on:
+  push:
+    branches: [gitskills-migration-run]
+    paths:
+      - '.github/workflows/skills-sh-d3-turbo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skills-sh-d3-turbo-v1
+  cancel-in-progress: false
+
+jobs:
+  d3:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [1, 2, 3, 4, 5, 6]
+    steps:
+      - name: Drain D3 lane ${{ matrix.lane }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1/skills-sh-lexical-d3-v1'
+          empties=0
+          failures=0
+          successes=0
+          for ((i=1;i<=120;i++)); do
+            body="$(mktemp)"
+            code="$(curl -sS --connect-timeout 8 --max-time 35 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$url" || true)"
+            text="$(cat "$body" 2>/dev/null || true)"
+            rm -f "$body"
+            echo "[lane=${{ matrix.lane }}][$i] HTTP $code ${text:0:500}"
+            if [[ "$code" == 200 || "$code" == 201 ]]; then
+              failures=0
+              if grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$text"; then
+                empties=$((empties+1))
+                if (( empties >= 3 )); then
+                  echo "D3 drained"
+                  break
+                fi
+              else
+                empties=0
+                successes=$((successes+1))
+              fi
+            else
+              failures=$((failures+1))
+              if (( failures >= 4 )); then
+                echo "fail-closed after four consecutive failures" >&2
+                exit 1
+              fi
+              sleep $((failures * 2))
+            fi
+            sleep 1
+          done
+          echo "lane=${{ matrix.lane }} successes=$successes empties=$empties"
