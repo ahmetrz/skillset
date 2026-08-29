@@ -1,5 +1,5 @@
 name: skills.sh repo scan turbo
-# retry sweep 2026-08-29 pass4-stale
+# retry sweep 2026-08-29 pass5-tail
 
 on:
   push:
