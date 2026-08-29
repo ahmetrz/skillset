@@ -200,3 +200,65 @@ jobs:
             if (( bad * 2 >= WIDTH )); then bad_rounds=$((bad_rounds+1)); sleep $((bad_rounds*2)); else bad_rounds=0; sleep 0.05; fi
             (( bad_rounds >= 5 )) && { echo "fail-closed: sustained final failures" >&2; exit 1; }
           done
+
+
+  export:
+    needs: final
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [1,2,3,4]
+    steps:
+      - name: Drain canonical export queue
+        shell: bash
+        run: |
+          set -euo pipefail
+          WIDTH=4
+          MAX_ROUNDS=120
+          empty_rounds=0
+          bad_rounds=0
+          tmpdir=$(mktemp -d)
+          trap 'rm -rf "$tmpdir"' EXIT
+          for ((round=1; round<=MAX_ROUNDS; round++)); do
+            for ((j=1; j<=WIDTH; j++)); do
+              (
+                body="$tmpdir/$round-$j.body"
+                code=$(curl -sS --connect-timeout 8 --max-time 55 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-canonical-export-v1" || true)
+                printf '%s' "$code" > "$tmpdir/$round-$j.meta"
+              ) &
+            done
+            wait || true
+            empty=0; bad=0
+            for ((j=1; j<=WIDTH; j++)); do
+              code=$(cat "$tmpdir/$round-$j.meta")
+              body=$(cat "$tmpdir/$round-$j.body" 2>/dev/null || true)
+              echo "[export lane=${{ matrix.lane }} round=$round call=$j] HTTP $code ${body:0:260}"
+              if [[ "$code" == 200 || "$code" == 201 ]]; then
+                grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$body" && empty=$((empty+1))
+              else
+                bad=$((bad+1))
+              fi
+              rm -f "$tmpdir/$round-$j.meta" "$tmpdir/$round-$j.body"
+            done
+            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
+            (( empty_rounds >= 3 )) && break
+            if (( bad * 2 >= WIDTH )); then bad_rounds=$((bad_rounds+1)); sleep $((bad_rounds*2)); else bad_rounds=0; sleep 0.05; fi
+            (( bad_rounds >= 5 )) && { echo "fail-closed: sustained export failures" >&2; exit 1; }
+          done
+
+  integrity-gate:
+    needs: export
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check completion gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          body=$(curl -sS --connect-timeout 8 --max-time 30 -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-completion-check-v1")
+          echo "$body"
+          grep -Eq '"ready"[[:space:]]*:[[:space:]]*true' <<<"$body" || {
+            echo "completion gate not ready" >&2
+            exit 1
+          }
