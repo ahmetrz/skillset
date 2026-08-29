@@ -30,8 +30,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=8
-          MAX_ROUNDS=900
+          WIDTH=16
+          MAX_ROUNDS=600
           empty_rounds=0
           bad_rounds=0
           total_success=0
@@ -142,8 +142,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=8
-          MAX_ROUNDS=700
+          WIDTH=16
+          MAX_ROUNDS=500
           empty_rounds=0
           bad_rounds=0
           tmpdir=$(mktemp -d)
