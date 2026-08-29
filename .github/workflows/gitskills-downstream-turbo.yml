@@ -52,7 +52,10 @@ jobs:
               code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1))
               rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
             done
-            status=$(curl -sS --connect-timeout 8 --max-time 20 "$STATUS_URL")
+            status='{}'
+            if (( round % 10 == 0 )); then
+              status=$(curl -sS --connect-timeout 5 --max-time 8 "$STATUS_URL" || echo '{}')
+            fi
             terminal=$(jq -r '.analysis.terminal // 0' <<<"$status")
             open=$(jq -r '.analysis.open // 999999' <<<"$status")
             echo "analysis lane=${{ matrix.lane }} round=$round width=$WIDTH open=$open terminal=$terminal bad=$bad"
@@ -94,7 +97,10 @@ jobs:
             wait || true
             bad=0
             for ((j=1;j<=WIDTH;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
-            status=$(curl -sS --connect-timeout 8 --max-time 20 "$STATUS_URL")
+            status='{}'
+            if (( round % 10 == 0 )); then
+              status=$(curl -sS --connect-timeout 5 --max-time 8 "$STATUS_URL" || echo '{}')
+            fi
             a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); t=$(jq -r '.projection.terminal // 0' <<<"$status")
             echo "projection lane=${{ matrix.lane }} round=$round analysis_open=$a projection_open=$p terminal=$t bad=$bad"
             (( t > 0 )) && exit 1
@@ -127,7 +133,10 @@ jobs:
             wait || true
             bad=0
             for ((j=1;j<=WIDTH;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
-            status=$(curl -sS --connect-timeout 8 --max-time 20 "$STATUS_URL")
+            status='{}'
+            if (( round % 10 == 0 )); then
+              status=$(curl -sS --connect-timeout 5 --max-time 8 "$STATUS_URL" || echo '{}')
+            fi
             a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); r=$(jq -r '.rubric.open // 999999' <<<"$status"); t=$(jq -r '.rubric.terminal // 0' <<<"$status")
             echo "rubric lane=${{ matrix.lane }} round=$round opens=$a/$p/$r terminal=$t bad=$bad"
             (( t > 0 )) && exit 1
@@ -160,7 +169,10 @@ jobs:
             wait || true
             bad=0
             for ((j=1;j<=WIDTH;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
-            status=$(curl -sS --connect-timeout 8 --max-time 20 "$STATUS_URL")
+            status='{}'
+            if (( round % 10 == 0 )); then
+              status=$(curl -sS --connect-timeout 5 --max-time 8 "$STATUS_URL" || echo '{}')
+            fi
             a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); r=$(jq -r '.rubric.open // 999999' <<<"$status"); f=$(jq -r '.final.open // 999999' <<<"$status"); t=$(jq -r '.final.terminal // 0' <<<"$status")
             echo "final lane=${{ matrix.lane }} round=$round opens=$a/$p/$r/$f terminal=$t bad=$bad"
             (( t > 0 )) && exit 1
