@@ -63,6 +63,7 @@ async function retry(label,fn,attempts=4){
       last=e;
       if(i===attempts-1) break;
       const m=String(e?.message||e);
+      if(/archive_not_found/i.test(m)) break;
       const delay=Math.min((/429|503|504|timeout/i.test(m)?1500:500)*(2**i),12000)+Math.floor(Math.random()*300);
       console.warn(JSON.stringify({event:'retry',label,attempt:i+1,delay,error:m.slice(0,240)}));
       await sleep(delay);
@@ -138,10 +139,16 @@ async function extractSkills(response){
   });
 }
 
-async function finish(item,outcome,{discovered=0,path=null,error=null}={}){
-  await rpc('skillset_skills_sh_d3_archive_finish_external_v1',{
-    p_source:item.source,p_outcome:outcome,p_discovered:discovered,p_storage_path:path,p_error:error
-  });
+async function finishBatch(results){
+  const items=results.map(r=>({
+    source:r.source,
+    outcome:r.outcome,
+    discovered:Number(r.discovered||0),
+    storage_path:r.path||'',
+    error:r.error||''
+  }));
+  if(!items.length) return 0;
+  return await retry('finish_batch',()=>rpc('skillset_skills_sh_d3_archive_finish_batch_external_v1',{p_items:items}),6);
 }
 
 async function record(item,status,{discovered=0,path=null,digest=null,bytes=0,error=null}={}){
@@ -175,23 +182,20 @@ async function processOne(item){
     await retry('b2:'+item.source,()=>b2.send(new PutObjectCommand({Bucket:bucket,Key:key,Body:gz,ContentType:'application/gzip',Metadata:{sha256:digest,source:'skills-sh'}})),5);
     const b2path='b2://'+bucket+'/'+key;
     await record(item,'done',{discovered:packed.length,path:b2path,digest,bytes:gz.length});
-    await finish(item,'done',{discovered:packed.length,path:b2path});
-    return {ok:true,source:item.source,skills:packed.length,bytes:gz.length};
+    return {ok:true,source:item.source,outcome:'done',discovered:packed.length,path:b2path,skills:packed.length,bytes:gz.length};
   }catch(e){
     const msg=String(e?.message||e);
     if(/archive_not_found/.test(msg)){
       await record(item,'not_found',{error:msg});
-      await finish(item,'not_found',{error:msg});
-      return {ok:true,notFound:true,source:item.source};
+      return {ok:true,notFound:true,source:item.source,outcome:'not_found',error:msg};
     }
     if(/oversize/.test(msg)){
       await record(item,'oversize',{error:msg});
-      await finish(item,'oversize',{error:msg});
-      return {ok:true,oversize:true,source:item.source};
+      return {ok:true,oversize:true,source:item.source,outcome:'oversize',error:msg};
     }
-    await record(item,'error',{error:msg.slice(0,1200)}).catch(()=>{});
-    await finish(item,'error',{error:msg.slice(0,1200)}).catch(()=>{});
-    return {ok:false,source:item.source,error:msg.slice(0,300)};
+    const err=msg.slice(0,1200);
+    await record(item,'error',{error:err}).catch(()=>{});
+    return {ok:false,source:item.source,outcome:'error',error:err};
   }
 }
 
@@ -218,6 +222,7 @@ async function main(){
     if(!items.length){empty++; if(empty>=3) break; await sleep(500); continue;}
     empty=0;
     const results=await mapLimit(items,CONCURRENCY,processOne);
+    await finishBatch(results);
     const ok=results.filter(x=>x?.ok).length;
     const bad=results.length-ok;
     completed+=ok; failures+=bad;
