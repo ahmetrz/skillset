@@ -1,4 +1,5 @@
 name: skills.sh exact turbo
+# normalization + retry sweep 2026-08-29
 
 on:
   push:
