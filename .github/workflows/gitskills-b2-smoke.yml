@@ -1,0 +1,53 @@
+name: GitSkills B2 migration smoke
+
+on:
+  push:
+    branches:
+      - gitskills-migration-run
+    paths:
+      - 'scripts/gitskills-b2-worker.mjs'
+      - '.github/workflows/gitskills-b2-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gitskills-b2-smoke
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+      B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+      B2_BUCKET: ${{ secrets.B2_BUCKET }}
+      B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+      GITSKILLS_PACK_SIZE: '12'
+      GITSKILLS_FETCH_CONCURRENCY: '4'
+      GITSKILLS_PACKS_PER_RUN: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          for v in TURSO_DATABASE_URL TURSO_AUTH_TOKEN B2_ACCESS_KEY_ID B2_SECRET_ACCESS_KEY B2_BUCKET B2_ENDPOINT; do
+            test -n "${!v:-}" || { echo "Missing $v"; exit 1; }
+          done
+      - name: Install bounded worker dependencies
+        run: |
+          npm install --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund @aws-sdk/client-s3@3
+      - name: Run exactly one migration pack
+        run: node scripts/gitskills-b2-worker.mjs
+      - name: Print Turso checkpoint
+        if: always()
+        run: node scripts/gitskills-b2-worker.mjs --status
