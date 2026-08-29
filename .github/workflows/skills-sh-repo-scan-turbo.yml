@@ -1,0 +1,53 @@
+name: skills.sh repo scan turbo
+
+on:
+  push:
+    branches: [gitskills-migration-run]
+    paths:
+      - '.github/workflows/skills-sh-repo-scan-turbo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skills-sh-repo-scan-turbo-v1
+  cancel-in-progress: true
+
+env:
+  BASE: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1
+
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [1,2,3,4,5,6,7,8,9,10,11,12]
+    steps:
+      - name: Drain repo scan queue
+        shell: bash
+        run: |
+          set -euo pipefail
+          empty=0; failures=0; successes=0
+          for i in {1..220}; do
+            body=$(mktemp)
+            code=$(curl -sS --connect-timeout 8 --max-time 45 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/skillset-skills-sh-repo-scan-v1" || true)
+            text=$(cat "$body" 2>/dev/null || true); rm -f "$body"
+            echo "[lane=${{ matrix.lane }}][$i] HTTP $code ${text:0:420}"
+            if [[ "$code" == 200 || "$code" == 201 ]]; then
+              failures=0
+              if grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0|"done"[[:space:]]*:[[:space:]]*true' <<<"$text"; then
+                empty=$((empty+1)); (( empty>=3 )) && break
+              else
+                empty=0; successes=$((successes+1))
+              fi
+            else
+              failures=$((failures+1))
+              if (( failures>=6 )); then echo 'fail-closed: six consecutive failures' >&2; exit 1; fi
+              sleep $((failures*2))
+            fi
+            sleep 0.25
+          done
+          echo "lane=${{ matrix.lane }} successes=$successes"
