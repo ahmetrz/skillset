@@ -1,5 +1,5 @@
 name: GitSkills downstream turbo
-# stable final fanout after transient auto-rescue migration
+# restart final lanes after capacity/error propagation rollout v4
 
 on:
   push:
