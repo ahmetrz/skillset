@@ -132,7 +132,9 @@ async function extractSkills(response){
     extract.on('error',fail);
     gunzip.on('error',fail);
 
-    Readable.fromWeb(response.body).pipe(gunzip).pipe(extract);
+    const nodeStream = Readable.fromWeb(response.body);
+    nodeStream.on('error', fail);
+    nodeStream.pipe(gunzip).pipe(extract);
   });
 }
 
