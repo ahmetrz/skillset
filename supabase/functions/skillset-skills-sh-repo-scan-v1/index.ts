@@ -116,6 +116,24 @@ async function queryRepo(owner: string, repo: string, attempt: number) {
 }
 
 async function searchRepo(owner: string, repo: string) {
+  const validGitHubOwner = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(owner);
+  if (!owner.trim() || !repo.trim() || !validGitHubOwner) {
+    return {
+      owner,
+      repo,
+      query: repo || owner,
+      status: 200,
+      skipped: true,
+      skipReason: !owner.trim() || !repo.trim()
+        ? "invalid_empty_github_owner_or_repo"
+        : "invalid_github_owner_format",
+      durationMs: 0,
+      matches: [],
+      upstreamCount: 0,
+      saturated: false,
+      attempt: 0,
+    };
+  }
   let last: any = null;
   for (let attempt = 1; attempt <= 4; attempt++) {
     last = await queryRepo(owner, repo, attempt);
@@ -150,21 +168,19 @@ Deno.serve(async () => {
   try {
     const { data: claims, error: claimError } = await sb.rpc("skillset_skills_sh_repo_scan_claim_v1");
     if (claimError) return Response.json({ ok: false, stage: "claim", error: claimError.message }, { status: 500 });
-    if (!claims?.length) return Response.json({ ok: true, version: 5, done: true, claimed: 0 });
+    if (!claims?.length) return Response.json({ ok: true, version: 8, done: true, claimed: 0 });
     batch = claims[0];
 
-    const [{ data: repos, error: reposError }, { data: state, error: stateError }] = await Promise.all([
+    const [{ data: repos, error: reposError }, { data: states, error: stateError }] = await Promise.all([
       sb.rpc("skillset_skills_sh_repo_scan_repos_v1", {
         p_start_offset: batch.start_offset,
         p_limit: batch.batch_size,
       }),
-      sb.schema("skillset").from("skills_sh_repo_scan_batches_v1")
-        .select("pack_path,pack_sha256,error_count")
-        .eq("batch_id", batch.batch_id)
-        .maybeSingle(),
+      sb.rpc("skillset_skills_sh_repo_scan_state_v1", { p_batch_id: batch.batch_id }),
     ]);
     if (reposError) throw new Error("repos:" + reposError.message);
     if (stateError) throw new Error("state:" + stateError.message);
+    const state = Array.isArray(states) ? states[0] || null : states;
 
     try {
       const { data: existingBucket } = await sb.storage.getBucket(BUCKET);
@@ -205,12 +221,13 @@ Deno.serve(async () => {
     const repoCount = all.length;
     const skillMatches = all.reduce((n, x) => n + (x.matches?.length || 0), 0);
     const saturated = all.filter((x) => x.saturated).length;
+    const skipped = all.filter((x) => x.skipped === true).length;
     const errors = all.filter((x) => x.status !== 200).length;
     const histogram: Record<string, number> = {};
     for (const row of all) histogram[String(row.status || 0)] = (histogram[String(row.status || 0)] || 0) + 1;
 
     const payload = {
-      version: 5,
+      version: 8,
       batchId: batch.batch_id,
       startOffset: batch.start_offset,
       batchSize: batch.batch_size,
@@ -218,6 +235,7 @@ Deno.serve(async () => {
       repoCount,
       skillMatches,
       saturatedRepos: saturated,
+      skippedInvalidSources: skipped,
       errorCount: errors,
       statusHistogram: histogram,
       recovery: { reusedCount, retriedCount, priorPack: state?.pack_path || null },
@@ -248,11 +266,12 @@ Deno.serve(async () => {
     if (finishError) throw new Error("finish:" + finishError.message);
     const response = {
       ok: errors === 0,
-      version: 5,
+      version: 8,
       batchId: batch.batch_id,
       repoCount,
       skillMatches,
       saturatedRepos: saturated,
+      skippedInvalidSources: skipped,
       errorCount: errors,
       statusHistogram: histogram,
       reusedCount,
@@ -264,11 +283,15 @@ Deno.serve(async () => {
     return Response.json(response, { status: errors > 0 ? 503 : 200 });
   } catch (error) {
     if (batch?.batch_id) {
-      await sb.rpc("skillset_skills_sh_repo_scan_release_v1", {
-        p_batch_id: batch.batch_id,
-        p_error: String(error),
-      }).catch(() => {});
+      try {
+        await sb.rpc("skillset_skills_sh_repo_scan_release_v1", {
+          p_batch_id: batch.batch_id,
+          p_error: String(error),
+        });
+      } catch {
+        // The original worker error is returned even if release itself fails.
+      }
     }
-    return Response.json({ ok: false, version: 5, stage: "worker", batchId: batch?.batch_id || null, error: String(error) }, { status: 500 });
+    return Response.json({ ok: false, version: 8, stage: "worker", batchId: batch?.batch_id || null, error: String(error) }, { status: 500 });
   }
 });
