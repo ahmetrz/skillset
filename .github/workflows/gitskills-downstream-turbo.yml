@@ -11,241 +11,198 @@ permissions:
   contents: read
 
 concurrency:
-  group: gitskills-downstream-turbo-v1
+  group: gitskills-downstream-turbo-v2
   cancel-in-progress: true
 
 env:
   BASE: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1
+  STATUS_URL: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1/gitskills-pipeline-status-v1
 
 jobs:
   analysis:
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         lane: [1,2,3,4]
     steps:
-      - name: Drain analysis
+      - name: Stream-drain analysis
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4
-          MAX_ROUNDS=2200
-          empty_rounds=0
-          bad_rounds=0
-          tmpdir=$(mktemp -d)
-          trap 'rm -rf "$tmpdir"' EXIT
-          for ((round=1; round<=MAX_ROUNDS; round++)); do
-            for ((j=1; j<=WIDTH; j++)); do
+          WIDTH=8
+          MIN_WIDTH=4
+          MAX_WIDTH=12
+          CLEAN=0
+          BAD=0
+          tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          for ((round=1; round<=3000; round++)); do
+            round_width=$WIDTH
+            for ((j=1;j<=round_width;j++)); do
               (
-                body="$tmpdir/$round-$j.body"
+                body="$tmp/$round-$j.body"
                 code=$(curl -sS --connect-timeout 8 --max-time 55 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-analysis-v1" || true)
-                printf '%s' "$code" > "$tmpdir/$round-$j.meta"
+                echo "$code" > "$tmp/$round-$j.code"
               ) &
             done
             wait || true
-            empty=0; bad=0
-            for ((j=1; j<=WIDTH; j++)); do
-              code=$(cat "$tmpdir/$round-$j.meta")
-              body=$(cat "$tmpdir/$round-$j.body" 2>/dev/null || true)
-              echo "[analysis lane=${{ matrix.lane }} round=$round call=$j] HTTP $code ${body:0:260}"
-              if [[ "$code" == 200 || "$code" == 201 ]]; then
-                grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$body" && empty=$((empty+1))
-              else
-                bad=$((bad+1))
-              fi
-              rm -f "$tmpdir/$round-$j.meta" "$tmpdir/$round-$j.body"
+            bad=0
+            for ((j=1;j<=round_width;j++)); do
+              code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1))
+              rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
             done
-            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
-            (( empty_rounds >= 3 )) && break
-            if (( bad * 2 >= WIDTH )); then bad_rounds=$((bad_rounds+1)); sleep $((bad_rounds*2)); else bad_rounds=0; sleep 0.05; fi
-            (( bad_rounds >= 5 )) && { echo "fail-closed: sustained analysis failures" >&2; exit 1; }
+            status=$(curl -sS --connect-timeout 8 --max-time 20 "$STATUS_URL")
+            terminal=$(jq -r '.analysis.terminal // 0' <<<"$status")
+            open=$(jq -r '.analysis.open // 999999' <<<"$status")
+            echo "analysis lane=${{ matrix.lane }} round=$round width=$WIDTH open=$open terminal=$terminal bad=$bad"
+            (( terminal > 0 )) && { echo "analysis terminal errors" >&2; exit 1; }
+            (( open == 0 )) && break
+            if (( bad == 0 )); then
+              CLEAN=$((CLEAN+1)); BAD=0
+              if (( CLEAN>=4 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); CLEAN=0; fi
+              sleep 0.03
+            else
+              CLEAN=0; BAD=$((BAD+1))
+              if (( bad*4>=round_width && WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-2)); ((WIDTH<MIN_WIDTH))&&WIDTH=$MIN_WIDTH; fi
+              sleep $((BAD*2))
+              (( BAD>=5 )) && { echo "analysis sustained failure" >&2; exit 1; }
+            fi
           done
 
   projection:
-    needs: analysis
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4]
+        lane: [1,2]
     steps:
-      - name: Drain projection
+      - name: Stream-drain projection
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4
-          MAX_ROUNDS=2200
-          empty_rounds=0
-          bad_rounds=0
-          tmpdir=$(mktemp -d)
-          trap 'rm -rf "$tmpdir"' EXIT
-          for ((round=1; round<=MAX_ROUNDS; round++)); do
-            for ((j=1; j<=WIDTH; j++)); do
+          WIDTH=4; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          for ((round=1; round<=4000; round++)); do
+            for ((j=1;j<=WIDTH;j++)); do
               (
-                body="$tmpdir/$round-$j.body"
+                body="$tmp/$round-$j.body"
                 code=$(curl -sS --connect-timeout 8 --max-time 55 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-projection-v1" || true)
-                printf '%s' "$code" > "$tmpdir/$round-$j.meta"
+                echo "$code" > "$tmp/$round-$j.code"
               ) &
             done
             wait || true
-            empty=0; bad=0
-            for ((j=1; j<=WIDTH; j++)); do
-              code=$(cat "$tmpdir/$round-$j.meta")
-              body=$(cat "$tmpdir/$round-$j.body" 2>/dev/null || true)
-              echo "[projection lane=${{ matrix.lane }} round=$round call=$j] HTTP $code ${body:0:260}"
-              if [[ "$code" == 200 || "$code" == 201 ]]; then
-                grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$body" && empty=$((empty+1))
-              else
-                bad=$((bad+1))
-              fi
-              rm -f "$tmpdir/$round-$j.meta" "$tmpdir/$round-$j.body"
-            done
-            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
-            (( empty_rounds >= 3 )) && break
-            if (( bad * 2 >= WIDTH )); then bad_rounds=$((bad_rounds+1)); sleep $((bad_rounds*2)); else bad_rounds=0; sleep 0.05; fi
-            (( bad_rounds >= 5 )) && { echo "fail-closed: sustained projection failures" >&2; exit 1; }
+            bad=0
+            for ((j=1;j<=WIDTH;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
+            status=$(curl -sS --connect-timeout 8 --max-time 20 "$STATUS_URL")
+            a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); t=$(jq -r '.projection.terminal // 0' <<<"$status")
+            echo "projection lane=${{ matrix.lane }} round=$round analysis_open=$a projection_open=$p terminal=$t bad=$bad"
+            (( t > 0 )) && exit 1
+            (( a == 0 && p == 0 )) && break
+            if (( bad*2>=WIDTH )); then BAD=$((BAD+1)); sleep $((BAD*2)); else BAD=0; sleep 0.05; fi
+            (( BAD>=5 )) && exit 1
           done
 
   rubric:
-    needs: projection
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4]
+        lane: [1,2]
     steps:
-      - name: Drain rubric
+      - name: Stream-drain rubric
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4
-          MAX_ROUNDS=2200
-          empty_rounds=0
-          bad_rounds=0
-          tmpdir=$(mktemp -d)
-          trap 'rm -rf "$tmpdir"' EXIT
-          for ((round=1; round<=MAX_ROUNDS; round++)); do
-            for ((j=1; j<=WIDTH; j++)); do
+          WIDTH=4; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          for ((round=1; round<=4000; round++)); do
+            for ((j=1;j<=WIDTH;j++)); do
               (
-                body="$tmpdir/$round-$j.body"
+                body="$tmp/$round-$j.body"
                 code=$(curl -sS --connect-timeout 8 --max-time 55 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-rubric-v1" || true)
-                printf '%s' "$code" > "$tmpdir/$round-$j.meta"
+                echo "$code" > "$tmp/$round-$j.code"
               ) &
             done
             wait || true
-            empty=0; bad=0
-            for ((j=1; j<=WIDTH; j++)); do
-              code=$(cat "$tmpdir/$round-$j.meta")
-              body=$(cat "$tmpdir/$round-$j.body" 2>/dev/null || true)
-              echo "[rubric lane=${{ matrix.lane }} round=$round call=$j] HTTP $code ${body:0:260}"
-              if [[ "$code" == 200 || "$code" == 201 ]]; then
-                grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$body" && empty=$((empty+1))
-              else
-                bad=$((bad+1))
-              fi
-              rm -f "$tmpdir/$round-$j.meta" "$tmpdir/$round-$j.body"
-            done
-            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
-            (( empty_rounds >= 3 )) && break
-            if (( bad * 2 >= WIDTH )); then bad_rounds=$((bad_rounds+1)); sleep $((bad_rounds*2)); else bad_rounds=0; sleep 0.05; fi
-            (( bad_rounds >= 5 )) && { echo "fail-closed: sustained rubric failures" >&2; exit 1; }
+            bad=0
+            for ((j=1;j<=WIDTH;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
+            status=$(curl -sS --connect-timeout 8 --max-time 20 "$STATUS_URL")
+            a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); r=$(jq -r '.rubric.open // 999999' <<<"$status"); t=$(jq -r '.rubric.terminal // 0' <<<"$status")
+            echo "rubric lane=${{ matrix.lane }} round=$round opens=$a/$p/$r terminal=$t bad=$bad"
+            (( t > 0 )) && exit 1
+            (( a == 0 && p == 0 && r == 0 )) && break
+            if (( bad*2>=WIDTH )); then BAD=$((BAD+1)); sleep $((BAD*2)); else BAD=0; sleep 0.05; fi
+            (( BAD>=5 )) && exit 1
           done
 
   final:
-    needs: rubric
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4]
+        lane: [1,2]
     steps:
-      - name: Drain final
+      - name: Stream-drain final
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4
-          MAX_ROUNDS=2200
-          empty_rounds=0
-          bad_rounds=0
-          tmpdir=$(mktemp -d)
-          trap 'rm -rf "$tmpdir"' EXIT
-          for ((round=1; round<=MAX_ROUNDS; round++)); do
-            for ((j=1; j<=WIDTH; j++)); do
+          WIDTH=4; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          for ((round=1; round<=4000; round++)); do
+            for ((j=1;j<=WIDTH;j++)); do
               (
-                body="$tmpdir/$round-$j.body"
+                body="$tmp/$round-$j.body"
                 code=$(curl -sS --connect-timeout 8 --max-time 55 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-finalize-v1" || true)
-                printf '%s' "$code" > "$tmpdir/$round-$j.meta"
+                echo "$code" > "$tmp/$round-$j.code"
               ) &
             done
             wait || true
-            empty=0; bad=0
-            for ((j=1; j<=WIDTH; j++)); do
-              code=$(cat "$tmpdir/$round-$j.meta")
-              body=$(cat "$tmpdir/$round-$j.body" 2>/dev/null || true)
-              echo "[final lane=${{ matrix.lane }} round=$round call=$j] HTTP $code ${body:0:260}"
-              if [[ "$code" == 200 || "$code" == 201 ]]; then
-                grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$body" && empty=$((empty+1))
-              else
-                bad=$((bad+1))
-              fi
-              rm -f "$tmpdir/$round-$j.meta" "$tmpdir/$round-$j.body"
-            done
-            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
-            (( empty_rounds >= 3 )) && break
-            if (( bad * 2 >= WIDTH )); then bad_rounds=$((bad_rounds+1)); sleep $((bad_rounds*2)); else bad_rounds=0; sleep 0.05; fi
-            (( bad_rounds >= 5 )) && { echo "fail-closed: sustained final failures" >&2; exit 1; }
+            bad=0
+            for ((j=1;j<=WIDTH;j++)); do code=$(cat "$tmp/$round-$j.code"); [[ "$code" == 200 || "$code" == 201 ]] || bad=$((bad+1)); rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"; done
+            status=$(curl -sS --connect-timeout 8 --max-time 20 "$STATUS_URL")
+            a=$(jq -r '.analysis.open // 999999' <<<"$status"); p=$(jq -r '.projection.open // 999999' <<<"$status"); r=$(jq -r '.rubric.open // 999999' <<<"$status"); f=$(jq -r '.final.open // 999999' <<<"$status"); t=$(jq -r '.final.terminal // 0' <<<"$status")
+            echo "final lane=${{ matrix.lane }} round=$round opens=$a/$p/$r/$f terminal=$t bad=$bad"
+            (( t > 0 )) && exit 1
+            (( a == 0 && p == 0 && r == 0 && f == 0 )) && break
+            if (( bad*2>=WIDTH )); then BAD=$((BAD+1)); sleep $((BAD*2)); else BAD=0; sleep 0.05; fi
+            (( BAD>=5 )) && exit 1
           done
 
-
   export:
-    needs: final
+    needs: [analysis, projection, rubric, final]
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
         lane: [1,2,3,4]
     steps:
-      - name: Drain canonical export queue
+      - name: Drain canonical export
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4
-          MAX_ROUNDS=120
-          empty_rounds=0
-          bad_rounds=0
-          tmpdir=$(mktemp -d)
-          trap 'rm -rf "$tmpdir"' EXIT
-          for ((round=1; round<=MAX_ROUNDS; round++)); do
-            for ((j=1; j<=WIDTH; j++)); do
+          WIDTH=4; empty=0; bad=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          for ((round=1; round<=160; round++)); do
+            for ((j=1;j<=WIDTH;j++)); do
               (
-                body="$tmpdir/$round-$j.body"
+                body="$tmp/$round-$j.body"
                 code=$(curl -sS --connect-timeout 8 --max-time 55 -o "$body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-canonical-export-v1" || true)
-                printf '%s' "$code" > "$tmpdir/$round-$j.meta"
+                echo "$code" > "$tmp/$round-$j.code"
               ) &
             done
             wait || true
-            empty=0; bad=0
-            for ((j=1; j<=WIDTH; j++)); do
-              code=$(cat "$tmpdir/$round-$j.meta")
-              body=$(cat "$tmpdir/$round-$j.body" 2>/dev/null || true)
-              echo "[export lane=${{ matrix.lane }} round=$round call=$j] HTTP $code ${body:0:260}"
-              if [[ "$code" == 200 || "$code" == 201 ]]; then
-                grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$body" && empty=$((empty+1))
-              else
-                bad=$((bad+1))
-              fi
-              rm -f "$tmpdir/$round-$j.meta" "$tmpdir/$round-$j.body"
+            e=0; b=0
+            for ((j=1;j<=WIDTH;j++)); do
+              code=$(cat "$tmp/$round-$j.code"); body=$(cat "$tmp/$round-$j.body" 2>/dev/null||true)
+              [[ "$code" == 200 || "$code" == 201 ]] || b=$((b+1))
+              grep -Eq '"claimed"[[:space:]]*:[[:space:]]*0' <<<"$body" && e=$((e+1))
+              rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
             done
-            if (( empty == WIDTH )); then empty_rounds=$((empty_rounds+1)); else empty_rounds=0; fi
-            (( empty_rounds >= 3 )) && break
-            if (( bad * 2 >= WIDTH )); then bad_rounds=$((bad_rounds+1)); sleep $((bad_rounds*2)); else bad_rounds=0; sleep 0.05; fi
-            (( bad_rounds >= 5 )) && { echo "fail-closed: sustained export failures" >&2; exit 1; }
+            (( e==WIDTH )) && empty=$((empty+1)) || empty=0
+            (( empty>=3 )) && break
+            (( b*2>=WIDTH )) && { bad=$((bad+1)); sleep $((bad*2)); } || { bad=0; sleep 0.05; }
+            (( bad>=5 )) && exit 1
           done
 
   integrity-gate:
@@ -258,7 +215,4 @@ jobs:
           set -euo pipefail
           body=$(curl -sS --connect-timeout 8 --max-time 30 -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-completion-check-v1")
           echo "$body"
-          grep -Eq '"ready"[[:space:]]*:[[:space:]]*true' <<<"$body" || {
-            echo "completion gate not ready" >&2
-            exit 1
-          }
+          grep -Eq '"ready"[[:space:]]*:[[:space:]]*true' <<<"$body" || exit 1
