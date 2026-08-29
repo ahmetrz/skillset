@@ -74,7 +74,7 @@ async function retry(label,fn,attempts=4){
 
 async function openArchive(owner,repo){
   const urls=[
-    `https://github.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/archive/HEAD.tar.gz`,
+    `https://codeload.github.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/tar.gz/HEAD`,
     `https://codeload.github.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/tar.gz/refs/heads/main`,
     `https://codeload.github.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/tar.gz/refs/heads/master`
   ];
