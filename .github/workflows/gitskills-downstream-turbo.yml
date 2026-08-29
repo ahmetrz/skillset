@@ -1,5 +1,5 @@
 name: GitSkills downstream turbo
-# restart after transient final stale-processing rescue
+# restart after final transient auto-rescue migration
 
 on:
   push:
