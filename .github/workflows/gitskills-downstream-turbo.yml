@@ -1,5 +1,5 @@
 name: GitSkills downstream turbo
-# restart after final transient auto-rescue migration
+# stable final fanout after transient auto-rescue migration
 
 on:
   push:
@@ -206,7 +206,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=6; MIN_WIDTH=4; MAX_WIDTH=8; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=4; MIN_WIDTH=3; MAX_WIDTH=5; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
@@ -240,14 +240,15 @@ jobs:
             fi
             if (( bad == 0 )); then
               CLEAN=$((CLEAN+1)); BAD=0
-              if (( CLEAN>=3 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+2)); ((WIDTH>MAX_WIDTH))&&WIDTH=$MAX_WIDTH; CLEAN=0; fi
+              if (( CLEAN>=4 && WIDTH<MAX_WIDTH )); then WIDTH=$((WIDTH+1)); CLEAN=0; fi
               sleep 0.03
             else
-              CLEAN=0; BAD=$((BAD+1))
+              CLEAN=0
+              if (( bad*2>=round_width )); then BAD=$((BAD+1)); else BAD=0; fi
               if (( bad*4>=round_width && WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-2)); ((WIDTH<MIN_WIDTH))&&WIDTH=$MIN_WIDTH; fi
-              sleep $((BAD*2))
+              sleep $((bad*2))
             fi
-            (( BAD>=5 )) && exit 1
+            (( BAD>=8 )) && exit 1
           done
 
   export:
