@@ -1,0 +1,1 @@
+drop index if exists skillset.skills_content_sha256_idx;

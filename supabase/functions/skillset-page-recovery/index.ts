@@ -1,0 +1,17 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import * as cheerio from 'https://esm.sh/cheerio@1.0.0';
+import { NodeHtmlMarkdown } from 'https://esm.sh/node-html-markdown@1.3.0';
+const enc=new TextEncoder();
+async function sha256(text:string){const d=await crypto.subtle.digest('SHA-256',enc.encode(text));return Array.from(new Uint8Array(d)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+async function gzipBytes(text:string){const s=new Blob([text]).stream().pipeThrough(new CompressionStream('gzip'));return new Uint8Array(await new Response(s).arrayBuffer());}
+function pageCandidates(row:any){const source=String(row.source??'').trim(),skill=String(row.skill_name??'').trim();const urls=[`https://skills.sh/site/${source}/${encodeURIComponent(skill)}`];const old=String(row.skill_url??'').trim();if(old)urls.push(old);return [...new Set(urls)];}
+function extractMarkdown(html:string){const $=cheerio.load(html);let node=$('div.prose.prose-invert').first();if(!node.length)node=$('div.prose').first();if(!node.length)return null;const inner=node.html();if(!inner)return null;const body=NodeHtmlMarkdown.translate(inner).trim();if(!body)return null;return `<!-- reconstructed from skills.sh rendered page; original SKILL.md frontmatter/formatting may be unavailable -->\n\n${body}\n`;}
+Deno.serve(async(req)=>{
+ const su=Deno.env.get('SUPABASE_URL'),sk=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');if(!su||!sk)return new Response('config',{status:500});
+ const db=createClient(su,sk,{auth:{persistSession:false}});let body:any={};try{body=await req.json();}catch{}
+ const {data:auth,error:ae}=await db.rpc('skillset_consume_job_token',{p_token:body.token??'',p_purpose:'page-recovery'});if(ae||auth!==true)return new Response('Unauthorized',{status:401});
+ const limit=Math.max(1,Math.min(Number(body.limit??5),10));const {data:rows,error:ce}=await db.rpc('skillset_claim_page_recovery',{p_limit:limit});if(ce)return new Response(JSON.stringify({ok:false,error:ce.message}),{status:500,headers:{'content-type':'application/json'}});
+ let okCount=0,errorCount=0;const bucket='skillset-corpus';
+ await Promise.all((rows??[]).map(async(row:any)=>{try{let md:string|null=null,pageUrl:string|null=null;for(const u of pageCandidates(row)){const r=await fetch(u,{headers:{'user-agent':'skillset-corpus/1.0'},redirect:'follow',signal:AbortSignal.timeout(15000)});if(!r.ok)continue;const html=await r.text();const x=extractMarkdown(html);if(x){md=x;pageUrl=r.url||u;break;}}if(!md||!pageUrl)throw new Error('skills_sh_page_recovery_not_found');const hash=await sha256(md),gz=await gzipBytes(md),objectKey=`reconstructed/sha256/${hash.slice(0,2)}/${hash}.md.gz`;const {error:upErr}=await db.storage.from(bucket).upload(objectKey,gz,{contentType:'application/gzip',upsert:false,cacheControl:'31536000'});if(upErr&&!/already|duplicate/i.test(String(upErr.message)))throw new Error(`upload:${upErr.message}`);const {error:se}=await db.rpc('skillset_store_reconstructed_content',{p_id:row.id,p_sha:hash,p_bytes:enc.encode(md).byteLength,p_object_key:objectKey,p_source_url:pageUrl});if(se)throw new Error(`store:${se.message}`);okCount++;}catch(e){const m=e instanceof Error?e.message:String(e);await db.rpc('skillset_mark_recovery_error',{p_id:row.id,p_error:m});errorCount++;}}));
+ return new Response(JSON.stringify({ok:true,processed:(rows??[]).length,okCount,errorCount}),{headers:{'content-type':'application/json'}});
+});
