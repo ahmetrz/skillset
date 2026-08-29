@@ -1,7 +1,7 @@
 import { createClient } from '@libsql/client';
-import { S3Client, HeadObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import tar from 'tar-stream';
-import { createGunzip, gzipSync } from 'node:zlib';
+import { createGunzip, gzipSync, gunzipSync } from 'node:zlib';
 import { Readable } from 'node:stream';
 import { createHash } from 'node:crypto';
 
@@ -248,35 +248,38 @@ async function processOne(item){
   }
 }
 
-async function supabaseQueueRow(source){
-  const u=new URL(SUPABASE_URL+'/rest/v1/skills_sh_d3_archive_queue_v1');
-  u.searchParams.set('select','source,status,discovered_skills,storage_path,error');
-  u.searchParams.set('source','eq.'+source);
-  const r=await fetch(u,{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY,'Accept-Profile':'skillset'},signal:AbortSignal.timeout(30000)});
-  const text=await r.text();
-  if(!r.ok) throw new Error('reconcile_rest_'+r.status+':'+text.slice(0,400));
-  const rows=JSON.parse(text);
-  return Array.isArray(rows)?rows[0]:null;
+function externalKey(item){
+  return `skills-sh/exact-b2-v1/bucket-${String(item.bucket_id||0).padStart(2,'0')}/${String(item.repo_index||0).padStart(7,'0')}-${safe(item.owner)}-${safe(item.repo)}.json.gz`;
+}
+
+async function readObjectBytes(body){
+  if(!body) throw new Error('b2_empty_body');
+  if(typeof body.transformToByteArray==='function') return Buffer.from(await body.transformToByteArray());
+  const chunks=[];
+  for await(const chunk of body) chunks.push(Buffer.from(chunk));
+  return Buffer.concat(chunks);
 }
 
 async function reconcileExternalState(){
   const q=await turso.execute(`SELECT source,owner,repo,bucket_id,repo_index FROM skills_sh_external_exact_v1 WHERE status='error' ORDER BY source`);
   const results=await mapLimit(q.rows,8,async item=>{
-    const remote=await supabaseQueueRow(String(item.source));
-    if(!remote) return {source:item.source,outcome:'missing_queue'};
-    if(remote.status==='not_found'){
-      await record(item,'not_found',{error:remote.error||'archive_not_found'});
-      return {source:item.source,outcome:'not_found'};
-    }
-    if(remote.status!=='done') return {source:item.source,outcome:'still_open'};
-    const key=`skills-sh/exact-b2-v1/bucket-${String(item.bucket_id||0).padStart(2,'0')}/${String(item.repo_index||0).padStart(7,'0')}-${safe(item.owner)}-${safe(item.repo)}.json.gz`;
+    const key=externalKey(item);
     try{
-      const head=await b2.send(new HeadObjectCommand({Bucket:bucket,Key:key}));
-      const digest=head.Metadata?.sha256||null;
-      const bytes=Number(head.ContentLength||0);
-      await record(item,'done',{discovered:Number(remote.discovered_skills||0),path:'b2://'+bucket+'/'+key,digest,bytes});
+      // B2 is the source of truth for this external checkpoint. A complete,
+      // parseable object is sufficient to repair a stale Turso error without
+      // exposing the private Supabase schema through the Data API.
+      const object=await b2.send(new GetObjectCommand({Bucket:bucket,Key:key}));
+      const gz=await readObjectBytes(object.Body);
+      const payload=JSON.parse(gunzipSync(gz).toString('utf8'));
+      if(payload?.repoSource!==String(item.source)||!Array.isArray(payload?.files)) throw new Error('b2_payload_mismatch');
+      const digest=object.Metadata?.sha256||sha256(gz);
+      await record(item,'done',{discovered:payload.files.length,path:'b2://'+bucket+'/'+key,digest,bytes:gz.length});
       return {source:item.source,outcome:'done'};
-    }catch{return {source:item.source,outcome:'missing_b2_object'}}
+    }catch(e){
+      const msg=String(e?.name||'')+':'+String(e?.message||e);
+      if(/NoSuchKey|NotFound|not found|404/i.test(msg)) return {source:item.source,outcome:'missing_b2_object'};
+      return {source:item.source,outcome:'invalid_b2_object',error:msg.slice(0,240)};
+    }
   });
   const summary={};for(const x of results)summary[x.outcome]=(summary[x.outcome]||0)+1;
   console.log(JSON.stringify({event:'reconcile',checked:results.length,summary}));
