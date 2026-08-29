@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: gitskills-b2-boost
+  group: gitskills-b2-boost-v2
   cancel-in-progress: false
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        worker: [1, 2]
+        worker: [1, 2, 3]
     runs-on: ubuntu-latest
     timeout-minutes: 50
     env:
@@ -30,7 +30,7 @@ jobs:
       B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
       B2_BUCKET: ${{ secrets.B2_BUCKET }}
       B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
-      GITSKILLS_PACK_SIZE: '24'
+      GITSKILLS_PACK_SIZE: '32'
       GITSKILLS_FETCH_CONCURRENCY: '4'
       GITSKILLS_PACKS_PER_RUN: '400'
     steps:
