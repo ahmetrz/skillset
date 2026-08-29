@@ -1,5 +1,5 @@
 name: skills.sh exact turbo
-# normalization + retry sweep 2026-08-29 tar-retry
+# normalization + retry sweep 2026-08-29 tar-retry-pass2
 
 on:
   push:
