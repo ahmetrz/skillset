@@ -3,6 +3,7 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { createHash } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
 
+// External GitSkills exact-content worker: Turso state + immutable B2 packs.
 const HF_ROWS = 'https://datasets-server.huggingface.co/rows';
 const PACK_SIZE = Math.max(1, Math.min(Number(process.env.GITSKILLS_PACK_SIZE || 12), 32));
 const FETCH_CONCURRENCY = Math.max(1, Math.min(Number(process.env.GITSKILLS_FETCH_CONCURRENCY || 4), 8));
