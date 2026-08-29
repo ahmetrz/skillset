@@ -5,7 +5,7 @@ on:
     branches:
       - gitskills-migration-run
     paths:
-      - 'scripts/gitskills-b2-worker.mjs'
+      - 'scripts/gitskills-b2-worker-v2.mjs'
       - '.github/workflows/gitskills-b2-smoke.yml'
   workflow_dispatch:
 
@@ -14,14 +14,35 @@ permissions:
 
 concurrency:
   group: gitskills-b2-migration
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+      B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+      B2_BUCKET: ${{ secrets.B2_BUCKET }}
+      B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm install --no-save --no-audit --no-fund @aws-sdk/client-s3@3
+      - name: Recover cancelled and HF-429 shards
+        run: node scripts/gitskills-b2-worker-v2.mjs --recover
+
   migrate:
+    needs: recover
     strategy:
       fail-fast: false
       matrix:
-        worker: [1, 2, 3, 4, 5, 6, 7, 8]
+        worker: [1, 2, 3, 4]
     runs-on: ubuntu-latest
     timeout-minutes: 50
     env:
@@ -31,9 +52,9 @@ jobs:
       B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
       B2_BUCKET: ${{ secrets.B2_BUCKET }}
       B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
-      GITSKILLS_PACK_SIZE: '12'
+      GITSKILLS_PACK_SIZE: '24'
       GITSKILLS_FETCH_CONCURRENCY: '4'
-      GITSKILLS_PACKS_PER_RUN: '200'
+      GITSKILLS_PACKS_PER_RUN: '400'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -51,7 +72,7 @@ jobs:
           npm install --no-audit --no-fund
           npm install --no-save --no-audit --no-fund @aws-sdk/client-s3@3
       - name: Run migration worker ${{ matrix.worker }}
-        run: node scripts/gitskills-b2-worker.mjs
+        run: node scripts/gitskills-b2-worker-v2.mjs
       - name: Print Turso checkpoint
         if: always()
-        run: node scripts/gitskills-b2-worker.mjs --status
+        run: node scripts/gitskills-b2-worker-v2.mjs --status
