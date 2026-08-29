@@ -277,8 +277,12 @@ async function reconcileExternalState(){
       return {source:item.source,outcome:'done'};
     }catch(e){
       const msg=String(e?.name||'')+':'+String(e?.message||e);
-      if(/NoSuchKey|NotFound|not found|404/i.test(msg)) return {source:item.source,outcome:'missing_b2_object'};
-      return {source:item.source,outcome:'invalid_b2_object',error:msg.slice(0,240)};
+      // Missing or corrupt external objects are not merely reported: rebuild
+      // them through the same exact archive/tree fallback used by normal work.
+      const recovered=await processOne(item);
+      return recovered?.ok
+        ? {source:item.source,outcome:'recovered_'+recovered.outcome}
+        : {source:item.source,outcome:'recovery_error',error:String(recovered?.error||msg).slice(0,240)};
     }
   });
   const summary={};for(const x of results)summary[x.outcome]=(summary[x.outcome]||0)+1;
