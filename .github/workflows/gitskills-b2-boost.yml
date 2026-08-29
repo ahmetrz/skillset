@@ -1,0 +1,47 @@
+name: GitSkills B2 boost
+
+on:
+  push:
+    branches:
+      - gitskills-migration-run
+    paths:
+      - '.github/workflows/gitskills-b2-boost.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gitskills-b2-boost
+  cancel-in-progress: false
+
+jobs:
+  boost:
+    strategy:
+      fail-fast: false
+      matrix:
+        worker: [1, 2]
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+      B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+      B2_BUCKET: ${{ secrets.B2_BUCKET }}
+      B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+      GITSKILLS_PACK_SIZE: '24'
+      GITSKILLS_FETCH_CONCURRENCY: '4'
+      GITSKILLS_PACKS_PER_RUN: '400'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm install --no-save --no-audit --no-fund @aws-sdk/client-s3@3
+      - name: Run boost worker ${{ matrix.worker }}
+        run: node scripts/gitskills-b2-worker-v2.mjs
+      - name: Print Turso checkpoint
+        if: always()
+        run: node scripts/gitskills-b2-worker-v2.mjs --status
