@@ -11,10 +11,11 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 concurrency:
-  group: gitskills-b2-migration
-  cancel-in-progress: true
+  group: gitskills-b2-migration-v3
+  cancel-in-progress: false
 
 jobs:
   recover:
@@ -42,9 +43,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        worker: [1, 2, 3, 4]
+        worker: [1, 2, 3, 4, 5, 6, 7]
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 18
     env:
       TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
       TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
@@ -52,9 +53,9 @@ jobs:
       B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
       B2_BUCKET: ${{ secrets.B2_BUCKET }}
       B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
-      GITSKILLS_PACK_SIZE: '24'
+      GITSKILLS_PACK_SIZE: '32'
       GITSKILLS_FETCH_CONCURRENCY: '4'
-      GITSKILLS_PACKS_PER_RUN: '400'
+      GITSKILLS_PACKS_PER_RUN: '24'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -76,3 +77,34 @@ jobs:
       - name: Print Turso checkpoint
         if: always()
         run: node scripts/gitskills-b2-worker-v2.mjs --status
+
+  continue-if-needed:
+    needs: migrate
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - name: Decide whether more exact-content work remains
+        id: remain
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE' >> "$GITHUB_OUTPUT"
+          import { createClient } from '@libsql/client';
+          const c=createClient({url:process.env.TURSO_DATABASE_URL,authToken:process.env.TURSO_AUTH_TOKEN});
+          const r=await c.execute(`SELECT COUNT(*) AS n FROM gitskills_shards WHERE status<>'done' AND attempts<64`);
+          const n=Number(r.rows[0]?.n||0);
+          console.log(`remaining=${n}`);
+          console.error(JSON.stringify({event:'remaining',n}));
+          NODE
+      - name: Chain next migration run
+        if: steps.remain.outputs.remaining != '0'
+        run: gh workflow run gitskills-b2-smoke.yml --ref gitskills-migration-run
