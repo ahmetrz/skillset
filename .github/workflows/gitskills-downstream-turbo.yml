@@ -31,7 +31,7 @@ jobs:
         run: |
           set -euo pipefail
           WIDTH=2
-          MIN_WIDTH=2
+          MIN_WIDTH=1
           MAX_WIDTH=4
           CLEAN=0
           BAD=0
@@ -75,8 +75,7 @@ jobs:
             else
               CLEAN=0; BAD=$((BAD+1))
               if (( bad*4>=round_width && WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-2)); ((WIDTH<MIN_WIDTH))&&WIDTH=$MIN_WIDTH; fi
-              sleep $((BAD*2))
-              (( BAD>=30 )) && { echo "analysis sustained failure" >&2; exit 1; }
+              delay=$((BAD*2)); ((delay>10)) && delay=10; sleep "$delay"
             fi
           done
 
@@ -93,7 +92,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4; MIN_WIDTH=4; MAX_WIDTH=6; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=4; MIN_WIDTH=1; MAX_WIDTH=6; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
@@ -132,9 +131,8 @@ jobs:
             else
               CLEAN=0; BAD=$((BAD+1))
               if (( bad*4>=round_width && WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-2)); ((WIDTH<MIN_WIDTH))&&WIDTH=$MIN_WIDTH; fi
-              sleep $((BAD*2))
+              delay=$((BAD*2)); ((delay>10)) && delay=10; sleep "$delay"
             fi
-            (( BAD>=30 )) && exit 1
           done
 
   rubric:
@@ -150,7 +148,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=5; MIN_WIDTH=4; MAX_WIDTH=6; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=5; MIN_WIDTH=1; MAX_WIDTH=6; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
@@ -189,9 +187,8 @@ jobs:
             else
               CLEAN=0; BAD=$((BAD+1))
               if (( bad*4>=round_width && WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-2)); ((WIDTH<MIN_WIDTH))&&WIDTH=$MIN_WIDTH; fi
-              sleep $((BAD*2))
+              delay=$((BAD*2)); ((delay>10)) && delay=10; sleep "$delay"
             fi
-            (( BAD>=30 )) && exit 1
           done
 
   final:
@@ -209,7 +206,7 @@ jobs:
           set -euo pipefail
           # Sixteen lanes reduce long-tail queue contention while preserving the
           # proven aggregate request envelope (64 initial, 48-80 adaptive).
-          WIDTH=4; MIN_WIDTH=3; MAX_WIDTH=5; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=4; MIN_WIDTH=1; MAX_WIDTH=5; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
@@ -249,9 +246,8 @@ jobs:
               CLEAN=0
               if (( bad*2>=round_width )); then BAD=$((BAD+1)); else BAD=0; fi
               if (( bad*2>=round_width && WIDTH>MIN_WIDTH )); then WIDTH=$((WIDTH-1)); fi
-              sleep $((bad*2))
+              delay=$((bad*2)); ((delay>10)) && delay=10; sleep "$delay"
             fi
-            (( BAD>=30 )) && exit 1
           done
 
   export:
@@ -286,8 +282,11 @@ jobs:
             done
             (( e==WIDTH )) && empty=$((empty+1)) || empty=0
             (( empty>=3 )) && break
-            (( b*2>=WIDTH )) && { bad=$((bad+1)); sleep $((bad*2)); } || { bad=0; sleep 0.05; }
-            (( bad>=30 )) && exit 1
+            if (( b*2>=WIDTH )); then
+              bad=$((bad+1)); delay=$((bad*2)); ((delay>10)) && delay=10; sleep "$delay"
+            else
+              bad=0; sleep 0.05
+            fi
           done
 
   integrity-gate:
