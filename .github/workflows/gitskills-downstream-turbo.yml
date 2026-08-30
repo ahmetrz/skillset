@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4]
+        lane: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     steps:
       - name: Stream-drain analysis
         shell: bash
@@ -81,12 +81,13 @@ jobs:
           done
 
   projection:
+    needs: analysis
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4]
+        lane: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     steps:
       - name: Stream-drain projection
         shell: bash
@@ -137,12 +138,13 @@ jobs:
           done
 
   rubric:
+    needs: projection
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4]
+        lane: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     steps:
       - name: Stream-drain rubric
         shell: bash
@@ -193,6 +195,7 @@ jobs:
           done
 
   final:
+    needs: rubric
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     strategy:
