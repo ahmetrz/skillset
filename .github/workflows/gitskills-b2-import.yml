@@ -1,0 +1,47 @@
+name: GitSkills B2 fast import
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [gitskills-migration-run]
+    paths:
+      - '.github/workflows/gitskills-b2-import.yml'
+      - 'scripts/gitskills-b2-import-v1.mjs'
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: gitskills-b2-fast-import-v1
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        worker: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+      B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+      B2_BUCKET: ${{ secrets.B2_BUCKET }}
+      B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+      GITSKILLS_INGEST_URL: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1/gitskills-b2-ingest-v1
+      IMPORT_CONCURRENCY: '4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm install --no-save --no-audit --no-fund @aws-sdk/client-s3@3
+      - name: Import exact B2 packs ${{ matrix.worker }}
+        run: node scripts/gitskills-b2-import-v1.mjs
+      - name: Print import checkpoint
+        if: always()
+        run: node scripts/gitskills-b2-import-v1.mjs --status
