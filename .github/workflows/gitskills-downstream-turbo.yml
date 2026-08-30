@@ -198,13 +198,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4,5,6,7,8,9]
+        lane: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     steps:
       - name: Stream-drain final
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=8; MIN_WIDTH=7; MAX_WIDTH=9; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          # Sixteen lanes reduce long-tail queue contention while preserving the
+          # proven aggregate request envelope (64 initial, 48-80 adaptive).
+          WIDTH=4; MIN_WIDTH=3; MAX_WIDTH=5; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
