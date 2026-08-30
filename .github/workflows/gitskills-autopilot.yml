@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4,5,6,7,8]
+        lane: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     steps:
       - name: Drain exact-content parquet chunks
         shell: bash
@@ -36,7 +36,7 @@ jobs:
           set -euo pipefail
           WIDTH=2
           MIN_WIDTH=1
-          MAX_WIDTH=4
+          MAX_WIDTH=3
           CLEAN=0
           BAD=0
           EMPTY=0
