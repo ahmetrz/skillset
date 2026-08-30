@@ -21,7 +21,7 @@ env:
 
 jobs:
   discovery:
-    name: Bulk discovery (${{ matrix.lane }})
+    name: Parquet discovery (${{ matrix.lane }})
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     strategy:
@@ -29,7 +29,7 @@ jobs:
       matrix:
         lane: [1,2,3,4]
     steps:
-      - name: Drain 12-shard bulk claims
+      - name: Drain exact-content parquet chunks
         shell: bash
         run: |
           set -euo pipefail
@@ -51,7 +51,7 @@ jobs:
                   -H "x-region: $FUNCTION_REGION" \
                   -H 'Content-Type: application/json' \
                   -o "$body" -w '%{http_code}' -X POST -d '{}' \
-                  "$BASE/gitskills-discovery-v1" || true)
+                  "$BASE/gitskills-parquet-discovery-v1" || true)
                 echo "$code" > "$tmp/$round-$j.code"
               ) &
             done
@@ -64,7 +64,7 @@ jobs:
             for ((j=1; j<=round_width; j++)); do
               code=$(cat "$tmp/$round-$j.code")
               body=$(cat "$tmp/$round-$j.body" 2>/dev/null || echo '{}')
-              c=$(jq -r '.claimed // 0' <<<"$body" 2>/dev/null || echo 0)
+              c=$(jq -r 'if has("claimed") then .claimed elif (.output // "") != "" then 1 else 0 end' <<<"$body" 2>/dev/null || echo 0)
               s=$(jq -r '.scanned // 0' <<<"$body" 2>/dev/null || echo 0)
               claimed=$((claimed+c))
               scanned=$((scanned+s))
@@ -73,7 +73,7 @@ jobs:
               rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
             done
 
-            echo "discovery lane=${{ matrix.lane }} round=$round width=$WIDTH claimed=$claimed scanned=$scanned empty=$empty bad=$bad"
+            echo "parquet lane=${{ matrix.lane }} round=$round width=$WIDTH claimed=$claimed scanned=$scanned empty=$empty bad=$bad"
 
             if (( empty == round_width )); then
               EMPTY=$((EMPTY+1))
