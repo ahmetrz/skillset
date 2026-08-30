@@ -1,4 +1,5 @@
 name: GitSkills end-to-end autopilot
+# downstream final fanout: 16 lanes
 
 on:
   workflow_dispatch:
