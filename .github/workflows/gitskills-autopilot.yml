@@ -33,9 +33,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=2
+          WIDTH=4
           MIN_WIDTH=1
-          MAX_WIDTH=2
+          MAX_WIDTH=4
           CLEAN=0
           BAD=0
           EMPTY=0
