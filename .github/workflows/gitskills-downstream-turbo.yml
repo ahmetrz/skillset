@@ -201,13 +201,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4]
+        lane: [1,2,3,4,5,6]
     steps:
       - name: Stream-drain final
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=5; MIN_WIDTH=4; MAX_WIDTH=6; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+          WIDTH=7; MIN_WIDTH=6; MAX_WIDTH=8; CLEAN=0; BAD=0; tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
           for ((round=1; round<=4000; round++)); do
             round_width=$WIDTH
             for ((j=1;j<=round_width;j++)); do
