@@ -1,0 +1,21 @@
+name: GitSkills parquet park
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [gitskills-migration-run]
+    paths:
+      - '.github/workflows/gitskills-parquet-park.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gitskills-end-to-end-autopilot-v1
+  cancel-in-progress: true
+
+jobs:
+  park:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo 'Parquet fallback parked; B2 exact-pack import is authoritative.'
