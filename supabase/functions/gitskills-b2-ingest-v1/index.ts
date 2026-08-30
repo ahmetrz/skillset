@@ -44,11 +44,11 @@ Deno.serve(async (req: Request) => {
     const { error: uploadError } = await sb.storage.from(BUCKET).upload(path, bytes, {
       upsert: true, contentType: "application/gzip", cacheControl: "31536000"
     });
-    if (uploadError) throw uploadError;
+    if (uploadError) throw new Error(`storage_upload:${JSON.stringify(uploadError)}`);
     const { error: finishError } = await sb.rpc("skillset_gitskills_b2_ingest_finish_v1", {
       p_path: path, p_representatives: representatives
     });
-    if (finishError) throw finishError;
+    if (finishError) throw new Error(`ingest_finish:${JSON.stringify(finishError)}`);
     return json({ ok: true, path, bytes: bytes.length, representatives, sha256: digest });
   } catch (error) {
     return json({ ok: false, error: String(error) }, 401);
