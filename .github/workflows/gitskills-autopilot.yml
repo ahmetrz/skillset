@@ -1,0 +1,117 @@
+name: GitSkills end-to-end autopilot
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [gitskills-migration-run]
+    paths:
+      - '.github/workflows/gitskills-autopilot.yml'
+      - '.github/workflows/gitskills-downstream-turbo.yml'
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: gitskills-end-to-end-autopilot-v1
+  cancel-in-progress: false
+
+env:
+  BASE: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1
+  FUNCTION_REGION: eu-west-1
+
+jobs:
+  discovery:
+    name: Bulk discovery (${{ matrix.lane }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [1,2,3,4,5,6,7,8]
+    steps:
+      - name: Drain 12-shard bulk claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          WIDTH=3
+          MIN_WIDTH=1
+          MAX_WIDTH=4
+          CLEAN=0
+          BAD=0
+          EMPTY=0
+          tmp=$(mktemp -d)
+          trap 'rm -rf "$tmp"' EXIT
+
+          for ((round=1; round<=2400; round++)); do
+            round_width=$WIDTH
+            for ((j=1; j<=round_width; j++)); do
+              (
+                body="$tmp/$round-$j.body"
+                code=$(curl -sS --connect-timeout 8 --max-time 120 \
+                  -H "x-region: $FUNCTION_REGION" \
+                  -H 'Content-Type: application/json' \
+                  -o "$body" -w '%{http_code}' -X POST -d '{}' \
+                  "$BASE/gitskills-discovery-v1" || true)
+                echo "$code" > "$tmp/$round-$j.code"
+              ) &
+            done
+            wait || true
+
+            bad=0
+            empty=0
+            claimed=0
+            scanned=0
+            for ((j=1; j<=round_width; j++)); do
+              code=$(cat "$tmp/$round-$j.code")
+              body=$(cat "$tmp/$round-$j.body" 2>/dev/null || echo '{}')
+              c=$(jq -r '.claimed // 0' <<<"$body" 2>/dev/null || echo 0)
+              s=$(jq -r '.scanned // 0' <<<"$body" 2>/dev/null || echo 0)
+              claimed=$((claimed+c))
+              scanned=$((scanned+s))
+              (( c == 0 )) && empty=$((empty+1))
+              if [[ "$code" != 200 && "$code" != 207 ]]; then bad=$((bad+1)); fi
+              rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
+            done
+
+            echo "discovery lane=${{ matrix.lane }} round=$round width=$WIDTH claimed=$claimed scanned=$scanned empty=$empty bad=$bad"
+
+            if (( empty == round_width )); then
+              EMPTY=$((EMPTY+1))
+            else
+              EMPTY=0
+            fi
+            (( EMPTY >= 3 )) && break
+
+            if (( bad == 0 )); then
+              BAD=0
+              CLEAN=$((CLEAN+1))
+              if (( CLEAN >= 5 && WIDTH < MAX_WIDTH )); then WIDTH=$((WIDTH+1)); CLEAN=0; fi
+              sleep 0.05
+            else
+              CLEAN=0
+              BAD=$((BAD+1))
+              if (( WIDTH > MIN_WIDTH )); then WIDTH=$((WIDTH-1)); fi
+              sleep $((BAD*2))
+              (( BAD >= 20 )) && exit 1
+            fi
+          done
+
+  downstream:
+    needs: discovery
+    uses: ./.github/workflows/gitskills-downstream-turbo.yml
+
+  verify:
+    needs: downstream
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require complete source-to-export integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          body=$(curl -sS --connect-timeout 8 --max-time 120 \
+            -H "x-region: $FUNCTION_REGION" \
+            -H 'Content-Type: application/json' \
+            -X POST -d '{}' "$BASE/gitskills-completion-check-v1")
+          echo "$body" | jq .
+          jq -e '.completion.ready == true' <<<"$body" >/dev/null

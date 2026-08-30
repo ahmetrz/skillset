@@ -2,6 +2,7 @@ name: GitSkills downstream turbo
 # pin DB/Storage-heavy Edge calls to the project region and survive transient stalls
 
 on:
+  workflow_call:
   push:
     branches: [gitskills-migration-run]
     paths:
@@ -298,4 +299,4 @@ jobs:
           set -euo pipefail
           body=$(curl -sS --connect-timeout 8 --max-time 120 -H "x-region: $FUNCTION_REGION" -X POST -H 'Content-Type: application/json' -d '{}' "$BASE/gitskills-completion-check-v1")
           echo "$body"
-          grep -Eq '"ready"[[:space:]]*:[[:space:]]*true' <<<"$body" || exit 1
+          jq -e '.completion.ready == true' <<<"$body" >/dev/null || exit 1
