@@ -24,17 +24,17 @@ jobs:
   discovery:
     name: Parquet discovery (${{ matrix.lane }})
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
-        lane: [1,2,3,4]
+        lane: [1,2,3,4,5,6,7,8]
     steps:
       - name: Drain exact-content parquet chunks
         shell: bash
         run: |
           set -euo pipefail
-          WIDTH=4
+          WIDTH=2
           MIN_WIDTH=1
           MAX_WIDTH=4
           CLEAN=0
@@ -48,7 +48,7 @@ jobs:
             for ((j=1; j<=round_width; j++)); do
               (
                 body="$tmp/$round-$j.body"
-                code=$(curl -sS --connect-timeout 8 --max-time 120 \
+                code=$(curl -sS --connect-timeout 8 --max-time 145 \
                   -H "x-region: $FUNCTION_REGION" \
                   -H 'Content-Type: application/json' \
                   -o "$body" -w '%{http_code}' -X POST -d '{}' \
@@ -69,14 +69,19 @@ jobs:
               s=$(jq -r '.scanned // 0' <<<"$body" 2>/dev/null || echo 0)
               claimed=$((claimed+c))
               scanned=$((scanned+s))
-              (( c == 0 )) && empty=$((empty+1))
-              if [[ "$code" != 200 && "$code" != 207 ]]; then bad=$((bad+1)); fi
+              ok=$(jq -r '.ok // true' <<<"$body" 2>/dev/null || echo false)
+              if [[ "$code" != 200 && "$code" != 207 ]] || [[ "$ok" != true ]]; then
+                bad=$((bad+1))
+                echo "parquet request failed lane=${{ matrix.lane }} round=$round slot=$j http=$code body=$(head -c 600 <<<"$body")" >&2
+              elif (( c == 0 )); then
+                empty=$((empty+1))
+              fi
               rm -f "$tmp/$round-$j.code" "$tmp/$round-$j.body"
             done
 
             echo "parquet lane=${{ matrix.lane }} round=$round width=$WIDTH claimed=$claimed scanned=$scanned empty=$empty bad=$bad"
 
-            if (( empty == round_width )); then
+            if (( bad == 0 && empty == round_width )); then
               EMPTY=$((EMPTY+1))
             else
               EMPTY=0
@@ -86,14 +91,14 @@ jobs:
             if (( bad == 0 )); then
               BAD=0
               CLEAN=$((CLEAN+1))
-              if (( CLEAN >= 5 && WIDTH < MAX_WIDTH )); then WIDTH=$((WIDTH+1)); CLEAN=0; fi
+              if (( CLEAN >= 4 && WIDTH < MAX_WIDTH )); then WIDTH=$((WIDTH+1)); CLEAN=0; fi
               sleep 0.05
             else
               CLEAN=0
               BAD=$((BAD+1))
               if (( WIDTH > MIN_WIDTH )); then WIDTH=$((WIDTH-1)); fi
               sleep $((BAD*2))
-              (( BAD >= 20 )) && exit 1
+              (( BAD >= 12 )) && exit 1
             fi
           done
 
