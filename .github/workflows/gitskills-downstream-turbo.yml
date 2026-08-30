@@ -3,10 +3,6 @@ name: GitSkills downstream turbo
 
 on:
   workflow_call:
-  push:
-    branches: [gitskills-migration-run]
-    paths:
-      - '.github/workflows/gitskills-downstream-turbo.yml'
   workflow_dispatch:
 
 permissions:
