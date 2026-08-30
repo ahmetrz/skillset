@@ -6,7 +6,7 @@ const BUCKET = "skill-discovery-v1";
 const ISSUER = "https://token.actions.githubusercontent.com";
 const AUDIENCE = "gitskills-b2-supabase-ingest";
 const JWKS = createRemoteJWKSet(new URL(`${ISSUER}/.well-known/jwks`));
-const PATH = /^gitskills\/discovery-b2-v[12]\/pack-[0-9-]+\.json\.gz$/;
+const PATH = /^gitskills\/(?:discovery-b2-v[12]\/pack-[0-9-]+|discovery-b2-split-v1\/pack-[0-9]+-part-[0-9]+)\.json\.gz$/;
 
 function json(body: unknown, status = 200) {
   return Response.json(body, { status });
@@ -19,7 +19,8 @@ async function authorize(req: Request) {
   if (payload.repository !== "ahmetrz/skillset") throw new Error("repository_denied");
   if (payload.ref !== "refs/heads/gitskills-migration-run") throw new Error("ref_denied");
   const workflow = String(payload.workflow_ref || "");
-  if (!workflow.includes("/.github/workflows/gitskills-b2-import.yml@refs/heads/gitskills-migration-run")) {
+  if (!workflow.includes("/.github/workflows/gitskills-b2-import.yml@refs/heads/gitskills-migration-run") &&
+      !workflow.includes("/.github/workflows/gitskills-b2-split-rescue.yml@refs/heads/gitskills-migration-run")) {
     throw new Error("workflow_denied");
   }
 }
