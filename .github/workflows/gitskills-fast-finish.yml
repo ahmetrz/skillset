@@ -1,0 +1,14 @@
+name: GitSkills fast finish
+
+on:
+  push:
+    branches: [gitskills-migration-run]
+    paths: [.github/workflows/gitskills-fast-finish.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  downstream:
+    uses: ./.github/workflows/gitskills-downstream-turbo.yml
