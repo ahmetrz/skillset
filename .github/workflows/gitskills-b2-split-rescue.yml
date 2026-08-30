@@ -1,5 +1,5 @@
 name: GitSkills B2 split rescue
-# Rebuilds capped source packs directly from the immutable dataset ranges.
+# Rebuilds capped source packs directly from immutable dataset ranges; no B2 download quota required.
 
 on:
   push:
