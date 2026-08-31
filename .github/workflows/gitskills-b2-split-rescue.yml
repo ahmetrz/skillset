@@ -27,6 +27,7 @@ jobs:
         worker: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     env:
       GITSKILLS_INGEST_URL: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1/gitskills-b2-ingest-v1
+      GITSKILLS_RESCUE_STARTS: 136132,136164
       WORKER: ${{ matrix.worker }}
     steps:
       - uses: actions/checkout@v4

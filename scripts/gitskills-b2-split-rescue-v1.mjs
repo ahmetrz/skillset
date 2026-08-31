@@ -6,8 +6,10 @@ const need=n=>{const v=process.env[n];if(!v)throw new Error(`Missing ${n}`);retu
 const ingest=need('GITSKILLS_INGEST_URL');
 const lane=Number(need('WORKER'));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const expected=new Map([[135012,1674],[135108,1494],[135236,1634],[135268,1441],[135300,1561],[135332,1568],[135364,1567],[135396,1609],[135428,1521],[135460,1275],[135556,1726],[135588,1799],[135652,1568],[135684,1756],[135716,1717],[135748,1818],[135780,1764],[135812,1339],[135844,1405],[135876,1540],[135908,1730],[135940,1519],[135972,1651],[136004,1547],[136036,1531],[136068,1704],[136100,1631]]);
-const starts=[...expected.keys()];
+const expected=new Map([[135012,1674],[135108,1494],[135236,1634],[135268,1441],[135300,1561],[135332,1568],[135364,1567],[135396,1609],[135428,1521],[135460,1275],[135556,1726],[135588,1799],[135652,1568],[135684,1756],[135716,1717],[135748,1818],[135780,1764],[135812,1339],[135844,1405],[135876,1540],[135908,1730],[135940,1519],[135972,1651],[136004,1547],[136036,1531],[136068,1704],[136100,1631],[136132,null],[136164,null]]);
+const requested=(process.env.GITSKILLS_RESCUE_STARTS||'').split(',').map(Number).filter(Number.isInteger);
+const starts=requested.length?requested:[...expected.keys()];
+for(const start of starts)if(!expected.has(start))throw new Error(`unknown_rescue_start_${start}`);
 
 async function retry(label,fn,attempts=8){let last;for(let i=0;i<attempts;i++){try{return await fn()}catch(e){last=e;if(i===attempts-1)break;const is429=/\b429\b/.test(String(e));const delay=Math.min((is429?5000:1000)*2**i,is429?60000:15000)+Math.floor(Math.random()*750);console.warn(JSON.stringify({event:'retry',label,attempt:i+1,delay,error:String(e).slice(0,240)}));await sleep(delay)}}throw last}
 
@@ -40,7 +42,8 @@ async function upload(token,path,payload,reps){
 async function rescue(token,start){
   const shards=await mapLimit(Array.from({length:32},(_,i)=>start+i),4,fetchShard);
   const actual=shards.reduce((n,s)=>n+s.representativeRows,0);
-  if(actual!==expected.get(start))throw new Error(`source_count_mismatch_${start}_${actual}_${expected.get(start)}`);
+  const required=expected.get(start);
+  if(required!==null&&actual!==required)throw new Error(`source_count_mismatch_${start}_${actual}_${required}`);
   const groups=[];let current=[],count=0;
   for(const shard of shards){if(current.length&&count+shard.representativeRows>250){groups.push([current,count]);current=[];count=0}current.push(shard);count+=shard.representativeRows}
   if(current.length)groups.push([current,count]);
