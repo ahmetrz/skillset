@@ -1,5 +1,5 @@
 name: GitSkills fast finish
-# Stable-capacity restart after the lossless oversized-pack rescue completed.
+# Stable-capacity restart after watchdog trigger de-duplication.
 
 on:
   push:

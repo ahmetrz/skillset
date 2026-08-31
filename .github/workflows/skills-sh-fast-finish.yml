@@ -1,4 +1,5 @@
 name: skills.sh checkpointed fast finish
+# Resume after exact-B2 reconciliation and the evaluation empty-tail fix.
 
 on:
   workflow_dispatch:

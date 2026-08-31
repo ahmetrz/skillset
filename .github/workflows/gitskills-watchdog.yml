@@ -2,9 +2,6 @@ name: GitSkills platform watchdog
 
 on:
   workflow_dispatch:
-  push:
-    branches: [gitskills-migration-run]
-    paths: [.github/workflows/gitskills-watchdog.yml]
   schedule:
     - cron: '11 * * * *'
 
