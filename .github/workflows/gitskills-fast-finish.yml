@@ -9,6 +9,8 @@ on:
       - 'scripts/gitskills-projection-rescue-v1.mjs'
       - 'supabase/functions/gitskills-projection-rescue-v1/**'
       - 'supabase/migrations/*rescue_oversized_gitskills_projection_packs.sql'
+      - 'supabase/functions/gitskills-completion-check-v1/**'
+      - 'supabase/migrations/*use_hybrid_gitskills_completion_gate.sql'
   workflow_dispatch:
 
 permissions:
