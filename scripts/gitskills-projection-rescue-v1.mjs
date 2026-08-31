@@ -18,7 +18,28 @@ async function download(label,url){return retry(label,async()=>{const r=await fe
 async function upload(token,path,bytes){const sha=digest(bytes);await api(token,`upload_${path}`,bytes,{'content-type':'application/gzip','x-operation':'upload','x-storage-path':path,'x-sha256':sha});return sha}
 
 function encodeInput(template,shards){return gzipSync(Buffer.from(JSON.stringify({...template,generatedAt:new Date().toISOString(),shards})),{level:6})}
-function boundedParts(template,shards){const out=[];const split=group=>{const bytes=encodeInput(template,group);if(bytes.length<=MAX_GZIP){out.push({shards:group,inputBytes:bytes});return}if(group.length===1)throw new Error(`single_shard_too_large:${bytes.length}`);const mid=Math.ceil(group.length/2);split(group.slice(0,mid));split(group.slice(mid))};for(let i=0;i<shards.length;i+=4)split(shards.slice(i,i+4));return out}
+function boundedParts(template,shards){
+  const out=[];
+  const splitShard=shard=>{
+    const bytes=encodeInput(template,[shard]);
+    if(bytes.length<=MAX_GZIP){out.push({shards:[shard],inputBytes:bytes});return}
+    const rows=Array.isArray(shard.rows)?shard.rows:[];
+    if(rows.length<=1)throw new Error(`single_row_too_large:${bytes.length}`);
+    const mid=Math.ceil(rows.length/2);
+    splitShard({...shard,rows:rows.slice(0,mid)});
+    splitShard({...shard,rows:rows.slice(mid)});
+  };
+  const split=group=>{
+    const bytes=encodeInput(template,group);
+    if(bytes.length<=MAX_GZIP){out.push({shards:group,inputBytes:bytes});return}
+    if(group.length===1){splitShard(group[0]);return}
+    const mid=Math.ceil(group.length/2);
+    split(group.slice(0,mid));
+    split(group.slice(mid));
+  };
+  for(let i=0;i<shards.length;i+=4)split(shards.slice(i,i+4));
+  return out;
+}
 
 async function rescue(token,parent){
   const [inputGz,prefilterGz]=await Promise.all([download('input',parent.input_url),download('prefilter',parent.prefilter_url)]);
@@ -27,8 +48,12 @@ async function rescue(token,parent){
   if(!Array.isArray(input.shards)||!input.shards.length||!Array.isArray(pf.decisions))throw new Error('invalid_parent_payload');
   const template={...input};delete template.shards;
   const parts=boundedParts(template,input.shards);
+  const sourceKeys=new Set();
+  for(const shard of input.shards)for(const row of shard.rows||[]){const k=key(row);if(sourceKeys.has(k))throw new Error(`duplicate_source_row_key:${k}`);sourceKeys.add(k)}
   const rowToPart=new Map();
   parts.forEach((part,i)=>part.shards.forEach(shard=>(shard.rows||[]).forEach(row=>{const k=key(row);if(rowToPart.has(k))throw new Error(`duplicate_row_key:${k}`);rowToPart.set(k,i)})));
+  if(rowToPart.size!==sourceKeys.size)throw new Error(`split_row_count_mismatch:${rowToPart.size}/${sourceKeys.size}`);
+  for(const k of sourceKeys)if(!rowToPart.has(k))throw new Error(`missing_split_row_key:${k}`);
   const decisions=Array.from({length:parts.length},()=>[]);
   for(const d of pf.decisions){const i=rowToPart.get(key(d));if(i===undefined)throw new Error(`orphan_prefilter_decision:${key(d)}`);decisions[i].push(d)}
   if(decisions.reduce((n,x)=>n+x.length,0)!==pf.decisions.length)throw new Error('decision_count_mismatch');
