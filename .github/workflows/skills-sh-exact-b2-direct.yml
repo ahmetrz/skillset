@@ -8,22 +8,26 @@ on:
       - '.github/workflows/skills-sh-exact-b2-direct.yml'
       - 'scripts/skills-sh-exact-b2-worker-v1.mjs'
   workflow_dispatch:
+  schedule:
+    # Checkpointed takeover run. It exits quickly when the exact queue is empty.
+    - cron: '41 */3 * * *'
 
 permissions:
   contents: read
 
 concurrency:
   group: skills-sh-exact-b2-direct-v1
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   direct:
     runs-on: ubuntu-24.04
-    timeout-minutes: 65
+    timeout-minutes: 170
     strategy:
       fail-fast: false
       matrix:
-        worker: [1,2,3,4]
+        # Large repositories are capped at six aggregate archive operations.
+        worker: [1,2]
     env:
       SUPABASE_URL: https://cxvvfgwdqgxczxmomztw.supabase.co
       SUPABASE_PUBLISHABLE_KEY: sb_publishable_-QoeR1QT-TcMoLNxrHmNNg_pniY7P7r
@@ -35,8 +39,10 @@ jobs:
       B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
       GITHUB_TOKEN: ${{ github.token }}
       SKILLS_SH_BATCH_SIZE: '8'
-      SKILLS_SH_CONCURRENCY: '4'
-      SKILLS_SH_MAX_BATCHES: '40'
+      SKILLS_SH_CONCURRENCY: '3'
+      SKILLS_SH_MIN_CONCURRENCY: '2'
+      SKILLS_SH_MAX_CONCURRENCY: '3'
+      SKILLS_SH_MAX_BATCHES: '1000'
       SKILLS_SH_ARCHIVE_TIMEOUT_MS: '45000'
     steps:
       - uses: actions/checkout@v4

@@ -1,0 +1,58 @@
+name: GitSkills platform watchdog
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [gitskills-migration-run]
+    paths: [.github/workflows/gitskills-watchdog.yml]
+  schedule:
+    - cron: '11 * * * *'
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: gitskills-platform-watchdog-v1
+  cancel-in-progress: true
+
+env:
+  STATUS_URL: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1/gitskills-pipeline-status-v1
+
+jobs:
+  supervise:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Restart checkpointed downstream work only when needed
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          status=$(curl -fsS --connect-timeout 8 --max-time 30 "$STATUS_URL")
+          echo "$status" | jq .
+
+          terminal=$(jq '[.analysis.terminal,.projection.terminal,.rubric.terminal,.final.terminal,.export.terminal] | map(. // 0) | add' <<<"$status")
+          open=$(jq '[.analysis.open,.projection.open,.rubric.open,.final.open,.export.open] | map(. // 0) | add' <<<"$status")
+          if (( terminal > 0 )); then
+            echo "Fail-closed: terminal queue errors require diagnosis; no blind reset." >&2
+            exit 1
+          fi
+          (( open == 0 )) && { echo "GitSkills downstream is complete."; exit 0; }
+
+          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/gitskills-fast-finish.yml/runs?branch=gitskills-migration-run&per_page=20"
+          runs=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' "$api")
+          active=$(jq '[.workflow_runs[] | select(.status=="queued" or .status=="in_progress")] | length' <<<"$runs")
+          if (( active > 0 )); then
+            echo "Fast-finish already active; watchdog will not duplicate it."
+            exit 0
+          fi
+
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'Content-Type: application/json' \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/gitskills-fast-finish.yml/dispatches" \
+            -d '{"ref":"gitskills-migration-run"}'
+          echo "Restarted GitSkills from its durable checkpoint."
