@@ -10,7 +10,9 @@ on:
       - 'supabase/functions/gitskills-projection-rescue-v1/**'
       - 'supabase/migrations/*rescue_oversized_gitskills_projection_packs.sql'
       - 'supabase/functions/gitskills-completion-check-v1/**'
+      - 'supabase/functions/gitskills-canonical-export-v1/**'
       - 'supabase/migrations/*use_hybrid_gitskills_completion_gate.sql'
+      - 'supabase/migrations/*gitskills_completion_gate.sql'
   workflow_dispatch:
 
 permissions:
