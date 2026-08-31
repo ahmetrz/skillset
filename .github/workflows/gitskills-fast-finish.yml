@@ -1,15 +1,39 @@
 name: GitSkills fast finish
-# Stable-capacity restart after watchdog trigger de-duplication.
+# Losslessly split oversized projection tails before the stable-capacity drain.
 
 on:
   push:
     branches: [gitskills-migration-run]
-    paths: [.github/workflows/gitskills-fast-finish.yml]
+    paths:
+      - '.github/workflows/gitskills-fast-finish.yml'
+      - 'scripts/gitskills-projection-rescue-v1.mjs'
+      - 'supabase/functions/gitskills-projection-rescue-v1/**'
+      - 'supabase/migrations/*rescue_oversized_gitskills_projection_packs.sql'
   workflow_dispatch:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
+  projection-rescue:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        worker: [1,2,3,4,5,6,7,8]
+    env:
+      GITSKILLS_PROJECTION_RESCUE_URL: https://cxvvfgwdqgxczxmomztw.supabase.co/functions/v1/gitskills-projection-rescue-v1
+      WORKER: ${{ matrix.worker }}
+      WORKERS: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/gitskills-projection-rescue-v1.mjs
+
   downstream:
+    needs: projection-rescue
     uses: ./.github/workflows/gitskills-downstream-turbo.yml
