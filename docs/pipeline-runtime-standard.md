@@ -37,3 +37,22 @@ preserves correctness, security, and the free-tier cost boundary.
 
 These rules apply to every subsequent acquisition, normalization, analysis, export,
 and integrity stage unless a stricter stage-specific constraint is documented.
+
+## Automatic stage transitions
+
+The skills.sh completion chain runs inside Supabase and does not depend on an open
+Codex session or a long-running GitHub runner:
+
+1. Verify both archive passes are terminal. The exact-storage pass is authoritative
+   when the redundant novel pass has only a manifest transport error.
+2. Drain SDLC projection with its database capacity gate and four-attempt worker
+   contract. A terminal batch receives one bounded rescue round, then blocks loudly.
+3. Start evaluation in 5,000-content-hash deltas and drain each delta before opening
+   the next one.
+4. Pass integrity only when archive, projection, in-flight HTTP work, running
+   evaluations, failed evaluations, and unevaluated canonical hashes are all clean.
+5. Mark the pipeline completed and unschedule the controller automatically.
+
+The controller is `public.skillset_skills_sh_completion_tick_v1()` and is scheduled
+as `skills-sh-completion-autopilot-v1` every three seconds while work remains. Its
+control table and RPCs are restricted to `service_role`.
