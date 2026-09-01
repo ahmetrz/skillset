@@ -79,3 +79,25 @@ canonical and provenance access are view-backed. The catalog, provenance, export
 synthesis candidates, control table, and RPCs are restricted to `service_role`.
 Social-media candidates are discovery inputs marked for domain review; they are not
 treated as authored or approved skills without that review.
+
+## Final synthesis continuation
+
+Completion is a transition, not a reason to wait for a user message. When the unified
+corpus gate passes, the final synthesis controller must start automatically and run
+independently of an open Codex session:
+
+1. Deduplicate the 2,200 ranked memberships to 1,594 canonical source skills.
+2. Materialize projected database content and selected GitSkills archive content into
+   hash-verified, provenance-preserving storage packs.
+3. Compose one deterministic bundle for every ranked target/category pair. Bundles
+   retain the original components and add a narrow routing `SKILL.md`; they do not
+   silently rewrite or merge safety constraints.
+4. Pass integrity only when every canonical source is materialized, every category
+   bundle contains its expected component count, and every artifact has a digest.
+5. Stop the cron automatically only after that gate passes. Bounded terminal failures
+   block loudly rather than dropping candidates.
+
+The controller is `public.skillset_unified_final_synthesis_tick_v1()` and the worker
+is deployed in the retired `skills-sh-search-behavior-probe` function slot to remain
+inside the existing free-plan function quota. The slot is JWT-protected; the cron JWT
+is stored in Vault, not in repository files.
