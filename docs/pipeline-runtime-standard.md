@@ -62,10 +62,10 @@ control table and RPCs are restricted to `service_role`.
 After the source pipelines pass their gates, the unified corpus continues entirely
 inside Postgres. It does not require an open Codex session or a GitHub runner:
 
-1. Union the accepted GitSkills and skills.sh content hashes and checkpoint the
-   canonical catalog in 5,000-hash batches.
-2. Attach every known source alias in 2,000-hash batches so provenance remains
-   queryable after cross-source deduplication.
+1. Union the accepted GitSkills and skills.sh content hashes through a
+   storage-neutral view; do not duplicate the canonical corpus physically.
+2. Expose every known source alias through a provenance view so source mapping
+   remains queryable without copying the member tables.
 3. Build and fingerprint all 256 deterministic hash-prefix export partitions.
 4. Rank deterministic SDLC, global-quality, and social-media review candidates.
 5. Pass integrity only when expected and actual canonical counts match, every
@@ -74,8 +74,8 @@ inside Postgres. It does not require an open Codex session or a GitHub runner:
 6. Mark the run completed and unschedule the controller automatically.
 
 The controller is `public.skillset_unified_corpus_tick_v1()` and is scheduled as
-`unified-corpus-autopilot-v1` every three seconds while work remains. Every write is
-idempotent and cursor-checkpointed. The catalog, provenance, export manifest,
+`unified-corpus-autopilot-v1` while work remains. Every physical write is idempotent;
+canonical and provenance access are view-backed. The catalog, provenance, export manifest,
 synthesis candidates, control table, and RPCs are restricted to `service_role`.
 Social-media candidates are discovery inputs marked for domain review; they are not
 treated as authored or approved skills without that review.
