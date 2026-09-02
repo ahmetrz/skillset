@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-09-02T13:13:50.449Z",
+  "bucket": "skillset-corpus-v2-trzahmet93",
+  "turso": {
+    "gitskills_shards": {
+      "ok": true,
+      "value": {
+        "n": 18840,
+        "done": 18840,
+        "remaining": 0,
+        "reps": 830231
+      }
+    },
+    "gitskills_packs": {
+      "ok": true,
+      "value": {
+        "n": 670,
+        "reps": 830231,
+        "bytes": 4137696029
+      }
+    },
+    "gitskills_state": {
+      "ok": true,
+      "rows": [
+        {
+          "key": "legacy_done_shards",
+          "value": "19132",
+          "updated_at": "2026-08-29T20:12:12.413Z"
+        },
+        {
+          "key": "legacy_representatives",
+          "value": "1047750",
+          "updated_at": "2026-08-29T20:12:12.413Z"
+        }
+      ],
+      "rowsAffected": 0
+    },
+    "skills_sh_external_exact": {
+      "ok": true,
+      "rows": [
+        {
+          "status": "done",
+          "n": 7555,
+          "skills": 188725,
+          "bytes": 653473311
+        },
+        {
+          "status": "not_found",
+          "n": 406,
+          "skills": 0,
+          "bytes": 0
+        }
+      ],
+      "rowsAffected": 0
+    }
+  },
+  "b2": [
+    {
+      "prefix": "gitskills/",
+      "count": 670,
+      "bytes": 4137696029,
+      "pages": 1,
+      "latest": "2026-08-29T16:30:53.161Z"
+    },
+    {
+      "prefix": "skills-sh/",
+      "count": 7557,
+      "bytes": 653526383,
+      "pages": 8,
+      "latest": "2026-08-29T21:41:04.657Z"
+    }
+  ]
+}
