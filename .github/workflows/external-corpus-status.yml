@@ -1,0 +1,47 @@
+name: External corpus status
+
+on:
+  push:
+    branches: [gitskills-migration-run]
+    paths:
+      - '.github/workflows/external-corpus-status.yml'
+      - 'scripts/external-audit-status-v1.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: external-corpus-status-v1
+  cancel-in-progress: true
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+      B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+      B2_BUCKET: ${{ secrets.B2_BUCKET }}
+      B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - run: node scripts/external-audit-status-v1.mjs
+      - name: Persist status
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/external-status.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "chore: update external corpus status"
+          git push origin HEAD:gitskills-migration-run
