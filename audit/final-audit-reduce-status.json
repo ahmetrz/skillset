@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T12:27:33.374Z",
+  "generatedAt": "2026-09-03T17:54:43.960Z",
   "ready": false,
   "ingestReady": false,
   "policyReady": false,
@@ -10,48 +10,151 @@
       "skillsB2": 7557
     },
     "done": {
-      "legacy": 314,
-      "gitB2": 3,
-      "skillsB2": 63
+      "legacy": 11917,
+      "gitB2": 172,
+      "skillsB2": 1467
     },
     "policyDone": {
-      "legacy": 1,
-      "gitB2": 0,
-      "skillsB2": 0
+      "legacy": 3288,
+      "gitB2": 43,
+      "skillsB2": 618
     },
     "rows": [
       {
         "source_system": "gitskills-b2",
         "status": "done",
-        "units": 3,
-        "skills": 3773
+        "units": 172,
+        "skills": 193097
       },
       {
         "source_system": "gitskills-legacy-hf",
         "status": "done",
-        "units": 314,
-        "skills": 13386
+        "units": 11917,
+        "skills": 667383
       },
       {
         "source_system": "gitskills-legacy-hf",
         "status": "error",
-        "units": 8,
+        "units": 12,
         "skills": 0
       },
       {
         "source_system": "skills-sh-b2",
         "status": "done",
-        "units": 63,
-        "skills": 1074
+        "units": 1467,
+        "skills": 38187
       }
     ],
     "policyRows": [
       {
+        "source_system": "gitskills-b2",
+        "status": "done",
+        "units": 43,
+        "skills": 48854,
+        "facts": 7962
+      },
+      {
         "source_system": "gitskills-legacy-hf",
         "status": "done",
+        "units": 3288,
+        "skills": 183939,
+        "facts": 5643
+      },
+      {
+        "source_system": "gitskills-legacy-hf",
+        "status": "error",
         "units": 1,
-        "skills": 78,
+        "skills": 0,
         "facts": 0
+      },
+      {
+        "source_system": "skills-sh-b2",
+        "status": "done",
+        "units": 618,
+        "skills": 14267,
+        "facts": 1696
+      }
+    ],
+    "errorSamples": [
+      {
+        "source_key": "hf:gitskills:100353",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100353: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:29:39.291Z"
+      },
+      {
+        "source_key": "hf:gitskills:100369",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100369: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:29:39.289Z"
+      },
+      {
+        "source_key": "hf:gitskills:100340",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100340: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:28:44.859Z"
+      },
+      {
+        "source_key": "hf:gitskills:100348",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100348: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:28:44.836Z"
+      },
+      {
+        "source_key": "hf:gitskills:100284",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100284: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:26:52.521Z"
+      },
+      {
+        "source_key": "hf:gitskills:100276",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100276: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:26:51.950Z"
+      },
+      {
+        "source_key": "hf:gitskills:100260",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100260: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:26:51.614Z"
+      },
+      {
+        "source_key": "hf:gitskills:100268",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100268: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:26:51.051Z"
+      },
+      {
+        "source_key": "hf:gitskills:100217",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100217: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:25:59.997Z"
+      },
+      {
+        "source_key": "hf:gitskills:100201",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100201: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:25:59.553Z"
+      },
+      {
+        "source_key": "hf:gitskills:100209",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100209: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:25:59.304Z"
+      },
+      {
+        "source_key": "hf:gitskills:100193",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_100193: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
+        "updated_at": "2026-09-03T12:25:59.219Z"
+      }
+    ],
+    "policyErrorSamples": [
+      {
+        "source_key": "hf:gitskills:102800",
+        "source_system": "gitskills-legacy-hf",
+        "error": "fetch failed",
+        "updated_at": "2026-09-03T13:33:27.185Z"
       }
     ]
   }
