@@ -8,9 +8,6 @@ on:
       - '.github/workflows/skills-sh-exact-b2-direct.yml'
       - 'scripts/skills-sh-exact-b2-worker-v1.mjs'
   workflow_dispatch:
-  schedule:
-    # Checkpointed takeover run. It exits quickly when the exact queue is empty.
-    - cron: '41 */3 * * *'
 
 permissions:
   contents: read
