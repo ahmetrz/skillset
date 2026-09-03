@@ -1,0 +1,89 @@
+name: Final corpus audit engine v1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-corpus-audit-engine-v1.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '13 */4 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: final-corpus-audit-engine-v1
+  cancel-in-progress: false
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+  B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        include:
+          - {pass: ingest, source: git-legacy, partition: 0, parts: 8}
+          - {pass: ingest, source: git-legacy, partition: 1, parts: 8}
+          - {pass: ingest, source: git-legacy, partition: 2, parts: 8}
+          - {pass: ingest, source: git-legacy, partition: 3, parts: 8}
+          - {pass: ingest, source: git-legacy, partition: 4, parts: 8}
+          - {pass: ingest, source: git-legacy, partition: 5, parts: 8}
+          - {pass: ingest, source: git-legacy, partition: 6, parts: 8}
+          - {pass: ingest, source: git-legacy, partition: 7, parts: 8}
+          - {pass: ingest, source: git-b2, partition: 0, parts: 4}
+          - {pass: ingest, source: git-b2, partition: 1, parts: 4}
+          - {pass: ingest, source: git-b2, partition: 2, parts: 4}
+          - {pass: ingest, source: git-b2, partition: 3, parts: 4}
+          - {pass: ingest, source: skills-b2, partition: 0, parts: 4}
+          - {pass: ingest, source: skills-b2, partition: 1, parts: 4}
+          - {pass: ingest, source: skills-b2, partition: 2, parts: 4}
+          - {pass: ingest, source: skills-b2, partition: 3, parts: 4}
+          - {pass: policy, source: git-legacy, partition: 0, parts: 8}
+          - {pass: policy, source: git-legacy, partition: 1, parts: 8}
+          - {pass: policy, source: git-legacy, partition: 2, parts: 8}
+          - {pass: policy, source: git-legacy, partition: 3, parts: 8}
+          - {pass: policy, source: git-legacy, partition: 4, parts: 8}
+          - {pass: policy, source: git-legacy, partition: 5, parts: 8}
+          - {pass: policy, source: git-legacy, partition: 6, parts: 8}
+          - {pass: policy, source: git-legacy, partition: 7, parts: 8}
+          - {pass: policy, source: git-b2, partition: 0, parts: 4}
+          - {pass: policy, source: git-b2, partition: 1, parts: 4}
+          - {pass: policy, source: git-b2, partition: 2, parts: 4}
+          - {pass: policy, source: git-b2, partition: 3, parts: 4}
+          - {pass: policy, source: skills-b2, partition: 0, parts: 4}
+          - {pass: policy, source: skills-b2, partition: 1, parts: 4}
+          - {pass: policy, source: skills-b2, partition: 2, parts: 4}
+          - {pass: policy, source: skills-b2, partition: 3, parts: 4}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - name: Run checkpoint partition
+        env:
+          AUDIT_SOURCE: ${{ matrix.source }}
+          AUDIT_PARTITION: ${{ matrix.partition }}
+          AUDIT_PARTITIONS: ${{ matrix.parts }}
+          AUDIT_PASS: ${{ matrix.pass }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$AUDIT_PASS" == "ingest" ]]; then
+            node scripts/final-audit-external-v1.mjs
+          else
+            node scripts/final-audit-policy-rescan-v2.mjs
+          fi
