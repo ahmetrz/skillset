@@ -1,6 +1,8 @@
 {
-  "generatedAt": "2026-09-03T12:25:44.746Z",
+  "generatedAt": "2026-09-03T12:27:33.374Z",
   "ready": false,
+  "ingestReady": false,
+  "policyReady": false,
   "readiness": {
     "expected": {
       "legacy": 19132,
@@ -8,28 +10,48 @@
       "skillsB2": 7557
     },
     "done": {
-      "legacy": 228,
-      "gitB2": 1,
-      "skillsB2": 44
+      "legacy": 314,
+      "gitB2": 3,
+      "skillsB2": 63
+    },
+    "policyDone": {
+      "legacy": 1,
+      "gitB2": 0,
+      "skillsB2": 0
     },
     "rows": [
       {
         "source_system": "gitskills-b2",
         "status": "done",
-        "units": 1,
-        "skills": 720
+        "units": 3,
+        "skills": 3773
       },
       {
         "source_system": "gitskills-legacy-hf",
         "status": "done",
-        "units": 228,
-        "skills": 8743
+        "units": 314,
+        "skills": 13386
+      },
+      {
+        "source_system": "gitskills-legacy-hf",
+        "status": "error",
+        "units": 8,
+        "skills": 0
       },
       {
         "source_system": "skills-sh-b2",
         "status": "done",
-        "units": 44,
-        "skills": 826
+        "units": 63,
+        "skills": 1074
+      }
+    ],
+    "policyRows": [
+      {
+        "source_system": "gitskills-legacy-hf",
+        "status": "done",
+        "units": 1,
+        "skills": 78,
+        "facts": 0
       }
     ]
   }
