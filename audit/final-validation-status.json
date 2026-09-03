@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-09-03T12:28:53.157Z",
+  "status": "INGESTING",
+  "guards": {
+    "ingest_complete": false,
+    "policy_rescan_complete": false,
+    "near_candidate_pass_complete": false,
+    "oversized_lsh_groups_resolved": false,
+    "conflict_registry_complete": false,
+    "conflict_selections_complete": false,
+    "destructive_master_build_allowed": false
+  },
+  "expected": {
+    "legacy": 19132,
+    "gitB2": 670,
+    "skillsB2": 7557
+  },
+  "ingestDone": {
+    "legacy": 396,
+    "gitB2": 5,
+    "skillsB2": 79
+  },
+  "policyDone": {
+    "legacy": 1,
+    "gitB2": 0,
+    "skillsB2": 1
+  },
+  "oversizedGroups": 0,
+  "exactUnique": {
+    "n": 27898
+  },
+  "occurrences": {
+    "n": 27916
+  },
+  "near": [],
+  "conflictCount": 0,
+  "selectionsFilePresent": false
+}
