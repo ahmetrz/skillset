@@ -1,0 +1,88 @@
+name: Final corpus policy rescan v2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-corpus-policy-rescan-v2.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '31 */4 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: final-corpus-policy-rescan-v2
+  cancel-in-progress: false
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+  B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {source: git-legacy, parts: 19132}
+          - {source: git-b2, parts: 100000}
+          - {source: skills-b2, parts: 100000}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - name: One-unit policy smoke
+        env:
+          AUDIT_SOURCE: ${{ matrix.source }}
+          AUDIT_PARTITION: '0'
+          AUDIT_PARTITIONS: ${{ matrix.parts }}
+        run: node scripts/final-audit-policy-rescan-v2.mjs
+
+  rescan:
+    needs: smoke
+    if: ${{ needs.smoke.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        include:
+          - {source: git-legacy, partition: 0, parts: 8}
+          - {source: git-legacy, partition: 1, parts: 8}
+          - {source: git-legacy, partition: 2, parts: 8}
+          - {source: git-legacy, partition: 3, parts: 8}
+          - {source: git-legacy, partition: 4, parts: 8}
+          - {source: git-legacy, partition: 5, parts: 8}
+          - {source: git-legacy, partition: 6, parts: 8}
+          - {source: git-legacy, partition: 7, parts: 8}
+          - {source: git-b2, partition: 0, parts: 4}
+          - {source: git-b2, partition: 1, parts: 4}
+          - {source: git-b2, partition: 2, parts: 4}
+          - {source: git-b2, partition: 3, parts: 4}
+          - {source: skills-b2, partition: 0, parts: 4}
+          - {source: skills-b2, partition: 1, parts: 4}
+          - {source: skills-b2, partition: 2, parts: 4}
+          - {source: skills-b2, partition: 3, parts: 4}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - name: Run checkpointed policy partition
+        env:
+          AUDIT_SOURCE: ${{ matrix.source }}
+          AUDIT_PARTITION: ${{ matrix.partition }}
+          AUDIT_PARTITIONS: ${{ matrix.parts }}
+        run: node scripts/final-audit-policy-rescan-v2.mjs
