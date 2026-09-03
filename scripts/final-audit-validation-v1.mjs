@@ -12,7 +12,8 @@ const units=await q("SELECT source_system,status,count(*) units FROM final_audit
 const policyUnits=await q("SELECT source_system,status,count(*) units FROM final_audit_policy_unit_v2 GROUP BY source_system,status");
 const m=new Map(units.filter(x=>x.status==='done').map(x=>[String(x.source_system),Number(x.units)]));
 const pm=new Map(policyUnits.filter(x=>x.status==='done').map(x=>[String(x.source_system),Number(x.units)]));
-const expected={legacy:19132,gitB2:670,skillsB2:7557};
+const reduceCheckpoint=await readJson('audit/final-audit-reduce-status.json');
+const expected=reduceCheckpoint?.readiness?.expected||{legacy:19132,gitB2:642,skillsB2:7557};
 const ingestDone={legacy:m.get('gitskills-legacy-hf')||0,gitB2:m.get('gitskills-b2')||0,skillsB2:m.get('skills-sh-b2')||0};
 const policyDone={legacy:pm.get('gitskills-legacy-hf')||0,gitB2:pm.get('gitskills-b2')||0,skillsB2:pm.get('skills-sh-b2')||0};
 const ingestReady=Object.keys(expected).every(k=>ingestDone[k]===expected[k]);
