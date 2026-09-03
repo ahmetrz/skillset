@@ -24,8 +24,16 @@ function ham(a,b){return popcount64((BigInt('0x'+a)^BigInt('0x'+b)).toString(16)
 async function readiness(){
   const [git,skills]=await Promise.all([listCount('gitskills/discovery-b2-v2/'),listCount('skills-sh/exact-b2-v1/')]);
   const rows=await q("SELECT source_system,status,count(*) units,coalesce(sum(skills_indexed),0) skills FROM final_audit_unit_v1 GROUP BY source_system,status ORDER BY source_system,status");
+  let policyRows=[];
+  try{policyRows=await q("SELECT source_system,status,count(*) units,coalesce(sum(skills_scanned),0) skills,coalesce(sum(facts),0) facts FROM final_audit_policy_unit_v2 GROUP BY source_system,status ORDER BY source_system,status")}catch{}
   const m=new Map(rows.filter(x=>x.status==='done').map(x=>[String(x.source_system),Number(x.units)]));
-  return {expected:{legacy:19132,gitB2:git,skillsB2:skills},done:{legacy:m.get('gitskills-legacy-hf')||0,gitB2:m.get('gitskills-b2')||0,skillsB2:m.get('skills-sh-b2')||0},rows};
+  const pm=new Map(policyRows.filter(x=>x.status==='done').map(x=>[String(x.source_system),Number(x.units)]));
+  return {
+    expected:{legacy:19132,gitB2:git,skillsB2:skills},
+    done:{legacy:m.get('gitskills-legacy-hf')||0,gitB2:m.get('gitskills-b2')||0,skillsB2:m.get('skills-sh-b2')||0},
+    policyDone:{legacy:pm.get('gitskills-legacy-hf')||0,gitB2:pm.get('gitskills-b2')||0,skillsB2:pm.get('skills-sh-b2')||0},
+    rows,policyRows
+  };
 }
 async function summary(){
   const [a,b,c,d,e]=await Promise.all([
@@ -92,12 +100,30 @@ async function conflicts(){
   for(const [k,a,b] of pairs){const ka=k+'='+a,kb=k+'='+b;if((counts.get(ka)||0)&&(counts.get(kb)||0))out.push({topic:k,left:{stance:a,count:counts.get(ka),example:examples.get(ka)},right:{stance:b,count:counts.get(kb),example:examples.get(kb)},recommendation:recommendation(k,a,b),yourSelection:''})}
   const ag=counts.get('provider=agnostic')||0,forced=[...counts.entries()].filter(([k])=>k.startsWith('provider=forced:')).sort((a,b)=>b[1]-a[1]);
   if(ag&&forced.length)out.push({topic:'provider',left:{stance:'agnostic',count:ag,example:examples.get('provider=agnostic')},right:{stance:'provider_forced',count:forced.reduce((s,x)=>s+x[1],0),variants:forced.slice(0,30).map(([x,n])=>({stance:x.slice('provider='.length),count:n,example:examples.get(x)}))},recommendation:'agnostic',yourSelection:''});
-  return {generatedAt:now(),status:'PRELIMINARY_TEXT_LEVEL_POLICY_CONFLICTS',note:'Numeric threshold conflicts require the dedicated policy-rescan pass before this registry can be declared complete.',conflicts:out};
+  const numeric=await q("SELECT p.policy_key,p.policy_value,count(*) n,min(p.content_hash) example_hash,min(p.sample_locator) example_locator FROM final_audit_policy_v2 p JOIN final_audit_exact_v1 e ON e.content_hash=p.content_hash WHERE (e.sdlc_mask<>0 OR e.social_mask<>0) GROUP BY p.policy_key,p.policy_value ORDER BY p.policy_key,n DESC");
+  const byKey=new Map();
+  for(const r of numeric){const k=String(r.policy_key);if(!byKey.has(k))byKey.set(k,[]);byKey.get(k).push({value:String(r.policy_value),count:Number(r.n),example:{contentHash:r.example_hash,locator:r.example_locator}})}
+  for(const [k,vals] of byKey){
+    if(vals.length<2)continue;
+    const isTool=k.startsWith('tool:');
+    const conflictVals=isTool?vals.filter(v=>v.value==='never'||v.value==='prefer'):vals;
+    if(conflictVals.length<2)continue;
+    out.push({
+      topic:k,
+      variants:conflictVals.slice(0,50),
+      recommendation:isTool?'prefer portable/default tooling; never-ban only when safety or compatibility requires it':'avoid one global hard-coded value; choose a context/risk-specific default with an override',
+      yourSelection:''
+    });
+  }
+  return {generatedAt:now(),status:'COMPLETE_TEXT_LEVEL_POLICY_CONFLICTS',conflicts:out};
 }
 async function main(){
-  await ensure();const ready=await readiness(),ok=ready.done.legacy===ready.expected.legacy&&ready.done.gitB2===ready.expected.gitB2&&ready.done.skillsB2===ready.expected.skillsB2;
+  await ensure();const ready=await readiness();
+  const ingestOk=ready.done.legacy===ready.expected.legacy&&ready.done.gitB2===ready.expected.gitB2&&ready.done.skillsB2===ready.expected.skillsB2;
+  const policyOk=ready.policyDone.legacy===ready.expected.legacy&&ready.policyDone.gitB2===ready.expected.gitB2&&ready.policyDone.skillsB2===ready.expected.skillsB2;
+  const ok=ingestOk&&policyOk;
   await fs.mkdir('audit',{recursive:true});
-  if(!ok){const out={generatedAt:now(),ready:false,readiness:ready};await fs.writeFile('audit/final-audit-reduce-status.json',JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify(out,null,2));return}
+  if(!ok){const out={generatedAt:now(),ready:false,ingestReady:ingestOk,policyReady:policyOk,readiness:ready};await fs.writeFile('audit/final-audit-reduce-status.json',JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify(out,null,2));return}
   const sum=await summary();const nearOut=await near();const conflict=await conflicts();
   const out={generatedAt:now(),ready:true,readiness:ready,summary:sum,near:nearOut,conflictRegistryStatus:conflict.status};
   await fs.writeFile('audit/final-audit-reduce-status.json',JSON.stringify(out,null,2)+'\n');
