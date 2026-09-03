@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-09-03T12:25:44.746Z",
+  "ready": false,
+  "readiness": {
+    "expected": {
+      "legacy": 19132,
+      "gitB2": 642,
+      "skillsB2": 7557
+    },
+    "done": {
+      "legacy": 228,
+      "gitB2": 1,
+      "skillsB2": 44
+    },
+    "rows": [
+      {
+        "source_system": "gitskills-b2",
+        "status": "done",
+        "units": 1,
+        "skills": 720
+      },
+      {
+        "source_system": "gitskills-legacy-hf",
+        "status": "done",
+        "units": 228,
+        "skills": 8743
+      },
+      {
+        "source_system": "skills-sh-b2",
+        "status": "done",
+        "units": 44,
+        "skills": 826
+      }
+    ]
+  }
+}
