@@ -28,11 +28,13 @@ async function readiness(){
   try{policyRows=await q("SELECT source_system,status,count(*) units,coalesce(sum(skills_scanned),0) skills,coalesce(sum(facts),0) facts FROM final_audit_policy_unit_v2 GROUP BY source_system,status ORDER BY source_system,status")}catch{}
   const m=new Map(rows.filter(x=>x.status==='done').map(x=>[String(x.source_system),Number(x.units)]));
   const pm=new Map(policyRows.filter(x=>x.status==='done').map(x=>[String(x.source_system),Number(x.units)]));
+  const errorSamples=await q("SELECT source_key,source_system,error,updated_at FROM final_audit_unit_v1 WHERE status='error' ORDER BY updated_at DESC LIMIT 20");
+  let policyErrorSamples=[];try{policyErrorSamples=await q("SELECT source_key,source_system,error,updated_at FROM final_audit_policy_unit_v2 WHERE status='error' ORDER BY updated_at DESC LIMIT 20")}catch{}
   return {
     expected:{legacy:19132,gitB2:git,skillsB2:skills},
     done:{legacy:m.get('gitskills-legacy-hf')||0,gitB2:m.get('gitskills-b2')||0,skillsB2:m.get('skills-sh-b2')||0},
     policyDone:{legacy:pm.get('gitskills-legacy-hf')||0,gitB2:pm.get('gitskills-b2')||0,skillsB2:pm.get('skills-sh-b2')||0},
-    rows,policyRows
+    rows,policyRows,errorSamples,policyErrorSamples
   };
 }
 async function summary(){
