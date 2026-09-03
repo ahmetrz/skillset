@@ -2,8 +2,6 @@ name: GitSkills platform watchdog
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '11 * * * *'
 
 permissions:
   contents: read
