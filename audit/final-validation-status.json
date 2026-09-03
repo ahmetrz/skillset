@@ -1,7 +1,8 @@
 {
-  "generatedAt": "2026-09-03T12:29:23.946Z",
-  "status": "INGESTING",
+  "generatedAt": "2026-09-03T17:55:00.178Z",
+  "status": "RECONCILING_SOURCE_INVENTORY",
   "guards": {
+    "source_inventory_reconciled": false,
     "ingest_complete": false,
     "policy_rescan_complete": false,
     "near_candidate_pass_complete": false,
@@ -10,27 +11,50 @@
     "conflict_selections_complete": false,
     "destructive_master_build_allowed": false
   },
+  "sourceInventory": {
+    "generatedAt": "2026-09-03T17:47:45.442Z",
+    "status": "UNRESOLVED",
+    "originalGoal": "approximately 3,000,000 unique skills across GitSkills + skills.sh",
+    "verifiedExactSourceRecords": {
+      "gitskills": {
+        "legacyRepresentatives": 1047750,
+        "b2Representatives": 830231,
+        "totalRepresentatives": 1877981
+      },
+      "skillsSh": {
+        "exactSkillsInB2": 188725,
+        "doneRepos": 7555,
+        "notFoundRepos": 406
+      },
+      "combinedBeforeCrossSourceDedup": 2066706
+    },
+    "notes": [
+      "The 3M figure is a target/discovery-layer expectation, not a currently verified exact unique count.",
+      "The 19,132 / 642 / 7,557 values are audit work units, not skill counts.",
+      "Do not open final master build until the skills.sh 1M+ discovery layer is reconciled to exact SKILL.md records and duplicates/occurrences are accounted for."
+    ]
+  },
   "expected": {
     "legacy": 19132,
     "gitB2": 642,
     "skillsB2": 7557
   },
   "ingestDone": {
-    "legacy": 426,
-    "gitB2": 5,
-    "skillsB2": 82
+    "legacy": 11917,
+    "gitB2": 172,
+    "skillsB2": 1467
   },
   "policyDone": {
-    "legacy": 1,
-    "gitB2": 1,
-    "skillsB2": 1
+    "legacy": 3312,
+    "gitB2": 44,
+    "skillsB2": 618
   },
   "oversizedGroups": 0,
   "exactUnique": {
-    "n": 30381
+    "n": 895003
   },
   "occurrences": {
-    "n": 30404
+    "n": 918291
   },
   "near": [],
   "conflictCount": 0,
