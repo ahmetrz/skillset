@@ -6,9 +6,6 @@ on:
   push:
     branches: [gitskills-migration-run]
     paths: [.github/workflows/skills-sh-fast-finish.yml]
-  schedule:
-    # Each run is bounded below three hours and resumes from durable checkpoints.
-    - cron: '17 */3 * * *'
 
 permissions:
   contents: read
