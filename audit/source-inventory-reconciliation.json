@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-09-03T17:47:45.442Z",
+  "status": "UNRESOLVED",
+  "originalGoal": "approximately 3,000,000 unique skills across GitSkills + skills.sh",
+  "verifiedExactSourceRecords": {
+    "gitskills": {
+      "legacyRepresentatives": 1047750,
+      "b2Representatives": 830231,
+      "totalRepresentatives": 1877981
+    },
+    "skillsSh": {
+      "exactSkillsInB2": 188725,
+      "doneRepos": 7555,
+      "notFoundRepos": 406
+    },
+    "combinedBeforeCrossSourceDedup": 2066706
+  },
+  "notes": [
+    "The 3M figure is a target/discovery-layer expectation, not a currently verified exact unique count.",
+    "The 19,132 / 642 / 7,557 values are audit work units, not skill counts.",
+    "Do not open final master build until the skills.sh 1M+ discovery layer is reconciled to exact SKILL.md records and duplicates/occurrences are accounted for."
+  ]
+}
