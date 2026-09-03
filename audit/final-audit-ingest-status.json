@@ -1,0 +1,568 @@
+{
+  "generatedAt": "2026-09-03T17:55:49.753Z",
+  "exact": {
+    "n": 896700
+  },
+  "occurrences": {
+    "n": 920017
+  },
+  "units": [
+    {
+      "source_system": "gitskills-b2",
+      "status": "done",
+      "units": 173,
+      "scanned": 194261,
+      "skills": 194261
+    },
+    {
+      "source_system": "gitskills-legacy-hf",
+      "status": "done",
+      "units": 11929,
+      "scanned": 1192900,
+      "skills": 668009
+    },
+    {
+      "source_system": "gitskills-legacy-hf",
+      "status": "error",
+      "units": 8,
+      "scanned": 0,
+      "skills": 0
+    },
+    {
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "units": 1467,
+      "scanned": 38187,
+      "skills": 38187
+    }
+  ],
+  "scope": {
+    "sdlc": 515569,
+    "social": 202489,
+    "in_scope": 591571
+  },
+  "risks": [
+    {
+      "risk_mask": 4,
+      "n": 35349
+    },
+    {
+      "risk_mask": 8,
+      "n": 13641
+    },
+    {
+      "risk_mask": 64,
+      "n": 8430
+    },
+    {
+      "risk_mask": 2,
+      "n": 4015
+    },
+    {
+      "risk_mask": 32,
+      "n": 3946
+    },
+    {
+      "risk_mask": 12,
+      "n": 1542
+    },
+    {
+      "risk_mask": 6,
+      "n": 886
+    },
+    {
+      "risk_mask": 40,
+      "n": 711
+    },
+    {
+      "risk_mask": 36,
+      "n": 480
+    },
+    {
+      "risk_mask": 68,
+      "n": 405
+    },
+    {
+      "risk_mask": 10,
+      "n": 362
+    },
+    {
+      "risk_mask": 14,
+      "n": 81
+    },
+    {
+      "risk_mask": 44,
+      "n": 75
+    },
+    {
+      "risk_mask": 1,
+      "n": 58
+    },
+    {
+      "risk_mask": 96,
+      "n": 56
+    },
+    {
+      "risk_mask": 34,
+      "n": 47
+    },
+    {
+      "risk_mask": 72,
+      "n": 31
+    },
+    {
+      "risk_mask": 76,
+      "n": 21
+    },
+    {
+      "risk_mask": 42,
+      "n": 10
+    },
+    {
+      "risk_mask": 38,
+      "n": 9
+    },
+    {
+      "risk_mask": 16,
+      "n": 9
+    },
+    {
+      "risk_mask": 100,
+      "n": 8
+    },
+    {
+      "risk_mask": 70,
+      "n": 5
+    },
+    {
+      "risk_mask": 5,
+      "n": 4
+    },
+    {
+      "risk_mask": 65,
+      "n": 3
+    },
+    {
+      "risk_mask": 46,
+      "n": 2
+    },
+    {
+      "risk_mask": 9,
+      "n": 2
+    },
+    {
+      "risk_mask": 104,
+      "n": 1
+    },
+    {
+      "risk_mask": 20,
+      "n": 1
+    },
+    {
+      "risk_mask": 18,
+      "n": 1
+    }
+  ],
+  "topPolicies": [
+    {
+      "policy_sig": "branch=pr",
+      "n": 16455
+    },
+    {
+      "policy_sig": "production=approval",
+      "n": 12732
+    },
+    {
+      "policy_sig": "testing=first",
+      "n": 11561
+    },
+    {
+      "policy_sig": "clarification=ask",
+      "n": 10953
+    },
+    {
+      "policy_sig": "clarification=proceed",
+      "n": 10189
+    },
+    {
+      "policy_sig": "memory=stateless",
+      "n": 2660
+    },
+    {
+      "policy_sig": "clarification=proceed;production=approval",
+      "n": 1482
+    },
+    {
+      "policy_sig": "memory=persistent",
+      "n": 1200
+    },
+    {
+      "policy_sig": "git_destructive=forbid",
+      "n": 1183
+    },
+    {
+      "policy_sig": "clarification=ask;clarification=proceed",
+      "n": 1173
+    },
+    {
+      "policy_sig": "provider=forced:claude",
+      "n": 777
+    },
+    {
+      "policy_sig": "branch=pr;git_destructive=forbid",
+      "n": 745
+    },
+    {
+      "policy_sig": "priority=security",
+      "n": 721
+    },
+    {
+      "policy_sig": "provider=agnostic",
+      "n": 624
+    },
+    {
+      "policy_sig": "branch=pr;testing=first",
+      "n": 550
+    },
+    {
+      "policy_sig": "clarification=ask;production=approval",
+      "n": 546
+    },
+    {
+      "policy_sig": "provider=forced:codex",
+      "n": 540
+    },
+    {
+      "policy_sig": "testing=after",
+      "n": 536
+    },
+    {
+      "policy_sig": "branch=pr;production=approval",
+      "n": 456
+    },
+    {
+      "policy_sig": "production=approval;testing=first",
+      "n": 443
+    },
+    {
+      "policy_sig": "branch=pr;clarification=ask",
+      "n": 435
+    },
+    {
+      "policy_sig": "branch=pr;clarification=proceed",
+      "n": 376
+    },
+    {
+      "policy_sig": "testing=after;testing=first",
+      "n": 327
+    },
+    {
+      "policy_sig": "clarification=ask;testing=first",
+      "n": 313
+    },
+    {
+      "policy_sig": "clarification=proceed;testing=first",
+      "n": 235
+    },
+    {
+      "policy_sig": "provider=forced:gemini",
+      "n": 203
+    },
+    {
+      "policy_sig": "provider=forced:cursor",
+      "n": 131
+    },
+    {
+      "policy_sig": "memory=stateless;production=approval",
+      "n": 115
+    },
+    {
+      "policy_sig": "clarification=proceed;memory=persistent",
+      "n": 115
+    },
+    {
+      "policy_sig": "memory=persistent;provider=forced:sonnet",
+      "n": 107
+    },
+    {
+      "policy_sig": "memory=stateless;testing=first",
+      "n": 106
+    },
+    {
+      "policy_sig": "memory=persistent;provider=forced:gemini",
+      "n": 105
+    },
+    {
+      "policy_sig": "provider=forced:openai",
+      "n": 92
+    },
+    {
+      "policy_sig": "clarification=ask;git_destructive=forbid",
+      "n": 84
+    },
+    {
+      "policy_sig": "priority=speed",
+      "n": 80
+    },
+    {
+      "policy_sig": "provider=forced:opus",
+      "n": 76
+    },
+    {
+      "policy_sig": "clarification=ask;clarification=proceed;production=approval",
+      "n": 72
+    },
+    {
+      "policy_sig": "provider=forced:copilot",
+      "n": 65
+    },
+    {
+      "policy_sig": "clarification=proceed;provider=forced:codex",
+      "n": 58
+    },
+    {
+      "policy_sig": "branch=pr;clarification=ask;git_destructive=forbid",
+      "n": 57
+    },
+    {
+      "policy_sig": "branch=pr;provider=forced:claude",
+      "n": 54
+    },
+    {
+      "policy_sig": "clarification=proceed;memory=stateless",
+      "n": 53
+    },
+    {
+      "policy_sig": "clarification=ask;provider=forced:claude",
+      "n": 52
+    },
+    {
+      "policy_sig": "branch=pr;clarification=ask;clarification=proceed",
+      "n": 51
+    },
+    {
+      "policy_sig": "git_destructive=allow",
+      "n": 44
+    },
+    {
+      "policy_sig": "clarification=proceed;provider=forced:claude",
+      "n": 43
+    },
+    {
+      "policy_sig": "clarification=proceed;git_destructive=forbid",
+      "n": 42
+    },
+    {
+      "policy_sig": "provider=forced:anthropic",
+      "n": 40
+    },
+    {
+      "policy_sig": "clarification=ask;memory=stateless",
+      "n": 40
+    },
+    {
+      "policy_sig": "clarification=ask;memory=persistent",
+      "n": 40
+    },
+    {
+      "policy_sig": "clarification=ask;clarification=proceed;testing=first",
+      "n": 40
+    },
+    {
+      "policy_sig": "production=approval;testing=after",
+      "n": 39
+    },
+    {
+      "policy_sig": "git_destructive=forbid;production=approval",
+      "n": 39
+    },
+    {
+      "policy_sig": "provider=forced:sonnet",
+      "n": 38
+    },
+    {
+      "policy_sig": "branch=pr;clarification=proceed;git_destructive=forbid",
+      "n": 37
+    },
+    {
+      "policy_sig": "priority=security;testing=first",
+      "n": 35
+    },
+    {
+      "policy_sig": "branch=pr;provider=forced:codex",
+      "n": 32
+    },
+    {
+      "policy_sig": "branch=pr;clarification=ask;testing=first",
+      "n": 32
+    },
+    {
+      "policy_sig": "branch=pr;priority=security",
+      "n": 31
+    },
+    {
+      "policy_sig": "priority=security;production=approval",
+      "n": 30
+    },
+    {
+      "policy_sig": "production=approval;provider=forced:claude",
+      "n": 29
+    },
+    {
+      "policy_sig": "git_destructive=forbid;testing=first",
+      "n": 29
+    },
+    {
+      "policy_sig": "clarification=ask;provider=forced:codex",
+      "n": 29
+    },
+    {
+      "policy_sig": "branch=pr;memory=stateless",
+      "n": 29
+    },
+    {
+      "policy_sig": "branch=pr;testing=after",
+      "n": 28
+    },
+    {
+      "policy_sig": "memory=persistent;memory=stateless",
+      "n": 27
+    },
+    {
+      "policy_sig": "provider=forced:claude;testing=first",
+      "n": 25
+    },
+    {
+      "policy_sig": "clarification=ask;production=approval;testing=first",
+      "n": 25
+    },
+    {
+      "policy_sig": "production=auto",
+      "n": 24
+    },
+    {
+      "policy_sig": "clarification=proceed;testing=after",
+      "n": 24
+    },
+    {
+      "policy_sig": "clarification=ask;testing=after;testing=first",
+      "n": 24
+    },
+    {
+      "policy_sig": "clarification=ask;testing=after",
+      "n": 24
+    },
+    {
+      "policy_sig": "branch=pr;clarification=proceed;testing=first",
+      "n": 24
+    },
+    {
+      "policy_sig": "clarification=proceed;production=approval;testing=first",
+      "n": 23
+    },
+    {
+      "policy_sig": "branch=pr;production=approval;testing=first",
+      "n": 22
+    },
+    {
+      "policy_sig": "production=approval;provider=forced:codex",
+      "n": 21
+    },
+    {
+      "policy_sig": "branch=pr;git_destructive=forbid;production=approval",
+      "n": 21
+    },
+    {
+      "policy_sig": "production=approval;testing=after;testing=first",
+      "n": 20
+    },
+    {
+      "policy_sig": "branch=pr;clarification=proceed;production=approval",
+      "n": 20
+    },
+    {
+      "policy_sig": "branch=pr;clarification=ask;production=approval",
+      "n": 19
+    },
+    {
+      "policy_sig": "clarification=proceed;provider=forced:openai",
+      "n": 18
+    },
+    {
+      "policy_sig": "branch=direct_main;branch=pr",
+      "n": 17
+    },
+    {
+      "policy_sig": "production=approval;provider=agnostic",
+      "n": 16
+    },
+    {
+      "policy_sig": "memory=persistent;testing=first",
+      "n": 16
+    },
+    {
+      "policy_sig": "memory=persistent;production=approval",
+      "n": 16
+    },
+    {
+      "policy_sig": "clarification=ask;provider=forced:gemini",
+      "n": 16
+    },
+    {
+      "policy_sig": "memory=persistent;provider=forced:claude",
+      "n": 15
+    },
+    {
+      "policy_sig": "git_destructive=forbid;memory=stateless",
+      "n": 15
+    },
+    {
+      "policy_sig": "clarification=proceed;testing=after;testing=first",
+      "n": 14
+    },
+    {
+      "policy_sig": "memory=stateless;priority=security",
+      "n": 13
+    },
+    {
+      "policy_sig": "clarification=ask;priority=security",
+      "n": 13
+    },
+    {
+      "policy_sig": "branch=pr;git_destructive=allow",
+      "n": 13
+    },
+    {
+      "policy_sig": "branch=pr;git_destructive=forbid;testing=first",
+      "n": 12
+    },
+    {
+      "policy_sig": "clarification=proceed;provider=agnostic",
+      "n": 11
+    },
+    {
+      "policy_sig": "clarification=proceed;provider=forced:gemini",
+      "n": 10
+    },
+    {
+      "policy_sig": "clarification=proceed;priority=security",
+      "n": 9
+    },
+    {
+      "policy_sig": "clarification=ask;provider=forced:cursor",
+      "n": 9
+    },
+    {
+      "policy_sig": "branch=pr;memory=persistent",
+      "n": 9
+    },
+    {
+      "policy_sig": "branch=direct_main",
+      "n": 9
+    },
+    {
+      "policy_sig": "provider=forced:gpt-image",
+      "n": 8
+    }
+  ]
+}
