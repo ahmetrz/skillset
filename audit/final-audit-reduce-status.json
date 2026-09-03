@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T17:54:43.960Z",
+  "generatedAt": "2026-09-03T23:18:32.844Z",
   "ready": false,
   "ingestReady": false,
   "policyReady": false,
@@ -10,32 +10,38 @@
       "skillsB2": 7557
     },
     "done": {
-      "legacy": 11917,
-      "gitB2": 172,
+      "legacy": 18470,
+      "gitB2": 175,
       "skillsB2": 1467
     },
     "policyDone": {
-      "legacy": 3288,
-      "gitB2": 43,
-      "skillsB2": 618
+      "legacy": 17608,
+      "gitB2": 50,
+      "skillsB2": 659
     },
     "rows": [
       {
         "source_system": "gitskills-b2",
         "status": "done",
-        "units": 172,
-        "skills": 193097
+        "units": 175,
+        "skills": 196414
+      },
+      {
+        "source_system": "gitskills-b2",
+        "status": "error",
+        "units": 467,
+        "skills": 0
       },
       {
         "source_system": "gitskills-legacy-hf",
         "status": "done",
-        "units": 11917,
-        "skills": 667383
+        "units": 18470,
+        "skills": 1014321
       },
       {
         "source_system": "gitskills-legacy-hf",
         "status": "error",
-        "units": 12,
+        "units": 662,
         "skills": 0
       },
       {
@@ -43,118 +49,300 @@
         "status": "done",
         "units": 1467,
         "skills": 38187
+      },
+      {
+        "source_system": "skills-sh-b2",
+        "status": "error",
+        "units": 2946,
+        "skills": 0
       }
     ],
     "policyRows": [
       {
         "source_system": "gitskills-b2",
         "status": "done",
-        "units": 43,
-        "skills": 48854,
-        "facts": 7962
+        "units": 50,
+        "skills": 57559,
+        "facts": 9362
+      },
+      {
+        "source_system": "gitskills-b2",
+        "status": "error",
+        "units": 520,
+        "skills": 0,
+        "facts": 0
       },
       {
         "source_system": "gitskills-legacy-hf",
         "status": "done",
-        "units": 3288,
-        "skills": 183939,
-        "facts": 5643
+        "units": 17608,
+        "skills": 967130,
+        "facts": 47225
       },
       {
         "source_system": "gitskills-legacy-hf",
         "status": "error",
-        "units": 1,
+        "units": 1432,
         "skills": 0,
         "facts": 0
       },
       {
         "source_system": "skills-sh-b2",
         "status": "done",
-        "units": 618,
-        "skills": 14267,
-        "facts": 1696
+        "units": 659,
+        "skills": 18795,
+        "facts": 2383
+      },
+      {
+        "source_system": "skills-sh-b2",
+        "status": "error",
+        "units": 2945,
+        "skills": 0,
+        "facts": 0
       }
     ],
     "errorSamples": [
       {
-        "source_key": "hf:gitskills:100353",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100353: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:29:39.291Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-13/0010360-ecubus-ecubus-skills.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:31.288Z"
       },
       {
-        "source_key": "hf:gitskills:100369",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100369: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:29:39.289Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-14/0013513-gsfsss-motion-design-skill.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:30.920Z"
       },
       {
-        "source_key": "hf:gitskills:100340",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100340: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:28:44.859Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-23/0018077-florent427-clubflow.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:30.255Z"
       },
       {
-        "source_key": "hf:gitskills:100348",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100348: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:28:44.836Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-17/0013565-plutowang-agent.files.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:30.070Z"
       },
       {
-        "source_key": "hf:gitskills:100284",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100284: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:26:52.521Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-14/0014863-zhujian-liang-verilog-design-skill.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:27.299Z"
       },
       {
-        "source_key": "hf:gitskills:100276",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100276: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:26:51.950Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-19/0015152-iannuttall-timbre.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:26.831Z"
       },
       {
-        "source_key": "hf:gitskills:100260",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100260: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:26:51.614Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-12/0008552-yungyu16-skills.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:25.652Z"
       },
       {
-        "source_key": "hf:gitskills:100268",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100268: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:26:51.051Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-12/0008353-qualityunit-rendervid.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:14.740Z"
       },
       {
-        "source_key": "hf:gitskills:100217",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100217: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:25:59.997Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-14/0013504-gitbookio-public-docs.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:13.528Z"
       },
       {
-        "source_key": "hf:gitskills:100201",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100201: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:25:59.553Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-13/0010355-drgnchan-weex-trader-skill.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:13.479Z"
       },
       {
-        "source_key": "hf:gitskills:100209",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100209: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:25:59.304Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-17/0013532-openshift-lightspeed-service.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:12.487Z"
       },
       {
-        "source_key": "hf:gitskills:100193",
-        "source_system": "gitskills-legacy-hf",
-        "error": "hf_100193: HF 429: <!DOCTYPE html> <html class=\"\" lang=\"en\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" />",
-        "updated_at": "2026-09-03T12:25:59.219Z"
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-23/0018073-feed-mob-claude-code-marketplace.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:11.747Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-14/0014858-zevtos-agentpipe.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:09.043Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-19/0015141-hotyanovicha-demo-sdd-qloapps.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:08.750Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-12/0008548-yoppai-spartan-ui.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:07.428Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-12/0008341-prasan39-claude-skills.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:17:56.368Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-13/0010349-documentdrivendx-helix.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:17:55.532Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-14/0013492-gaoxiupu-skills.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:17:55.523Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-17/0012625-kravetsone-taskora.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:17:54.872Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-23/0018059-ethanolivertroy-emass-skills.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:17:53.301Z"
       }
     ],
     "policyErrorSamples": [
       {
-        "source_key": "hf:gitskills:102800",
+        "source_key": "b2:gitskills/discovery-b2-v2/pack-128868-128869-128870-128871-128872-128873-128874-128875-128876-128877-128878-128879-128880-128881-128882-128883-128884-128885-128886-128887-128888-128889-128890-128891-128892-128893-128894-128895-128896-128897-128898-128899.json.gz",
+        "source_system": "gitskills-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:30.871Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-00/0004084-drpwchen-claude-paper-tools.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:27.696Z"
+      },
+      {
+        "source_key": "b2:gitskills/discovery-b2-v2/pack-137636-137637-137638-137639-137640-137641-137642-137643-137644-137645-137646-137647-137648-137649-137650-137651-137652-137653-137654-137655-137656-137657-137658-137659-137660-137661-137662-137663-137664-137665-137666-137667.json.gz",
+        "source_system": "gitskills-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:27.354Z"
+      },
+      {
+        "source_key": "b2:gitskills/discovery-b2-v2/pack-131908-131909-131910-131911-131912-131913-131914-131915-131916-131917-131918-131919-131920-131921-131922-131923-131924-131925-131926-131927-131928-131929-131930-131931-131932-131933-131934-131935-131936-131937-131938-131939.json.gz",
+        "source_system": "gitskills-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:25.174Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-16/0011252-iceinvein-agent-skills.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:23.426Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-16/0011326-kjx-talesofai-claude-skill-hyper-beat.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:21.244Z"
+      },
+      {
+        "source_key": "b2:gitskills/discovery-b2-v2/pack-128644-128645-128646-128647-128648-128649-128650-128651-128652-128653-128654-128655-128656-128657-128658-128659-128660-128661-128662-128663-128664-128665-128666-128667-128668-128669-128670-128671-128672-128673-128674-128675.json.gz",
+        "source_system": "gitskills-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:20.704Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-16/0011689-utorrentgaming-inject-ig.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:15.314Z"
+      },
+      {
+        "source_key": "hf:gitskills:118314",
         "source_system": "gitskills-legacy-hf",
-        "error": "fetch failed",
-        "updated_at": "2026-09-03T13:33:27.185Z"
+        "error": "hf_118314: HF 429",
+        "updated_at": "2026-09-03T23:18:13.982Z"
+      },
+      {
+        "source_key": "hf:gitskills:118330",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_118330: HF 429",
+        "updated_at": "2026-09-03T23:18:13.660Z"
+      },
+      {
+        "source_key": "b2:gitskills/discovery-b2-v2/pack-128740-128741-128742-128743-128744-128745-128746-128747-128748-128749-128750-128751-128752-128753-128754-128755-128756-128757-128758-128759-128760-128761-128762-128763-128764-128765-128766-128767-128768-128769-128770-128771.json.gz",
+        "source_system": "gitskills-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:13.436Z"
+      },
+      {
+        "source_key": "hf:gitskills:118322",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_118322: HF 429",
+        "updated_at": "2026-09-03T23:18:13.398Z"
+      },
+      {
+        "source_key": "hf:gitskills:118306",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_118306: HF 429",
+        "updated_at": "2026-09-03T23:18:13.217Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-00/0004080-dr-guangtou-guangtou_vibe.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:09.833Z"
+      },
+      {
+        "source_key": "b2:gitskills/discovery-b2-v2/pack-137508-137509-137510-137511-137512-137513-137514-137515-137516-137517-137518-137519-137520-137521-137522-137523-137524-137525-137526-137527-137528-137529-137530-137531-137532-137533-137534-137535-137536-137537-137538-137539.json.gz",
+        "source_system": "gitskills-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:09.147Z"
+      },
+      {
+        "source_key": "b2:gitskills/discovery-b2-v2/pack-131780-131781-131782-131783-131784-131785-131786-131787-131788-131789-131790-131791-131792-131793-131794-131795-131796-131797-131798-131799-131800-131801-131802-131803-131804-131805-131806-131807-131808-131809-131810-131811.json.gz",
+        "source_system": "gitskills-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:06.989Z"
+      },
+      {
+        "source_key": "b2:skills-sh/exact-b2-v1/bucket-16/0011242-huangjunjan-oh-my-skills.json.gz",
+        "source_system": "skills-sh-b2",
+        "error": "b2_get: Cannot download file, download bandwidth or transaction (Class B) cap exceeded. See the Caps & Alerts page to increase your cap.",
+        "updated_at": "2026-09-03T23:18:05.131Z"
+      },
+      {
+        "source_key": "hf:gitskills:117030",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_117030: HF 429",
+        "updated_at": "2026-09-03T23:18:05.080Z"
+      },
+      {
+        "source_key": "hf:gitskills:117038",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_117038: HF 429",
+        "updated_at": "2026-09-03T23:18:04.842Z"
+      },
+      {
+        "source_key": "hf:gitskills:117054",
+        "source_system": "gitskills-legacy-hf",
+        "error": "hf_117054: HF 429",
+        "updated_at": "2026-09-03T23:18:04.758Z"
       }
     ]
   }
