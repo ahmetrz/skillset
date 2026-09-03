@@ -22,6 +22,8 @@ const state=await q("SELECT key,value FROM final_audit_reduce_state_v1");
 const sm=new Map(state.map(x=>[String(x.key),String(x.value)]));
 const nearReady=sm.get('near_complete')==='1';
 const oversizedGroups=Number(sm.get('near_oversized_groups')||0);
+const sourceInventory=await readJson('audit/source-inventory-reconciliation.json');
+const sourceInventoryReady=sourceInventory?.status==='VERIFIED';
 const conflict=await readJson('audit/conflict-registry-preliminary.json');
 const conflictReady=conflict?.status==='COMPLETE_TEXT_LEVEL_POLICY_CONFLICTS';
 const selectionPath='audit/conflict-selections.json';
@@ -33,21 +35,23 @@ const exact=await q("SELECT count(*) n FROM final_audit_exact_v1");
 const occ=await q("SELECT count(*) n FROM final_audit_occurrence_v1");
 const near=await q("SELECT relation,count(*) n FROM final_audit_near_v1 GROUP BY relation ORDER BY relation");
 const guards={
+  source_inventory_reconciled:sourceInventoryReady,
   ingest_complete:ingestReady,
   policy_rescan_complete:policyReady,
   near_candidate_pass_complete:nearReady,
   oversized_lsh_groups_resolved:nearReady&&oversizedGroups===0,
   conflict_registry_complete:conflictReady,
   conflict_selections_complete:selectionsComplete,
-  destructive_master_build_allowed:ingestReady&&policyReady&&nearReady&&oversizedGroups===0&&conflictReady&&selectionsComplete
+  destructive_master_build_allowed:sourceInventoryReady&&ingestReady&&policyReady&&nearReady&&oversizedGroups===0&&conflictReady&&selectionsComplete
 };
 let status='BLOCKED';
-if(!ingestReady||!policyReady)status='INGESTING';
+if(!sourceInventoryReady)status='RECONCILING_SOURCE_INVENTORY';
+else if(!ingestReady||!policyReady)status='INGESTING';
 else if(!nearReady||oversizedGroups>0)status='REDUCING';
 else if(!conflictReady)status='BUILDING_CONFLICT_REGISTRY';
 else if(!selectionsComplete)status='AWAITING_USER_CONFLICT_SELECTIONS';
 else status='READY_FOR_MASTER_BUILD';
-const out={generatedAt:now(),status,guards,expected,ingestDone,policyDone,oversizedGroups,exactUnique:exact[0],occurrences:occ[0],near,conflictCount:conflicts.length,selectionsFilePresent:await exists(selectionPath)};
+const out={generatedAt:now(),status,guards,sourceInventory,expected,ingestDone,policyDone,oversizedGroups,exactUnique:exact[0],occurrences:occ[0],near,conflictCount:conflicts.length,selectionsFilePresent:await exists(selectionPath)};
 await fs.mkdir('audit',{recursive:true});
 await fs.writeFile('audit/final-validation-status.json',JSON.stringify(out,null,2)+'\n');
 console.log(JSON.stringify(out,null,2));
