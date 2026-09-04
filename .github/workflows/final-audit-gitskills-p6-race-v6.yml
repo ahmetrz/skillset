@@ -1,0 +1,92 @@
+name: Final audit GitSkills p6 race v6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-gitskills-p6-race-v6.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  RELEASE_TAG: final-audit-v4-turbo
+  BULK_PARTITION: '6'
+  BULK_PARTITIONS: '8'
+  BULK_ITEM_SUBPARTS: '4'
+
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        subpart: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests aiohttp
+      - name: Download bulk plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download "$RELEASE_TAG" --pattern bulk-plan-v5.json
+      - name: Extract assigned p6 subpart
+        env:
+          BULK_PLAN: bulk-plan-v5.json
+          BULK_ITEM_SUBPART: ${{ matrix.subpart }}
+          BULK_OUT_DIR: p6-out
+        run: python scripts/final-audit-gitskills-parquet-extract-v5.py
+      - name: Transform assigned p6 subpart
+        env:
+          BULK_ITEM_SUBPART: ${{ matrix.subpart }}
+          BULK_OUT_DIR: p6-out
+        run: node scripts/final-audit-gitskills-parquet-transform-v5.mjs
+      - name: Remove raw source cache
+        if: always()
+        run: rm -f p6-out/raw-*.ndjson.gz p6-out/units-*.json
+      - name: Publish derived p6 subpart
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" p6-out/features-* p6-out/manifest-partial-* --clobber
+
+  combine:
+    needs: split
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Download p6 partial manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf p6-parts p6-combined
+          mkdir -p p6-parts p6-combined
+          gh release download "$RELEASE_TAG" --dir p6-parts --pattern 'manifest-partial-git-b2-bulk-p06-s*-of-04-of-08.json'
+      - name: Combine p6 completion manifest
+        env:
+          SUBPART_MANIFEST_DIR: p6-parts
+          SUBPART_COMBINED_OUT: p6-combined
+        run: node scripts/final-audit-gitskills-subparts-combine-v6.mjs
+      - name: Publish p6 completion
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" p6-combined/manifest-git-b2-bulk-p06-of-08.json --clobber
