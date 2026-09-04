@@ -29,17 +29,19 @@ for(const m of manifests)for(const u of m.units||[]){
 const [g,s,di,dp]=await Promise.all([
   q("SELECT count(*) n FROM gitskills_packs WHERE path LIKE 'gitskills/discovery-b2-v2/%'"),
   q("SELECT count(*) n FROM skills_sh_external_exact_v1 WHERE status='done' AND b2_path IS NOT NULL"),
-  q("SELECT source_system,count(*) n FROM final_audit_unit_v1 WHERE status='done' GROUP BY source_system"),
-  q("SELECT source_system,count(*) n FROM final_audit_policy_unit_v2 WHERE status='done' GROUP BY source_system")
+  q("SELECT source_system,source_key FROM final_audit_unit_v1 WHERE status='done'"),
+  q("SELECT source_system,source_key FROM final_audit_policy_unit_v2 WHERE status='done'")
 ]);
-const im=new Map(di.map(x=>[String(x.source_system),Number(x.n)])),pm=new Map(dp.map(x=>[String(x.source_system),Number(x.n)]));
-const relCounts={};
-for(const k of releaseDone.keys()){const sys=k.split('|')[0];relCounts[sys]=(relCounts[sys]||0)+1}
+const ingestSets=new Map(),policySets=new Map(),releaseSets=new Map();
+for(const r of di){const sys=String(r.source_system);if(!ingestSets.has(sys))ingestSets.set(sys,new Set());ingestSets.get(sys).add(String(r.source_key))}
+for(const r of dp){const sys=String(r.source_system);if(!policySets.has(sys))policySets.set(sys,new Set());policySets.get(sys).add(String(r.source_key))}
+for(const k of releaseDone.keys()){const pos=k.indexOf('|'),sys=k.slice(0,pos),sourceKey=k.slice(pos+1);if(!releaseSets.has(sys))releaseSets.set(sys,new Set());releaseSets.get(sys).add(sourceKey)}
 const expected={'gitskills-legacy-hf':19132,'gitskills-b2':Number(g[0]?.n||0),'skills-sh-b2':Number(s[0]?.n||0)};
 const effective={};
 for(const sys of Object.keys(expected)){
-  const oldI=im.get(sys)||0,oldP=pm.get(sys)||0,add=relCounts[sys]||0;
-  effective[sys]={expected:expected[sys],existingIngest:oldI,existingPolicy:oldP,releaseDone:add,ingestEffective:Math.min(expected[sys],oldI+add),policyEffective:Math.min(expected[sys],oldP+add)};
+  const oldI=ingestSets.get(sys)||new Set(),oldP=policySets.get(sys)||new Set(),rel=releaseSets.get(sys)||new Set();
+  const ingestUnion=new Set([...oldI,...rel]),policyUnion=new Set([...oldP,...rel]);
+  effective[sys]={expected:expected[sys],existingIngest:oldI.size,existingPolicy:oldP.size,releaseDone:rel.size,ingestEffective:ingestUnion.size,policyEffective:policyUnion.size};
 }
 const writers=Array.from({length:PARTS},()=>[]);
 const seen=new Set();let rows=0,inScope=0;
