@@ -34,16 +34,23 @@ for(const u of unresolved){
   const html=await (await fetch('https://skills.sh/'+encodeURIComponent(u.owner)+'/'+encodeURIComponent(u.repo),{headers:{'user-agent':'skillset-occurrence-rescue/6.0'}})).text();
   const slugs=new Set();
   for(const m of html.matchAll(/href="\/([^"/]+)\/([^"/]+)\/([^"/?#]+)"/g))if(m[1].toLowerCase()===u.owner.toLowerCase()&&m[2].toLowerCase()===u.repo.toLowerCase())slugs.add(m[3]);
+  const slugify=s=>String(s||'').toLowerCase().replace(/[\s_]+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  for(const o of occ){
+    const parts=String(o.item_key||'').replace(/\\/g,'/').split('/').filter(Boolean);
+    if(parts.length>=2)slugs.add(slugify(parts[parts.length-2]));
+  }
+  slugs.add(slugify(u.repo));
+  slugs.delete('');
   const downloaded=[];const errors=[];
   for(const slug of slugs){
     try{const res=await fetch('https://skills.sh/api/download/'+encodeURIComponent(u.owner)+'/'+encodeURIComponent(u.repo)+'/'+encodeURIComponent(slug),{headers:{'user-agent':'skillset-occurrence-rescue/6.0'}});if(!res.ok){errors.push({slug,status:res.status});continue}const j=await res.json();const sf=(Array.isArray(j.files)?j.files:[]).filter(x=>/(^|\/)SKILL\.md$/i.test(String(x.path||'')));if(sf.length!==1){errors.push({slug,error:'skill_md_count_'+sf.length});continue}const text=String(sf[0].contents||'');downloaded.push({slug,text,hash:sha256(text),snapshotHash:String(j.hash||'')})}catch(e){errors.push({slug,error:String(e?.message||e)})}
   }
-  const occMulti=multiset(occ.map(x=>String(x.content_hash))),downMulti=multiset(downloaded.map(x=>x.hash));
-  if(downloaded.length!==occ.length||!sameMulti(occMulti,downMulti)){report.push({...u,occurrenceRows:occ.length,pageSlugs:slugs.size,downloaded:downloaded.length,errors,status:'skip_hash_multiset_mismatch'});continue}
-  const queues=new Map();for(const d of downloaded){if(!queues.has(d.hash))queues.set(d.hash,[]);queues.get(d.hash).push(d)}
-  for(const o of occ){const h=String(o.content_hash),d=queues.get(h).shift();const f=feature(d.text,String(o.locator||'')),facts=numericFacts(d.text);if(f.h!==h)throw new Error('feature_hash_mismatch '+u.source);if(f.sdlc_mask!==0||f.social_mask!==0)inScope++;policyFacts+=facts.length;totalSkills++;records.push({source_key:u.sourceKey,item_key:String(o.item_key),source_system:'skills-sh-b2',repo:String(o.repo||u.source),path:String(o.path||o.item_key),locator:String(o.locator||''),content_hash:f.h,simhash_hex:f.simhash_hex,c0:f.c0,c1:f.c1,c2:f.c2,c3:f.c3,char_count:f.char_count,token_count:f.token_count,sdlc_mask:f.sdlc_mask,social_mask:f.social_mask,risk_mask:f.risk_mask,provider_mask:f.provider_mask,policy_sig:f.policy_sig,skill_name:f.skill_name||null,sample_locator:f.sample_locator,policy_facts:facts})}
+  const byHash=new Map();for(const d of downloaded)if(!byHash.has(d.hash))byHash.set(d.hash,d);
+  const missingHashes=[...new Set(occ.map(x=>String(x.content_hash)))].filter(h=>!byHash.has(h));
+  if(missingHashes.length){report.push({...u,occurrenceRows:occ.length,candidateSlugs:slugs.size,downloaded:downloaded.length,missingHashes,errors,status:'skip_hash_coverage_mismatch'});continue}
+  for(const o of occ){const h=String(o.content_hash),d=byHash.get(h);const f=feature(d.text,String(o.locator||'')),facts=numericFacts(d.text);if(f.h!==h)throw new Error('feature_hash_mismatch '+u.source);if(f.sdlc_mask!==0||f.social_mask!==0)inScope++;policyFacts+=facts.length;totalSkills++;records.push({source_key:u.sourceKey,item_key:String(o.item_key),source_system:'skills-sh-b2',repo:String(o.repo||u.source),path:String(o.path||o.item_key),locator:String(o.locator||''),content_hash:f.h,simhash_hex:f.simhash_hex,c0:f.c0,c1:f.c1,c2:f.c2,c3:f.c3,char_count:f.char_count,token_count:f.token_count,sdlc_mask:f.sdlc_mask,social_mask:f.social_mask,risk_mask:f.risk_mask,provider_mask:f.provider_mask,policy_sig:f.policy_sig,skill_name:f.skill_name||null,sample_locator:f.sample_locator,policy_facts:facts})}
   units.push({source_key:u.sourceKey,source_system:'skills-sh-b2',status:'done',rows_scanned:occ.length,skills_indexed:occ.length,records:occ.length,snapshot:{transport:'skills-sh-cache-occurrence-hash-verified',hashesVerified:occ.length}});
-  report.push({...u,occurrenceRows:occ.length,pageSlugs:slugs.size,downloaded:downloaded.length,status:'done_exact_hash_multiset'});
+  report.push({...u,occurrenceRows:occ.length,candidateSlugs:slugs.size,downloaded:downloaded.length,status:'done_exact_hash_coverage'});
 }
 const body=records.map(x=>JSON.stringify(x)).join('\n')+(records.length?'\n':'');
 await fs.writeFile(path.join(outDir,'features-skills-b2-occurrence-rescue-v6.ndjson.gz'),gzipSync(Buffer.from(body),{level:6}));
