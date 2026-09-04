@@ -7,11 +7,14 @@ import {feature,numericFacts} from './final-audit-feature-core-v4.mjs';
 
 const PART=Number(process.env.BULK_PARTITION||0);
 const PARTS=Math.max(1,Number(process.env.BULK_PARTITIONS||8));
+const SUB=Number(process.env.BULK_ITEM_SUBPART??-1);
+const SUBS=Math.max(1,Number(process.env.BULK_ITEM_SUBPARTS||1));
 const DIR=process.env.BULK_OUT_DIR||'bulk-v5-out';
-const raw=path.join(DIR,'raw-git-b2-bulk-p'+String(PART).padStart(2,'0')+'.ndjson.gz');
-const unitFile=path.join(DIR,'units-git-b2-bulk-p'+String(PART).padStart(2,'0')+'.json');
-const featureFile=path.join(DIR,'features-git-b2-bulk-p'+String(PART).padStart(2,'0')+'-of-'+String(PARTS).padStart(2,'0')+'.ndjson.gz');
-const manifestFile=path.join(DIR,'manifest-git-b2-bulk-p'+String(PART).padStart(2,'0')+'-of-'+String(PARTS).padStart(2,'0')+'.json');
+const suffix=SUB>=0?'-s'+String(SUB).padStart(2,'0')+'-of-'+String(SUBS).padStart(2,'0'):'';
+const raw=path.join(DIR,'raw-git-b2-bulk-p'+String(PART).padStart(2,'0')+suffix+'.ndjson.gz');
+const unitFile=path.join(DIR,'units-git-b2-bulk-p'+String(PART).padStart(2,'0')+suffix+'.json');
+const featureFile=path.join(DIR,'features-git-b2-bulk-p'+String(PART).padStart(2,'0')+suffix+'-of-'+String(PARTS).padStart(2,'0')+'.ndjson.gz');
+const manifestFile=path.join(DIR,'manifest-partial-git-b2-bulk-p'+String(PART).padStart(2,'0')+suffix+'-of-'+String(PARTS).padStart(2,'0')+'.json');
 
 const plan=JSON.parse(await fsp.readFile(unitFile,'utf8'));
 const counts=new Map(),records=new Map();
@@ -51,8 +54,9 @@ const units=(plan.packs||[]).map(u=>({
 }));
 const manifest={
   generatedAt:new Date().toISOString(),source:'git-b2-parquet-bulk',sourceSystem:'gitskills-b2',
-  partition:PART,partitions:PARTS,assignedUnits:units.length,completedUnits:units.filter(x=>x.status==='done').length,
-  failedUnits:units.filter(x=>x.status!=='done').length,skills:total,inScope,policyFacts:factsN,records:total,units
+  partition:PART,partitions:PARTS,subpart:SUB,subparts:SUBS,assignedUnits:units.length,
+  completedUnits:units.filter(x=>x.status==='done'||x.status==='partial').length,
+  failedUnits:units.filter(x=>x.status==='error').length,skills:total,inScope,policyFacts:factsN,records:total,units
 };
 await fsp.writeFile(manifestFile,JSON.stringify(manifest,null,2)+'\n');
 console.log(JSON.stringify({event:'bulk_transform_complete',partition:PART,parts:PARTS,units:units.length,skills:total,inScope,policyFacts:factsN,failedUnits:manifest.failedUnits}));
