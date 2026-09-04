@@ -1,0 +1,40 @@
+name: Final audit local shard v4 smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-local-shard-v4-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [git-legacy, git-b2, skills-b2]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client tar-stream
+      - name: Run one-unit write-free smoke
+        env:
+          AUDIT_SOURCE: ${{ matrix.source }}
+          AUDIT_PARTITION: '0'
+          AUDIT_PARTITIONS: '100000'
+          AUDIT_OUT_DIR: 'audit-v4-smoke'
+        run: node scripts/final-audit-local-shard-v4.mjs
