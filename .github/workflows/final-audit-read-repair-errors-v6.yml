@@ -1,0 +1,29 @@
+name: Read skills.sh repair errors v6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-read-repair-errors-v6.yml'
+
+permissions:
+  contents: read
+
+env:
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Download and print repair manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p m
+          gh release download "$RELEASE_TAG" --repo ${{ github.repository }} --dir m --pattern 'manifest-skills-b2-p*-of-04.json'
+          for f in m/*.json; do
+            echo "=== $f ==="
+            jq '{partition,totalMissingAtStart,assignedUnits,completedUnits,failedUnits,units:[.units[]|select(.status!="done")|{source_key,status,error}]}' "$f"
+          done
