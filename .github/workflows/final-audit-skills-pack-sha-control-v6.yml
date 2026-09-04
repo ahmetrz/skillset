@@ -57,4 +57,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release upload "$RELEASE_TAG" pack-sha-rescue-out/* --clobber
-# stable partition + immutable run assets v7.3
+# occurrence-hash current-tree rescue v7.4
