@@ -2,7 +2,7 @@ name: Final audit write-free downstream v4
 
 on:
   workflow_run:
-    workflows: ["Final audit write-free turbo v4"]
+    workflows: ["Final audit write-free turbo v4", "Final audit GitSkills repair v4"]
     types: [completed]
   workflow_dispatch:
 
