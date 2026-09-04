@@ -1,0 +1,140 @@
+name: Final audit write-free turbo v4
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-writefree-turbo-v4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: final-audit-writefree-turbo-v4
+  cancel-in-progress: false
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - name: Ensure scratch release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "$RELEASE_TAG" >/dev/null 2>&1 ||             gh release create "$RELEASE_TAG"               --target gitskills-migration-run               --title "Final Audit v4 Turbo Scratch"               --notes "Derived audit shards only. No raw skill text. Temporary write-free audit workspace."
+
+  audit:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        include:
+          - {source: git-legacy, partition: 0, parts: 4}
+          - {source: git-legacy, partition: 1, parts: 4}
+          - {source: git-legacy, partition: 2, parts: 4}
+          - {source: git-legacy, partition: 3, parts: 4}
+          - {source: git-b2, partition: 0, parts: 20}
+          - {source: git-b2, partition: 1, parts: 20}
+          - {source: git-b2, partition: 2, parts: 20}
+          - {source: git-b2, partition: 3, parts: 20}
+          - {source: git-b2, partition: 4, parts: 20}
+          - {source: git-b2, partition: 5, parts: 20}
+          - {source: git-b2, partition: 6, parts: 20}
+          - {source: git-b2, partition: 7, parts: 20}
+          - {source: git-b2, partition: 8, parts: 20}
+          - {source: git-b2, partition: 9, parts: 20}
+          - {source: git-b2, partition: 10, parts: 20}
+          - {source: git-b2, partition: 11, parts: 20}
+          - {source: git-b2, partition: 12, parts: 20}
+          - {source: git-b2, partition: 13, parts: 20}
+          - {source: git-b2, partition: 14, parts: 20}
+          - {source: git-b2, partition: 15, parts: 20}
+          - {source: git-b2, partition: 16, parts: 20}
+          - {source: git-b2, partition: 17, parts: 20}
+          - {source: git-b2, partition: 18, parts: 20}
+          - {source: git-b2, partition: 19, parts: 20}
+          - {source: skills-b2, partition: 0, parts: 16}
+          - {source: skills-b2, partition: 1, parts: 16}
+          - {source: skills-b2, partition: 2, parts: 16}
+          - {source: skills-b2, partition: 3, parts: 16}
+          - {source: skills-b2, partition: 4, parts: 16}
+          - {source: skills-b2, partition: 5, parts: 16}
+          - {source: skills-b2, partition: 6, parts: 16}
+          - {source: skills-b2, partition: 7, parts: 16}
+          - {source: skills-b2, partition: 8, parts: 16}
+          - {source: skills-b2, partition: 9, parts: 16}
+          - {source: skills-b2, partition: 10, parts: 16}
+          - {source: skills-b2, partition: 11, parts: 16}
+          - {source: skills-b2, partition: 12, parts: 16}
+          - {source: skills-b2, partition: 13, parts: 16}
+          - {source: skills-b2, partition: 14, parts: 16}
+          - {source: skills-b2, partition: 15, parts: 16}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client tar-stream
+      - name: Generate write-free audit shard
+        id: shard
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          AUDIT_SOURCE: ${{ matrix.source }}
+          AUDIT_PARTITION: ${{ matrix.partition }}
+          AUDIT_PARTITIONS: ${{ matrix.parts }}
+          AUDIT_OUT_DIR: audit-v4-out
+        run: node scripts/final-audit-local-shard-v4.mjs
+      - name: Upload derived shard to scratch release
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -lh audit-v4-out || true
+          files=(audit-v4-out/*)
+          if [ -e "${files[0]}" ]; then
+            gh release upload "$RELEASE_TAG" audit-v4-out/* --clobber
+          else
+            echo "No shard files produced" >&2
+            exit 1
+          fi
+
+  inventory:
+    needs: audit
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - name: Snapshot scratch release inventory
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p audit
+          gh release view "$RELEASE_TAG" --json assets,tagName,url > audit/final-audit-v4-release-status.json
+      - name: Persist compact status
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/final-audit-v4-release-status.json
+          git commit -m "chore: snapshot write-free turbo release" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
