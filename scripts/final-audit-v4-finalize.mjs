@@ -34,19 +34,35 @@ const nearCounts={
 
 const featureFiles=all.filter(x=>/^features-.*\.ndjson\.gz$/.test(path.basename(x)));
 const newPolicy=new Map(),newFacts=new Map(),newExamples=new Map(),seenHashes=new Set();
+let summarizedUniqueHashes=0;
 function add(map,k,n=1){map.set(k,(map.get(k)||0)+n)}
-for(const p of featureFiles){
-  for await(const r of ndjsonGz(p)){
-    if((Number(r.sdlc_mask)||0)===0&&(Number(r.social_mask)||0)===0)continue;
-    const h=String(r.content_hash||'');if(!h||seenHashes.has(h))continue;seenHashes.add(h);
-    for(const s of String(r.policy_sig||'').split(';').filter(Boolean)){add(newPolicy,s);if(!newExamples.has(s))newExamples.set(s,{contentHash:h,locator:r.sample_locator||r.locator})}
-    for(const f of r.policy_facts||[]){const k=String(f.key)+'='+String(f.value);add(newFacts,k);if(!newExamples.has(k))newExamples.set(k,{contentHash:h,locator:r.sample_locator||r.locator,evidence:f.evidence})}
+const policySummaryFile=all.find(x=>path.basename(x)==='final-audit-v6-policy-summary.json');
+if(policySummaryFile){
+  const s=JSON.parse(await fs.readFile(policySummaryFile,'utf8'));
+  for(const [k,v] of Object.entries(s.policy||{}))newPolicy.set(k,Number(v||0));
+  for(const [k,v] of Object.entries(s.facts||{}))newFacts.set(k,Number(v||0));
+  for(const [k,v] of Object.entries(s.examples||{}))newExamples.set(k,v);
+  summarizedUniqueHashes=Number(s.uniqueHashes||0);
+}else{
+  for(const p of featureFiles){
+    for await(const r of ndjsonGz(p)){
+      if((Number(r.sdlc_mask)||0)===0&&(Number(r.social_mask)||0)===0)continue;
+      const h=String(r.content_hash||'');if(!h||seenHashes.has(h))continue;seenHashes.add(h);
+      for(const s of String(r.policy_sig||'').split(';').filter(Boolean)){add(newPolicy,s);if(!newExamples.has(s))newExamples.set(s,{contentHash:h,locator:r.sample_locator||r.locator})}
+      for(const f of r.policy_facts||[]){const k=String(f.key)+'='+String(f.value);add(newFacts,k);if(!newExamples.has(k))newExamples.set(k,{contentHash:h,locator:r.sample_locator||r.locator,evidence:f.evidence})}
+    }
+  }
+  summarizedUniqueHashes=seenHashes.size;
+}
+const oldStanceRows=await q("SELECT policy_sig,count(*) n,min(content_hash) example_hash,min(sample_locator) example_locator FROM final_audit_exact_v1 WHERE (sdlc_mask<>0 OR social_mask<>0) AND policy_sig<>'' GROUP BY policy_sig");
+const oldStances=new Map();
+for(const r of oldStanceRows){
+  const n=Number(r.n||0),example=r.example_hash?{contentHash:r.example_hash,locator:r.example_locator}:null;
+  for(const stance of String(r.policy_sig||'').split(';').filter(Boolean)){
+    const cur=oldStances.get(stance)||{count:0,example:null};cur.count+=n;if(!cur.example)cur.example=example;oldStances.set(stance,cur);
   }
 }
-async function oldStanceCount(stance){
-  const rows=await q("SELECT count(*) n,min(content_hash) example_hash,min(sample_locator) example_locator FROM final_audit_exact_v1 WHERE (sdlc_mask<>0 OR social_mask<>0) AND (';'||policy_sig||';') LIKE ?",['%;'+stance+';%']);
-  return {count:Number(rows[0]?.n||0),example:rows[0]?.example_hash?{contentHash:rows[0].example_hash,locator:rows[0].example_locator}:null};
-}
+async function oldStanceCount(stance){return oldStances.get(stance)||{count:0,example:null}}
 function recommendation(key,left,right){
   if(key==='git_destructive')return 'forbid';
   if(key==='production')return 'approval';
@@ -114,5 +130,5 @@ const validation={
 };
 await fs.writeFile(path.join(outDir,'conflict-registry-preliminary.json'),JSON.stringify(registry,null,2)+'\n');
 await fs.writeFile(path.join(outDir,'final-validation-status.json'),JSON.stringify(validation,null,2)+'\n');
-await fs.writeFile(path.join(outDir,'final-audit-v4-final-summary.json'),JSON.stringify({generatedAt:new Date().toISOString(),sourceReady,nearReady,near:nearCounts,conflictCount:conflicts.length,newUniquePolicyHashesScanned:seenHashes.size},null,2)+'\n');
+await fs.writeFile(path.join(outDir,'final-audit-v4-final-summary.json'),JSON.stringify({generatedAt:new Date().toISOString(),sourceReady,nearReady,near:nearCounts,conflictCount:conflicts.length,newUniquePolicyHashesScanned:summarizedUniqueHashes},null,2)+'\n');
 console.log(JSON.stringify(validation,null,2));
