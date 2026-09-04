@@ -8,6 +8,7 @@ const need=n=>{const v=process.env[n];if(!v)throw new Error('Missing '+n);return
 const turso=createClient({url:need('TURSO_DATABASE_URL'),authToken:need('TURSO_AUTH_TOKEN')});
 const input=process.env.AUDIT_V4_INPUT||'v4-assets',outDir=process.env.AUDIT_V4_MERGE_OUT||'v4-merge-out';
 const PARTS=Math.max(1,Number(process.env.NEAR_PARTITIONS||20));
+const PART_MODE=process.env.NEAR_PARTITION_MODE||'modulo';
 async function q(sql,args=[]){return (await turso.execute({sql,args})).rows}
 async function files(dir){const out=[];for(const e of await fs.readdir(dir,{withFileTypes:true})){const p=path.join(dir,e.name);if(e.isDirectory())out.push(...await files(p));else out.push(p)}return out}
 async function* ndjsonGz(file){
@@ -56,7 +57,7 @@ for(const p of featureFiles){
     if(seen.has(sig))continue;seen.add(sig);
     const cs=[Number(r.c0),Number(r.c1),Number(r.c2)];
     for(let axis=0;axis<3;axis++){
-      const task=axis*256+Math.floor(cs[axis]/256),part=task%PARTS;
+      const bucket=Math.floor(cs[axis]/256),task=axis*256+bucket,part=PART_MODE==='range'?Math.min(PARTS-1,Math.floor(bucket*PARTS/256)):task%PARTS;
       writers[part].push(JSON.stringify({task,axis,content_hash:h,simhash_hex:r.simhash_hex,char_count:r.char_count,token_count:r.token_count,c0:r.c0,c1:r.c1,c2:r.c2,c3:r.c3}));
     }
   }
