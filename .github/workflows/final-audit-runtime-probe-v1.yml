@@ -8,12 +8,12 @@ permissions:
   contents: write
   statuses: write
 env:
-  TURSO_DATABASE_URL: \${{ secrets.TURSO_DATABASE_URL }}
-  TURSO_AUTH_TOKEN: \${{ secrets.TURSO_AUTH_TOKEN }}
-  B2_ACCESS_KEY_ID: \${{ secrets.B2_ACCESS_KEY_ID }}
-  B2_SECRET_ACCESS_KEY: \${{ secrets.B2_SECRET_ACCESS_KEY }}
-  B2_BUCKET: \${{ secrets.B2_BUCKET }}
-  B2_ENDPOINT: \${{ secrets.B2_ENDPOINT }}
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+  B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
   AUDIT_B2_READ: '0'
 jobs:
   probe:
