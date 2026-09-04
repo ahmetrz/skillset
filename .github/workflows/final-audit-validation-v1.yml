@@ -1,13 +1,7 @@
 name: Final audit validation gate v1
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/final-audit-validation-v1.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '59 */4 * * *'
 
 permissions:
   contents: write
