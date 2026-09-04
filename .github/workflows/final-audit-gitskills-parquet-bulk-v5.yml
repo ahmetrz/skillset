@@ -70,7 +70,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install parquet reader
-        run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests
+        run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests aiohttp
       - name: Download bulk plan
         env:
           GH_TOKEN: ${{ github.token }}
