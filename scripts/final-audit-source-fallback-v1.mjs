@@ -38,23 +38,35 @@ async function git(args,cwd,timeout=120000){
   const r=await exec('git',args,{cwd,timeout,maxBuffer:64*1024*1024,env:{...process.env,GIT_TERMINAL_PROMPT:'0'}});
   return String(r.stdout||'');
 }
+async function githubHistoricalSha(owner,repo,at){
+  const headers={'user-agent':'skillset-final-audit-turbo/4.0','accept':'application/vnd.github+json'};
+  const token=process.env.GITHUB_TOKEN||'';
+  if(token)headers.authorization='Bearer '+token;
+  const url='https://api.github.com/repos/'+encodeURIComponent(owner)+'/'+encodeURIComponent(repo)+'/commits?until='+encodeURIComponent(at)+'&per_page=1';
+  const r=await fetch(url,{headers,signal:AbortSignal.timeout(30000)});
+  const text=await r.text();
+  if(!r.ok)throw new Error('github_commits_'+r.status+':'+text.slice(0,200));
+  const rows=JSON.parse(text);
+  const commit=String(rows?.[0]?.sha||'');
+  if(!commit)throw new Error('github_commit_before_time_missing:'+owner+'/'+repo+'@'+at);
+  return commit;
+}
 async function historicalSha(owner,repo,at,dir){
-  const url='https://github.com/'+owner+'/'+repo+'.git';
-  const sym=await git(['ls-remote','--symref',url,'HEAD'],dir,60000);
-  const branch=sym.match(/^ref:\s+refs\/heads\/([^\t\r\n]+)\s+HEAD/m)?.[1];
-  if(!branch)throw new Error('default_branch_unresolved:'+owner+'/'+repo);
-  await git(['init','-q'],dir);
-  await git(['remote','add','origin',url],dir);
-  const fetchDepth=async depth=>git(['fetch','-q','--filter=blob:none','--depth='+depth,'origin','refs/heads/'+branch],dir,180000);
-  await fetchDepth(200);
-  let sha=(await git(['rev-list','-1','--before='+at,'FETCH_HEAD'],dir)).trim();
-  if(!sha){await fetchDepth(2000);sha=(await git(['rev-list','-1','--before='+at,'FETCH_HEAD'],dir)).trim()}
-  if(!sha){
-    await git(['fetch','-q','--filter=blob:none','--unshallow','origin','refs/heads/'+branch],dir,300000).catch(()=>{});
-    sha=(await git(['rev-list','-1','--before='+at,'FETCH_HEAD'],dir)).trim();
+  try{return await retry('github_historical_sha:'+owner+'/'+repo,()=>githubHistoricalSha(owner,repo,at),4)}
+  catch(apiError){
+    const url='https://github.com/'+owner+'/'+repo+'.git';
+    const sym=await git(['ls-remote','--symref',url,'HEAD'],dir,60000);
+    const branch=sym.match(/^ref:\s+refs\/heads\/([^\t\r\n]+)\s+HEAD/m)?.[1];
+    if(!branch)throw apiError;
+    await git(['init','-q'],dir);
+    await git(['remote','add','origin',url],dir);
+    const fetchDepth=async depth=>git(['fetch','-q','--filter=blob:none','--depth='+depth,'origin','refs/heads/'+branch],dir,180000);
+    await fetchDepth(200);
+    let commit=(await git(['rev-list','-1','--before='+at,'FETCH_HEAD'],dir)).trim();
+    if(!commit){await fetchDepth(2000);commit=(await git(['rev-list','-1','--before='+at,'FETCH_HEAD'],dir)).trim()}
+    if(!commit)throw apiError;
+    return commit;
   }
-  if(!sha)throw new Error('historical_commit_unresolved:'+owner+'/'+repo+'@'+at);
-  return sha;
 }
 async function codeloadSkills(owner,repo,sha){
   const url='https://codeload.github.com/'+encodeURIComponent(owner)+'/'+encodeURIComponent(repo)+'/tar.gz/'+encodeURIComponent(sha);
