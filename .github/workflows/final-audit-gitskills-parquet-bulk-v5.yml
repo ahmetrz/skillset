@@ -1,0 +1,111 @@
+name: Final audit GitSkills parquet bulk v5
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-gitskills-parquet-bulk-v5.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: final-audit-gitskills-parquet-bulk-v5
+  cancel-in-progress: false
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  RELEASE_TAG: final-audit-v4-turbo
+  BULK_PARTITIONS: '8'
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Download completed manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf bulk-skip
+          mkdir -p bulk-skip
+          gh release download "$RELEASE_TAG" --dir bulk-skip --pattern 'manifest-*' || true
+      - name: Build exact unresolved pack plan
+        env:
+          AUDIT_SKIP_MANIFEST_DIR: bulk-skip
+          BULK_PLAN_OUT: bulk-plan-v5.json
+        run: node scripts/final-audit-gitskills-bulk-plan-v5.mjs
+      - name: Publish plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" bulk-plan-v5.json --clobber
+
+  bulk:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        partition: [0,1,2,3,4,5,6,7]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install parquet reader
+        run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests
+      - name: Download bulk plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download "$RELEASE_TAG" --pattern bulk-plan-v5.json
+      - name: Extract assigned rows from Parquet CDN
+        env:
+          BULK_PLAN: bulk-plan-v5.json
+          BULK_PARTITION: ${{ matrix.partition }}
+          BULK_OUT_DIR: bulk-v5-out
+        run: python scripts/final-audit-gitskills-parquet-extract-v5.py
+      - name: Build audit feature shard
+        env:
+          BULK_PARTITION: ${{ matrix.partition }}
+          BULK_PARTITIONS: '8'
+          BULK_OUT_DIR: bulk-v5-out
+        run: node scripts/final-audit-gitskills-parquet-transform-v5.mjs
+      - name: Remove raw source cache
+        if: always()
+        run: rm -f bulk-v5-out/raw-*.ndjson.gz bulk-v5-out/units-*.json
+      - name: Publish derived repair shard
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" bulk-v5-out/features-* bulk-v5-out/manifest-* --clobber
+
+  verify:
+    needs: bulk
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - name: Show release asset inventory
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release view "$RELEASE_TAG" --json assets --jq '.assets | map(.name) | map(select(test("bulk|manifest-git-b2|features-git-b2"))) | length'
