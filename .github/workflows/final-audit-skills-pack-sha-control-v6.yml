@@ -1,4 +1,4 @@
-name: Test skills.sh acquisition pack SHA reconstruction v6
+name: Final audit skills.sh pack SHA rescue v7
 
 on:
   push:
@@ -8,16 +8,22 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 env:
-  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
-  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  TURSO_DATABASE_URL: \${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: \${{ secrets.TURSO_AUTH_TOKEN }}
+  RELEASE_TAG: final-audit-v4-turbo
 
 jobs:
-  test:
+  rescue:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        partition: [0,1,2,3]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,7 +32,23 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-save --no-audit --no-fund @libsql/client
-      - name: Reconstruct acquisition pack SHA controls
+      - name: Download current source manifests
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: node scripts/final-audit-skills-pack-sha-control-v6.mjs
+          GH_TOKEN: \${{ github.token }}
+        run: |
+          rm -rf tail-manifests pack-sha-rescue-out
+          mkdir -p tail-manifests pack-sha-rescue-out
+          gh release download "$RELEASE_TAG" --dir tail-manifests --pattern 'manifest-*' || true
+      - name: Reconstruct and verify exact acquisition packs
+        env:
+          GITHUB_TOKEN: \${{ github.token }}
+          MANIFEST_DIR: tail-manifests
+          RESCUE_OUT: pack-sha-rescue-out
+          AUDIT_PARTITION: \${{ matrix.partition }}
+          AUDIT_PARTITIONS: '4'
+        run: node scripts/final-audit-skills-pack-sha-rescue-v7.mjs
+      - name: Publish verified feature and provenance shards
+        if: always()
+        env:
+          GH_TOKEN: \${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" pack-sha-rescue-out/* --clobber
