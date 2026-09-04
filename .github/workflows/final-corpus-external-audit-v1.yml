@@ -47,7 +47,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3 tar-stream
       - name: Run one-unit smoke
         env:
           AUDIT_SOURCE: ${{ matrix.source }}
@@ -89,7 +89,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3 tar-stream
       - name: Run checkpointed audit partition
         env:
           AUDIT_SOURCE: ${{ matrix.source }}
@@ -110,7 +110,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3 tar-stream
       - run: node scripts/final-audit-external-v1.mjs --status
       - name: Persist status
         run: |
