@@ -31,7 +31,7 @@ export async function rebuildGitSkillsPack(key){
   if(!m)throw new Error('cannot_parse_gitskills_pack:'+key);
   const ids=m[1].split('-').map(Number).filter(Number.isFinite);
   const shards=[];
-  for(let i=0;i<ids.length;i+=2)shards.push(...await Promise.all(ids.slice(i,i+2).map(hfShard)));
+  for(let i=0;i<ids.length;i++){shards.push(await hfShard(ids[i]));await sleep(80+Math.floor(Math.random()*120))}
   return {version:1,source:'gitskills-hf-fallback',shards};
 }
 async function git(args,cwd,timeout=120000){
