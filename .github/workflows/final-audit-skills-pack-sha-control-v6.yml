@@ -7,6 +7,10 @@ on:
       - '.github/workflows/final-audit-skills-pack-sha-control-v6.yml'
   workflow_dispatch:
 
+concurrency:
+  group: final-audit-skills-pack-sha-rescue-v7
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
