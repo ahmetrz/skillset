@@ -1,0 +1,47 @@
+name: Final audit runtime probe v1
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/final-audit-runtime-probe-v1.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+env:
+  TURSO_DATABASE_URL: \${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: \${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_ACCESS_KEY_ID: \${{ secrets.B2_ACCESS_KEY_ID }}
+  B2_SECRET_ACCESS_KEY: \${{ secrets.B2_SECRET_ACCESS_KEY }}
+  B2_BUCKET: \${{ secrets.B2_BUCKET }}
+  B2_ENDPOINT: \${{ secrets.B2_ENDPOINT }}
+  AUDIT_B2_READ: '0'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3 tar-stream
+      - name: Probe one GitSkills pack
+        shell: bash
+        run: |
+          mkdir -p audit
+          set +e
+          AUDIT_SOURCE=git-b2 AUDIT_PARTITION=0 AUDIT_PARTITIONS=100000 node scripts/final-audit-external-v1.mjs > audit/final-audit-runtime-probe.log 2>&1
+          code=$?
+          echo "exit=$code" >> audit/final-audit-runtime-probe.log
+          cat audit/final-audit-runtime-probe.log
+          exit 0
+      - name: Persist probe
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/final-audit-runtime-probe.log
+          git commit -m "chore: persist audit runtime probe" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
