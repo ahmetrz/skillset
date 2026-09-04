@@ -50,10 +50,11 @@ jobs:
           RESCUE_OUT: pack-sha-rescue-out
           AUDIT_PARTITION: ${{ matrix.partition }}
           AUDIT_PARTITIONS: '4'
+          RESCUE_LABEL: ${{ github.run_id }}
         run: node scripts/final-audit-skills-pack-sha-rescue-v7.mjs
       - name: Publish verified feature and provenance shards
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release upload "$RELEASE_TAG" pack-sha-rescue-out/* --clobber
-# cache candidate pass v7.2
+# stable partition + immutable run assets v7.3
