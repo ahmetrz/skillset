@@ -1,13 +1,7 @@
 name: Final audit near turbo v2
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/final-audit-near-turbo-v2.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '23 * * * *'
 
 permissions:
   contents: write
