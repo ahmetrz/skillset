@@ -1,0 +1,62 @@
+name: Final audit skills.sh exact B2 rescue v6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-skills-b2-exact-rescue-v6.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+  B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+  B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  rescue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        partition: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - name: Download completed manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf rescue-skip rescue-out
+          mkdir -p rescue-skip rescue-out
+          gh release download "$RELEASE_TAG" --dir rescue-skip --pattern 'manifest-*' || true
+      - name: Recover unresolved exact skills.sh packs from B2
+        continue-on-error: true
+        env:
+          AUDIT_PARTITION: ${{ matrix.partition }}
+          AUDIT_PARTITIONS: '4'
+          AUDIT_SKIP_MANIFEST_DIR: rescue-skip
+          AUDIT_OUT_DIR: rescue-out
+        run: node scripts/final-audit-skills-b2-exact-rescue-v6.mjs
+      - name: Publish rescue diagnostics and features
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          files=(rescue-out/*)
+          if [ -e "${files[0]}" ]; then
+            gh release upload "$RELEASE_TAG" rescue-out/* --clobber
+          fi
