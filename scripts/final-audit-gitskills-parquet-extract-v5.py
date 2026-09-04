@@ -6,10 +6,13 @@ import pyarrow.parquet as pq
 
 PLAN=os.environ.get("BULK_PLAN","bulk-plan-v5.json")
 PART=int(os.environ.get("BULK_PARTITION","0"))
+SUB=int(os.environ.get("BULK_ITEM_SUBPART","-1"))
+SUBS=max(1,int(os.environ.get("BULK_ITEM_SUBPARTS","1")))
 OUT_DIR=pathlib.Path(os.environ.get("BULK_OUT_DIR","bulk-v5-out"))
 OUT_DIR.mkdir(parents=True,exist_ok=True)
-RAW=OUT_DIR/f"raw-git-b2-bulk-p{PART:02d}.ndjson.gz"
-UNIT=OUT_DIR/f"units-git-b2-bulk-p{PART:02d}.json"
+SUFFIX=(f"-s{SUB:02d}-of-{SUBS:02d}" if SUB>=0 else "")
+RAW=OUT_DIR/f"raw-git-b2-bulk-p{PART:02d}{SUFFIX}.ndjson.gz"
+UNIT=OUT_DIR/f"units-git-b2-bulk-p{PART:02d}{SUFFIX}.json"
 DATASET="mvaccargiu/gitskills"
 
 with open(PLAN,"r",encoding="utf-8") as f: plan=json.load(f)
@@ -118,6 +121,7 @@ with gzip.open(RAW,"wt",encoding="utf-8",compresslevel=5) as out:
                     gidx=rg_start+local_off+j
                     sk=owner(gidx)
                     if sk is None: continue
+                    if SUB>=0 and (gidx % SUBS)!=SUB: continue
                     selected_rows[sk]+=1
                     dp=row.get("dedup_primary")
                     if not (dp is True or dp==1): continue
@@ -135,14 +139,25 @@ with gzip.open(RAW,"wt",encoding="utf-8",compresslevel=5) as out:
 # Fail closed if any planned global row range was not actually traversed.
 units=[]
 bad=[]
+def sub_expected(p):
+    if SUB<0: return int(p["expectedRows"])
+    n=0
+    for rr in p["ranges"]:
+        a,b=int(rr["start"]),int(rr["end"])
+        first=a+((SUB-(a%SUBS))%SUBS)
+        if first<b:n+=1+((b-1-first)//SUBS)
+    return n
+
 for p in packs:
-    expected=int(p["expectedRows"])
+    expected=sub_expected(p)
     got=selected_rows[p["sourceKey"]]
     if got!=expected:
         bad.append({"sourceKey":p["sourceKey"],"expectedRows":expected,"selectedRows":got})
-    units.append({"source_key":p["sourceKey"],"source_system":"gitskills-b2","status":"done" if got==expected else "error","rows_scanned":got,"skills_indexed":skills[p["sourceKey"]],"expected_rows":expected})
+    ok=(got==expected)
+    status=("partial" if SUB>=0 and ok else ("done" if ok else "error"))
+    units.append({"source_key":p["sourceKey"],"source_system":"gitskills-b2","status":status,"rows_scanned":got,"skills_indexed":skills[p["sourceKey"]],"expected_rows":expected})
 shutil.rmtree(tmpdir,ignore_errors=True)
-summary={"partition":PART,"packs":units,"parquetFiles":[x["filename"] for x in needed_files],"selectedRows":sum(selected_rows.values()),"skills":sum(skills.values()),"bad":bad}
+summary={"partition":PART,"subpart":SUB,"subparts":SUBS,"packs":units,"parquetFiles":[x["filename"] for x in needed_files],"selectedRows":sum(selected_rows.values()),"skills":sum(skills.values()),"bad":bad}
 UNIT.write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
 print(json.dumps({"event":"bulk_extract_complete","partition":PART,"packs":len(packs),"files":len(needed_files),"selectedRows":summary["selectedRows"],"skills":summary["skills"],"bad":len(bad)}),flush=True)
 if bad: raise SystemExit(3)
