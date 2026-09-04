@@ -25,5 +25,5 @@ jobs:
             echo "=== $url ==="
             curl -L -sS "$url" -o /tmp/page
             echo "bytes=$(wc -c </tmp/page)"
-            python -c 'import re; s=open("/tmp/page","r",encoding="utf-8",errors="replace").read(); print({n:s.find(n) for n in ["SKILL.md","contents","self.__next_f.push","---","name:"]}); m=re.search(r"SKILL\\.md",s); print(s[max(0,m.start()-1200):min(len(s),m.start()+6000)] if m else "NO_SKILL_MD_MARKER")'
+            python -c 's=open("/tmp/page","r",encoding="utf-8",errors="replace").read(); i=s.find("SKILL.md"); j=s.find("self.__next_f.push"); print({"skill":i,"rsc":j,"dash":s.find("---"),"name":s.find("name:")}); print("AROUND_SKILL=",s[max(0,i-1000):i+5000]); print("AROUND_RSC=",s[max(0,j-500):j+7000])'
           done
