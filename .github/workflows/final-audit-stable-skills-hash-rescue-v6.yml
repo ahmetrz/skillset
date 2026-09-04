@@ -1,0 +1,37 @@
+name: Final audit stable skills.sh hash rescue v6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-stable-skills-hash-rescue-v6.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  rescue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Build immutable verified rescue
+        env:
+          OUT_DIR: stable-rescue-out
+        run: node scripts/final-audit-skills-stable-hash-rescue-v6.mjs
+      - name: Publish immutable verified rescue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" stable-rescue-out/* --clobber
