@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T23:18:07.777Z",
+  "generatedAt": "2026-09-04T05:25:51.685Z",
   "status": "RECONCILING_SOURCE_INVENTORY",
   "guards": {
     "source_inventory_reconciled": false,
@@ -42,19 +42,19 @@
   "ingestDone": {
     "legacy": 18470,
     "gitB2": 175,
-    "skillsB2": 1467
+    "skillsB2": 3053
   },
   "policyDone": {
-    "legacy": 17596,
-    "gitB2": 50,
-    "skillsB2": 659
+    "legacy": 18829,
+    "gitB2": 144,
+    "skillsB2": 2499
   },
   "oversizedGroups": 0,
   "exactUnique": {
-    "n": 1261593
+    "n": 1275044
   },
   "occurrences": {
-    "n": 1288752
+    "n": 1319828
   },
   "near": [],
   "conflictCount": 0,
