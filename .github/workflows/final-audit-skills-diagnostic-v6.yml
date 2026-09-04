@@ -1,0 +1,46 @@
+name: Diagnose unresolved skills.sh v6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-skills-diagnostic-v6.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Download completion manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf diag-skip
+          mkdir -p diag-skip
+          gh release download "$RELEASE_TAG" --dir diag-skip --pattern 'manifest-*' || true
+      - name: Diagnose unresolved locators
+        env:
+          AUDIT_SKIP_MANIFEST_DIR: diag-skip
+          DIAG_OUT: skills-sh-unresolved-diagnostic.json
+        run: node scripts/final-audit-skills-unresolved-diagnostic-v6.mjs
+      - name: Publish diagnostic
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" skills-sh-unresolved-diagnostic.json --clobber
