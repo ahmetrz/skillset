@@ -41,6 +41,7 @@ jobs:
           mkdir -p repair-skip repair-out
           gh release download "$RELEASE_TAG" --dir repair-skip --pattern 'manifest-*' || true
       - name: Repair only unresolved skills.sh units
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
           AUDIT_SOURCE: skills-b2
@@ -50,7 +51,7 @@ jobs:
           AUDIT_OUT_DIR: repair-out
         run: node scripts/final-audit-local-shard-v4.mjs
       - name: Publish repair shard
-        if: success()
+        if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
