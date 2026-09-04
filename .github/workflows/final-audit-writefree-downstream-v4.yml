@@ -42,6 +42,7 @@ jobs:
           AUDIT_V4_INPUT: v4-assets
           AUDIT_V4_MERGE_OUT: v4-merge-out
           NEAR_PARTITIONS: '20'
+          NEAR_PARTITION_MODE: range
         run: node scripts/final-audit-v4-merge.mjs
       - name: Publish merge products
         if: always()
@@ -92,7 +93,7 @@ jobs:
         run: |
           p=$(printf '%02d' "$NEAR_PARTITION")
           export NEAR_NEW_FILE="near-input/near-new-p${p}.ndjson.gz"
-          node scripts/final-audit-near-local-v4.mjs
+          node scripts/final-audit-near-range-v6.mjs
       - name: Publish near shard
         if: always()
         env:
