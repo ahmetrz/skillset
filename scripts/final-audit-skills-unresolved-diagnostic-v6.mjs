@@ -18,7 +18,7 @@ for(const p of await walk(skipDir)){
 const [di,dp,rows]=await Promise.all([
   q("SELECT source_key FROM final_audit_unit_v1 WHERE source_system='skills-sh-b2' AND status='done'"),
   q("SELECT source_key FROM final_audit_policy_unit_v2 WHERE source_system='skills-sh-b2' AND status='done'"),
-  q("SELECT source,owner,repo,updated_at,b2_path,status FROM skills_sh_external_exact_v1 WHERE status='done' AND b2_path IS NOT NULL ORDER BY b2_path")
+  q("SELECT source,owner,repo,updated_at,b2_path,status,discovered_skills,pack_sha256,bytes FROM skills_sh_external_exact_v1 WHERE status='done' AND b2_path IS NOT NULL ORDER BY b2_path")
 ]);
 const ingest=new Set(di.map(x=>String(x.source_key))),policy=new Set(dp.map(x=>String(x.source_key)));
 const prefix='b2://'+bucket+'/';
@@ -31,8 +31,8 @@ for(const r of rows){
   let parsed=null;
   const m=source.match(/github\.com\/([^/]+)\/([^/#?]+)/i);
   if(m)parsed={owner:m[1],repo:m[2].replace(/\.git$/,'')};
-  unresolved.push({sourceKey:sk,source,owner,repo,updatedAt:at,parsed,missing:{source:!source,owner:!owner,repo:!repo,updatedAt:!at}});
+  unresolved.push({sourceKey:sk,source,owner,repo,updatedAt:at,discoveredSkills:Number(r.discovered_skills||0),bytes:Number(r.bytes||0),packSha256:String(r.pack_sha256||''),parsed,missing:{source:!source,owner:!owner,repo:!repo,updatedAt:!at}});
 }
-const summary={generatedAt:new Date().toISOString(),releaseDone:releaseDone.size,existingIngest:ingest.size,existingPolicy:policy.size,unresolved:unresolved.length,missingOwner:unresolved.filter(x=>x.missing.owner).length,missingRepo:unresolved.filter(x=>x.missing.repo).length,missingUpdatedAt:unresolved.filter(x=>x.missing.updatedAt).length,githubParsable:unresolved.filter(x=>x.parsed).length,rows:unresolved};
+const summary={generatedAt:new Date().toISOString(),releaseDone:releaseDone.size,existingIngest:ingest.size,existingPolicy:policy.size,unresolved:unresolved.length,missingOwner:unresolved.filter(x=>x.missing.owner).length,missingRepo:unresolved.filter(x=>x.missing.repo).length,missingUpdatedAt:unresolved.filter(x=>x.missing.updatedAt).length,githubParsable:unresolved.filter(x=>x.parsed).length,zeroSkillPacks:unresolved.filter(x=>x.discoveredSkills===0).length,totalDiscoveredSkills:unresolved.reduce((s,x)=>s+x.discoveredSkills,0),totalBytes:unresolved.reduce((s,x)=>s+x.bytes,0),rows:unresolved};
 await fs.writeFile(outFile,JSON.stringify(summary,null,2)+'\n');
 console.log(JSON.stringify(summary,null,2));
