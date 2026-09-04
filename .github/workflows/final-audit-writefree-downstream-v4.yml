@@ -1,0 +1,142 @@
+name: Final audit write-free downstream v4
+
+on:
+  workflow_run:
+    workflows: ["Final audit write-free turbo v4"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      complete: ${{ steps.state.outputs.complete }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Download source shards
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf v4-assets v4-merge-out
+          mkdir -p v4-assets v4-merge-out
+          gh release download "$RELEASE_TAG" --dir v4-assets --pattern 'features-*' --pattern 'manifest-*'
+      - name: Merge readiness and create near partitions
+        id: runmerge
+        continue-on-error: true
+        env:
+          AUDIT_V4_INPUT: v4-assets
+          AUDIT_V4_MERGE_OUT: v4-merge-out
+          NEAR_PARTITIONS: '20'
+        run: node scripts/final-audit-v4-merge.mjs
+      - name: Publish merge products
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" v4-merge-out/* --clobber
+      - name: Expose readiness
+        id: state
+        if: always()
+        run: |
+          complete=$(jq -r '.complete // false' v4-merge-out/final-audit-v4-status.json 2>/dev/null || echo false)
+          echo "complete=$complete" >> "$GITHUB_OUTPUT"
+          cat v4-merge-out/final-audit-v4-status.json || true
+
+  near:
+    needs: merge
+    if: needs.merge.outputs.complete == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        partition: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Download assigned new-feature partition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf near-input near-v4-out
+          mkdir -p near-input near-v4-out
+          p=$(printf '%02d' '${{ matrix.partition }}')
+          gh release download "$RELEASE_TAG" --dir near-input --pattern "near-new-p${p}.ndjson.gz"
+      - name: Compute near and coverage candidates
+        env:
+          NEAR_PARTITION: ${{ matrix.partition }}
+          NEAR_PARTITIONS: '20'
+          NEAR_NEW_FILE: near-input/near-new-p$(printf '%02d' '${{ matrix.partition }}').ndjson.gz
+          NEAR_OUT_DIR: near-v4-out
+        shell: bash
+        run: |
+          p=$(printf '%02d' "$NEAR_PARTITION")
+          export NEAR_NEW_FILE="near-input/near-new-p${p}.ndjson.gz"
+          node scripts/final-audit-near-local-v4.mjs
+      - name: Publish near shard
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" near-v4-out/* --clobber
+
+  finalize:
+    needs: [merge, near]
+    if: always() && needs.merge.outputs.complete == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Download final derived audit assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf final-assets final-out
+          mkdir -p final-assets final-out
+          gh release download "$RELEASE_TAG" --dir final-assets --pattern 'features-*' --pattern 'final-audit-v4-status.json' --pattern 'near-manifest-*' --pattern 'near-*.ndjson.gz'
+      - name: Build conflict registry and validation
+        env:
+          AUDIT_V4_INPUT: final-assets
+          AUDIT_V4_FINAL_OUT: final-out
+        run: node scripts/final-audit-v4-finalize.mjs
+      - name: Publish final derived outputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" final-out/* --clobber
+      - name: Persist user-facing checkpoints
+        run: |
+          mkdir -p audit
+          cp final-out/conflict-registry-preliminary.json audit/conflict-registry-preliminary.json
+          cp final-out/final-validation-status.json audit/final-validation-status.json
+          cp final-out/final-audit-v4-final-summary.json audit/final-audit-v4-final-summary.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/conflict-registry-preliminary.json audit/final-validation-status.json audit/final-audit-v4-final-summary.json
+          git commit -m "chore: persist write-free final audit v4 outputs" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
