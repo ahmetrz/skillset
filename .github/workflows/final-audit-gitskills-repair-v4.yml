@@ -1,0 +1,67 @@
+name: Final audit GitSkills repair v4
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-gitskills-repair-v4.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '37 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: final-audit-gitskills-repair-v4
+  cancel-in-progress: false
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        partition: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client tar-stream
+      - name: Download completed-unit manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf repair-skip repair-out
+          mkdir -p repair-skip repair-out
+          gh release download "$RELEASE_TAG" --dir repair-skip --pattern 'manifest-*' || true
+      - name: Retry only unresolved GitSkills units
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          AUDIT_SOURCE: git-b2
+          AUDIT_PARTITION: ${{ matrix.partition }}
+          AUDIT_PARTITIONS: '4'
+          AUDIT_SKIP_MANIFEST_DIR: repair-skip
+          AUDIT_OUT_DIR: repair-out
+        run: node scripts/final-audit-local-shard-v4.mjs
+      - name: Publish repair shard
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          files=(repair-out/*)
+          if [ -e "${files[0]}" ]; then
+            gh release upload "$RELEASE_TAG" repair-out/* --clobber
+          fi
