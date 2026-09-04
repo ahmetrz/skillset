@@ -11,9 +11,29 @@ const need=n=>{const v=process.env[n];if(!v)throw new Error('Missing '+n);return
 const turso=createClient({url:need('TURSO_DATABASE_URL'),authToken:need('TURSO_AUTH_TOKEN')});
 const bucket=need('B2_BUCKET');
 const outDir=process.env.AUDIT_OUT_DIR||'audit-v4-out';
+const skipDir=process.env.AUDIT_SKIP_MANIFEST_DIR||'';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 async function q(sql,args=[]){return (await turso.execute({sql,args})).rows}
+async function releaseDoneSet(sys){
+  const set=new Set();
+  if(!skipDir)return set;
+  async function walk(dir){
+    let es=[];try{es=await fs.readdir(dir,{withFileTypes:true})}catch{return}
+    for(const e of es){
+      const p=path.join(dir,e.name);
+      if(e.isDirectory())await walk(p);
+      else if(/^manifest-.*\.json$/i.test(e.name)){
+        try{
+          const m=JSON.parse(await fs.readFile(p,'utf8'));
+          for(const u of m.units||[])if(String(u.source_system)===sys&&u.status==='done')set.add(String(u.source_key));
+        }catch{}
+      }
+    }
+  }
+  await walk(skipDir);
+  return set;
+}
 async function doneSets(sys){
   const [a,b]=await Promise.all([
     q("SELECT source_key FROM final_audit_unit_v1 WHERE source_system=? AND status='done'",[sys]),
@@ -21,24 +41,24 @@ async function doneSets(sys){
   ]);
   return {ingest:new Set(a.map(x=>String(x.source_key))),policy:new Set(b.map(x=>String(x.source_key)))};
 }
-function needed(k,sets){return !sets.ingest.has(k)||!sets.policy.has(k)}
+function needed(k,sets,releaseDone){return !releaseDone.has(k)&&(!sets.ingest.has(k)||!sets.policy.has(k))}
 async function units(){
   if(SRC==='git-legacy'){
-    const sys='gitskills-legacy-hf',sets=await doneSets(sys),all=[];
-    for(let id=FIRST;id<=LAST;id++){const k='hf:gitskills:'+id;if(needed(k,sets))all.push({key:String(id),sourceKey:k})}
+    const sys='gitskills-legacy-hf',sets=await doneSets(sys),releaseDone=await releaseDoneSet(sys),all=[];
+    for(let id=FIRST;id<=LAST;id++){const k='hf:gitskills:'+id;if(needed(k,sets,releaseDone))all.push({key:String(id),sourceKey:k})}
     return {sys,all:all.filter((_,i)=>i%PARTS===PART),totalMissing:all.length};
   }
   if(SRC==='git-b2'){
-    const sys='gitskills-b2',sets=await doneSets(sys);
+    const sys='gitskills-b2',sets=await doneSets(sys),releaseDone=await releaseDoneSet(sys);
     const rows=await q("SELECT path FROM gitskills_packs WHERE path LIKE 'gitskills/discovery-b2-v2/%' ORDER BY path");
-    const all=rows.map(x=>String(x.path)).filter(k=>needed('b2:'+k,sets)).map(k=>({key:k,sourceKey:'b2:'+k}));
+    const all=rows.map(x=>String(x.path)).filter(k=>needed('b2:'+k,sets,releaseDone)).map(k=>({key:k,sourceKey:'b2:'+k}));
     return {sys,all:all.filter((_,i)=>i%PARTS===PART),totalMissing:all.length};
   }
   if(SRC==='skills-b2'){
-    const sys='skills-sh-b2',sets=await doneSets(sys);
+    const sys='skills-sh-b2',sets=await doneSets(sys),releaseDone=await releaseDoneSet(sys);
     const rows=await q("SELECT b2_path FROM skills_sh_external_exact_v1 WHERE status='done' AND b2_path IS NOT NULL ORDER BY b2_path");
     const prefix='b2://'+bucket+'/';
-    const all=rows.map(x=>String(x.b2_path)).filter(x=>x.startsWith(prefix)).map(x=>x.slice(prefix.length)).filter(k=>needed('b2:'+k,sets)).map(k=>({key:k,sourceKey:'b2:'+k}));
+    const all=rows.map(x=>String(x.b2_path)).filter(x=>x.startsWith(prefix)).map(x=>x.slice(prefix.length)).filter(k=>needed('b2:'+k,sets,releaseDone)).map(k=>({key:k,sourceKey:'b2:'+k}));
     return {sys,all:all.filter((_,i)=>i%PARTS===PART),totalMissing:all.length};
   }
   throw new Error('Unknown AUDIT_SOURCE '+SRC);
