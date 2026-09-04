@@ -1,13 +1,7 @@
 name: Final corpus turbo audit v3
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/final-corpus-turbo-v3.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '7 * * * *'
 
 permissions:
   contents: write
