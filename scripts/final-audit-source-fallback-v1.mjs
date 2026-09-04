@@ -91,6 +91,13 @@ async function codeloadSkills(owner,repo,sha){
   });
 }
 async function sparseSkills(owner,repo,sha,dir){
+  const gitDir=path.join(dir,'.git');
+  let hasGit=true;
+  try{await fs.access(gitDir)}catch{hasGit=false}
+  if(!hasGit){
+    await git(['init','-q'],dir);
+    await git(['remote','add','origin','https://github.com/'+owner+'/'+repo+'.git'],dir);
+  }
   await git(['fetch','-q','--filter=blob:none','--depth=1','origin',sha],dir,180000).catch(()=>{});
   const raw=await exec('git',['ls-tree','-r','-z','--name-only',sha],{cwd:dir,timeout:120000,maxBuffer:128*1024*1024});
   const paths=Buffer.from(raw.stdout).toString('utf8').split('\0').filter(p=>/(^|\/)SKILL\.md$/i.test(p));
