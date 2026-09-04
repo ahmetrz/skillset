@@ -1,13 +1,7 @@
 name: Final corpus policy rescan v2
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/final-corpus-policy-rescan-v2.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '31 */4 * * *'
 
 permissions:
   contents: read
