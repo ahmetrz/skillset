@@ -17,18 +17,13 @@ jobs:
       - name: Inspect detail payload
         run: |
           set -e
-          for url in             https://skills.sh/facukoren/pm-agent/pm-workflow             https://skills.sh/k-park/ks-dev-proc/fix-root-cause             https://skills.sh/zoharvan12/kolbo-code/video-prompting-guide; do
+          for url in \
+            https://skills.sh/facukoren/pm-agent/pm-workflow \
+            https://skills.sh/k-park/ks-dev-proc/fix-root-cause \
+            https://skills.sh/zoharvan12/kolbo-code/video-prompting-guide
+          do
             echo "=== $url ==="
             curl -L -sS "$url" -o /tmp/page
             echo "bytes=$(wc -c </tmp/page)"
-            python - <<'PY'
-import re, html
-s=open('/tmp/page','r',encoding='utf-8',errors='replace').read()
-for needle in ['SKILL.md','contents','self.__next_f.push','---','name:']:
-    print(needle, s.find(needle))
-m=re.search(r'SKILL\.md',s)
-if m:
-    a=max(0,m.start()-1200); b=min(len(s),m.start()+6000)
-    print(s[a:b])
-PY
+            python -c 'import re; s=open("/tmp/page","r",encoding="utf-8",errors="replace").read(); print({n:s.find(n) for n in ["SKILL.md","contents","self.__next_f.push","---","name:"]}); m=re.search(r"SKILL\\.md",s); print(s[max(0,m.start()-1200):min(len(s),m.start()+6000)] if m else "NO_SKILL_MD_MARKER")'
           done
