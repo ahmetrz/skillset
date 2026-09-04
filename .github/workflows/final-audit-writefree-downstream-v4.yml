@@ -2,7 +2,7 @@ name: Final audit write-free downstream v4
 
 on:
   workflow_run:
-    workflows: ["Final audit write-free turbo v4", "Final audit GitSkills repair v4", "Final audit GitSkills parquet bulk v5", "Final audit GitSkills p6 race v6", "Final audit skills.sh selective repair v6", "Final audit skills.sh exact B2 rescue v6", "Final audit skills.sh occurrence cache rescue v6"]
+    workflows: ["Final audit write-free turbo v4", "Final audit GitSkills repair v4", "Final audit GitSkills parquet bulk v5", "Final audit GitSkills p6 race v6", "Final audit skills.sh selective repair v6", "Final audit skills.sh exact B2 rescue v6", "Final audit skills.sh occurrence cache rescue v6", "Final audit skills.sh pack SHA rescue v7"]
     types: [completed]
   workflow_dispatch:
 
