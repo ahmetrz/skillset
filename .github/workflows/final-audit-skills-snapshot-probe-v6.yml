@@ -1,0 +1,27 @@
+name: Probe skills.sh snapshot cache v6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-skills-snapshot-probe-v6.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe repo pages and API
+        run: |
+          set +e
+          for src in zoharvan12/kolbo-code k-park/ks-dev-proc facukoren/pm-agent samihalawa/computer-use; do
+            echo "=== REPO $src ==="
+            curl -L -sS -o /tmp/page -w 'status=%{http_code} bytes=%{size_download}\n' "https://skills.sh/$src"
+            grep -oE "href=\"/[^\"]+\"" /tmp/page | grep "$src" | head -20 || true
+            echo "--- API search source ---"
+            curl -L -sS -o /tmp/api -w 'status=%{http_code} bytes=%{size_download}\n' "https://skills.sh/api/v1/skills/search?q=$(echo "$src" | sed 's#/#%2F#g')&limit=10"
+            head -c 1000 /tmp/api; echo
+          done
