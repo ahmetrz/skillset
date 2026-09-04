@@ -2,13 +2,7 @@ name: Final corpus audit engine v1
 # B2 lanes are intentionally parked here: daily Class B/download caps require a single-read combined pass.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/final-corpus-audit-engine-v1.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '13 */4 * * *'
 
 permissions:
   contents: read
