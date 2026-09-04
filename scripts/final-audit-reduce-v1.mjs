@@ -22,7 +22,11 @@ async function setState(k,v){await turso.execute({sql:"INSERT INTO final_audit_r
 function popcount64(hex){let x=BigInt('0x'+hex),n=0;while(x){x&=x-1n;n++}return n}
 function ham(a,b){return popcount64((BigInt('0x'+a)^BigInt('0x'+b)).toString(16))}
 async function readiness(){
-  const [git,skills]=await Promise.all([listCount('gitskills/discovery-b2-v2/'),listCount('skills-sh/exact-b2-v1/')]);
+  const [gitRow,skillsRow]=await Promise.all([
+    q("SELECT count(*) n FROM gitskills_packs WHERE path LIKE 'gitskills/discovery-b2-v2/%'"),
+    q("SELECT count(*) n FROM skills_sh_external_exact_v1 WHERE status='done' AND b2_path IS NOT NULL")
+  ]);
+  const git=Number(gitRow[0]?.n||0),skills=Number(skillsRow[0]?.n||0);
   const rows=await q("SELECT source_system,status,count(*) units,coalesce(sum(skills_indexed),0) skills FROM final_audit_unit_v1 GROUP BY source_system,status ORDER BY source_system,status");
   let policyRows=[];
   try{policyRows=await q("SELECT source_system,status,count(*) units,coalesce(sum(skills_scanned),0) skills,coalesce(sum(facts),0) facts FROM final_audit_policy_unit_v2 GROUP BY source_system,status ORDER BY source_system,status")}catch{}
