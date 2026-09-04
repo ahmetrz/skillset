@@ -1,0 +1,32 @@
+name: Test skills.sh acquisition pack SHA reconstruction v6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-skills-pack-sha-control-v6.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Reconstruct acquisition pack SHA controls
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/final-audit-skills-pack-sha-control-v6.mjs
