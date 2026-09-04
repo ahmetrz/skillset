@@ -64,7 +64,7 @@ jobs:
     timeout-minutes: 330
     strategy:
       fail-fast: false
-      max-parallel: 20
+      max-parallel: 19
       matrix:
         partition: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
     steps:
@@ -100,8 +100,38 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh release upload "$RELEASE_TAG" near-v4-out/* --clobber
 
+
+  policy:
+    needs: merge
+    if: needs.merge.outputs.complete == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Download feature shards
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf policy-assets policy-out
+          mkdir -p policy-assets policy-out
+          gh release download "$RELEASE_TAG" --dir policy-assets --pattern 'features-*'
+      - name: Precompute conflict policy summary
+        env:
+          AUDIT_V6_POLICY_INPUT: policy-assets
+          AUDIT_V6_POLICY_OUT: policy-out
+        run: node scripts/final-audit-policy-summary-v6.mjs
+      - name: Publish compact policy summary
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" policy-out/final-audit-v6-policy-summary.json --clobber
+
   finalize:
-    needs: [merge, near]
+    needs: [merge, near, policy]
     if: always() && needs.merge.outputs.complete == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -119,7 +149,9 @@ jobs:
         run: |
           rm -rf final-assets final-out
           mkdir -p final-assets final-out
-          gh release download "$RELEASE_TAG" --dir final-assets --pattern 'features-*' --pattern 'final-audit-v4-status.json' --pattern 'near-manifest-*' --pattern 'near-*.ndjson.gz'
+          gh release download "$RELEASE_TAG" --dir final-assets --pattern 'final-audit-v4-status.json' --pattern 'near-manifest-*'
+          gh release download "$RELEASE_TAG" --dir final-assets --pattern 'final-audit-v6-policy-summary.json' || \
+            gh release download "$RELEASE_TAG" --dir final-assets --pattern 'features-*'
       - name: Build conflict registry and validation
         env:
           AUDIT_V4_INPUT: final-assets
