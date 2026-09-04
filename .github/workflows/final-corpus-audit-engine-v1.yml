@@ -1,4 +1,5 @@
 name: Final corpus audit engine v1
+# B2 lanes are intentionally parked here: daily Class B/download caps require a single-read combined pass.
 
 on:
   push:
@@ -41,14 +42,6 @@ jobs:
           - {pass: ingest, source: git-legacy, partition: 5, parts: 8}
           - {pass: ingest, source: git-legacy, partition: 6, parts: 8}
           - {pass: ingest, source: git-legacy, partition: 7, parts: 8}
-          - {pass: ingest, source: git-b2, partition: 0, parts: 4}
-          - {pass: ingest, source: git-b2, partition: 1, parts: 4}
-          - {pass: ingest, source: git-b2, partition: 2, parts: 4}
-          - {pass: ingest, source: git-b2, partition: 3, parts: 4}
-          - {pass: ingest, source: skills-b2, partition: 0, parts: 4}
-          - {pass: ingest, source: skills-b2, partition: 1, parts: 4}
-          - {pass: ingest, source: skills-b2, partition: 2, parts: 4}
-          - {pass: ingest, source: skills-b2, partition: 3, parts: 4}
           - {pass: policy, source: git-legacy, partition: 0, parts: 8}
           - {pass: policy, source: git-legacy, partition: 1, parts: 8}
           - {pass: policy, source: git-legacy, partition: 2, parts: 8}
@@ -57,14 +50,6 @@ jobs:
           - {pass: policy, source: git-legacy, partition: 5, parts: 8}
           - {pass: policy, source: git-legacy, partition: 6, parts: 8}
           - {pass: policy, source: git-legacy, partition: 7, parts: 8}
-          - {pass: policy, source: git-b2, partition: 0, parts: 4}
-          - {pass: policy, source: git-b2, partition: 1, parts: 4}
-          - {pass: policy, source: git-b2, partition: 2, parts: 4}
-          - {pass: policy, source: git-b2, partition: 3, parts: 4}
-          - {pass: policy, source: skills-b2, partition: 0, parts: 4}
-          - {pass: policy, source: skills-b2, partition: 1, parts: 4}
-          - {pass: policy, source: skills-b2, partition: 2, parts: 4}
-          - {pass: policy, source: skills-b2, partition: 3, parts: 4}
     steps:
       - uses: actions/checkout@v4
         with:
