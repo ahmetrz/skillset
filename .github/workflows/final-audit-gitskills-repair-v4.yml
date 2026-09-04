@@ -6,8 +6,6 @@ on:
     paths:
       - '.github/workflows/final-audit-gitskills-repair-v4.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '37 * * * *'
 
 permissions:
   contents: write
