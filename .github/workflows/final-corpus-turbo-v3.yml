@@ -17,12 +17,12 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  TURSO_DATABASE_URL: \${{ secrets.TURSO_DATABASE_URL }}
-  TURSO_AUTH_TOKEN: \${{ secrets.TURSO_AUTH_TOKEN }}
-  B2_ACCESS_KEY_ID: \${{ secrets.B2_ACCESS_KEY_ID }}
-  B2_SECRET_ACCESS_KEY: \${{ secrets.B2_SECRET_ACCESS_KEY }}
-  B2_BUCKET: \${{ secrets.B2_BUCKET }}
-  B2_ENDPOINT: \${{ secrets.B2_ENDPOINT }}
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+  B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
   AUDIT_B2_READ: '0'
 
 jobs:
@@ -64,9 +64,9 @@ jobs:
       - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3 tar-stream
       - name: Run single-read turbo partition
         env:
-          AUDIT_SOURCE: \${{ matrix.source }}
-          AUDIT_PARTITION: \${{ matrix.partition }}
-          AUDIT_PARTITIONS: \${{ matrix.parts }}
+          AUDIT_SOURCE: ${{ matrix.source }}
+          AUDIT_PARTITION: ${{ matrix.partition }}
+          AUDIT_PARTITIONS: ${{ matrix.parts }}
         run: node scripts/final-audit-external-v1.mjs
 
   checkpoint:
