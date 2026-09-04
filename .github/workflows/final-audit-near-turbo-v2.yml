@@ -17,12 +17,12 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  TURSO_DATABASE_URL: \${{ secrets.TURSO_DATABASE_URL }}
-  TURSO_AUTH_TOKEN: \${{ secrets.TURSO_AUTH_TOKEN }}
-  B2_ACCESS_KEY_ID: \${{ secrets.B2_ACCESS_KEY_ID }}
-  B2_SECRET_ACCESS_KEY: \${{ secrets.B2_SECRET_ACCESS_KEY }}
-  B2_BUCKET: \${{ secrets.B2_BUCKET }}
-  B2_ENDPOINT: \${{ secrets.B2_ENDPOINT }}
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+  B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
 
 jobs:
   near:
@@ -43,7 +43,7 @@ jobs:
       - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
       - name: Run near/coverage partition
         env:
-          NEAR_PARTITION: \${{ matrix.partition }}
+          NEAR_PARTITION: ${{ matrix.partition }}
           NEAR_PARTITIONS: '20'
         run: node scripts/final-audit-near-turbo-v2.mjs
 
