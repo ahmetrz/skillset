@@ -36,7 +36,8 @@ jobs:
           set +e
           AUDIT_SOURCE=git-b2 AUDIT_PARTITION=0 AUDIT_PARTITIONS=100000 node scripts/final-audit-external-v1.mjs > audit/final-audit-runtime-probe.log 2>&1
           code=$?
-          msg=$(tail -n 3 audit/final-audit-runtime-probe.log | tr '\n' ' ' | tr -s ' ' | cut -c1-130)
+          msg=$(grep -m1 -E "Error|TypeError|SyntaxError|SQLITE|Sqlite|no such|Cannot|Missing|failed" audit/final-audit-runtime-probe.log | tr -s ' ' | cut -c1-130)
+          [ -z "$msg" ] && msg=$(head -n 1 audit/final-audit-runtime-probe.log | tr -s ' ' | cut -c1-130)
           [ -z "$msg" ] && msg="exit=$code"
           state=success
           [ "$code" -ne 0 ] && state=error
