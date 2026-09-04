@@ -1,0 +1,46 @@
+name: Final audit skills.sh occurrence cache rescue v6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-skills-occurrence-cache-rescue-v6.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  rescue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Download manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf tail-manifests occ-rescue-out
+          mkdir -p tail-manifests occ-rescue-out
+          gh release download "$RELEASE_TAG" --dir tail-manifests --pattern 'manifest-*' || true
+      - name: Rescue hash-verifiable tail units
+        env:
+          MANIFEST_DIR: tail-manifests
+          RESCUE_OUT: occ-rescue-out
+        run: node scripts/final-audit-skills-occurrence-cache-rescue-v6.mjs
+      - name: Publish verified rescue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" occ-rescue-out/* --clobber
