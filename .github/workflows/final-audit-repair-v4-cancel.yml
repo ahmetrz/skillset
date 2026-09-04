@@ -1,0 +1,21 @@
+name: Park obsolete GitSkills repair v4
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-repair-v4-cancel.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: final-audit-gitskills-repair-v4
+  cancel-in-progress: true
+
+jobs:
+  park:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo "Obsolete rows-API repair parked; Parquet bulk v5 is the active repair path."
