@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 2
       matrix:
         partition: [0,1,2,3]
     steps:
@@ -52,4 +52,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release upload "$RELEASE_TAG" pack-sha-rescue-out/* --clobber
-# cache candidate pass v7.1
+# cache candidate pass v7.2
