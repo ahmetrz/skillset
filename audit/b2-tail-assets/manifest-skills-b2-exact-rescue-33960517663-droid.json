@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:38.141Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 2,
+  "inScope": 2,
+  "policyFacts": 0,
+  "records": 2,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-14/0014003-iamzhihuix-droid-account-manage.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 2,
+      "skills_indexed": 2,
+      "records": 2,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "a8d72475a35a2e2cb594f02bc59518684ce013d707aba2520bf78ed9a873c71c"
+      }
+    }
+  ]
+}

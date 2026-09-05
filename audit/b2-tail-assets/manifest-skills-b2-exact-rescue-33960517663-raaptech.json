@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:39.379Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 3,
+  "inScope": 3,
+  "policyFacts": 0,
+  "records": 3,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-07/0002031-raaptechllc-raaptech.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 3,
+      "skills_indexed": 3,
+      "records": 3,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "393c1e6f3fa2e3354794e5ae504df47113d12545933ce88f2de8fe043cab9b03"
+      }
+    }
+  ]
+}

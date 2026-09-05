@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:37.173Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 34,
+  "inScope": 31,
+  "policyFacts": 2,
+  "records": 34,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-12/0008459-syncrescendence-syncrescendence.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 34,
+      "skills_indexed": 34,
+      "records": 34,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "d0bb0eccc8d92a566c4518603cf31aafa9bef75cac873928f17e3b4978d6d8fa"
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:37.786Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 9,
+  "inScope": 6,
+  "policyFacts": 0,
+  "records": 9,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-26/0020116-wibaek-personal-skills.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 9,
+      "skills_indexed": 9,
+      "records": 9,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "1221131b4865218b29c3a0743191e9c62ce7ef5f155ca555fa4a06a71ccae8f2"
+      }
+    }
+  ]
+}

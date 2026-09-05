@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:42.691Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 45,
+  "inScope": 44,
+  "policyFacts": 5,
+  "records": 45,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-11/0007016-zoharvan12-kolbo-code.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 45,
+      "skills_indexed": 45,
+      "records": 45,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "0ea1d000e22bffbdfc2d36d70a10e55befb569cb6e5742546bc41d181c94e9a9"
+      }
+    }
+  ]
+}

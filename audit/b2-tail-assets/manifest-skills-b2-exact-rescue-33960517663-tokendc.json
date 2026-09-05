@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:35.861Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 4,
+  "inScope": 3,
+  "policyFacts": 0,
+  "records": 4,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-19/0015031-dunksmaster-tokendc.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 4,
+      "skills_indexed": 4,
+      "records": 4,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "c0fabd129bdf29c146181d2f0d31d56eafaeb13d7990fc8e05315f649398d6b9"
+      }
+    }
+  ]
+}

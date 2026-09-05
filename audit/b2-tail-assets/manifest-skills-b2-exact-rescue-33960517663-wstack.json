@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:37.629Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 65,
+  "inScope": 50,
+  "policyFacts": 0,
+  "records": 65,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-08/0010131-willa-code-wstack.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 65,
+      "skills_indexed": 65,
+      "records": 65,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "531a143374648d39d0693c1ccbef0a8f65254bbf4a8aa4d6e14b46d804046a60"
+      }
+    }
+  ]
+}

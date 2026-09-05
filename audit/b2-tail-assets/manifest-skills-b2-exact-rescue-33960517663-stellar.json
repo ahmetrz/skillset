@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:41.893Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 44,
+  "inScope": 34,
+  "policyFacts": 0,
+  "records": 44,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-11/0006928-tolgazorlu-stellar-agents.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 44,
+      "skills_indexed": 44,
+      "records": 44,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "5d065f4578607b05934a48e1534a6946f5f0be676886e1fd6c36991a8a9414dc"
+      }
+    }
+  ]
+}

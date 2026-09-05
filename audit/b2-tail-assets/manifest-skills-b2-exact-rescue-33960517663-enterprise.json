@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:38.258Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 1,
+  "inScope": 1,
+  "policyFacts": 0,
+  "records": 1,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-11/0006996-youlfey-enterprise-skills.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 1,
+      "skills_indexed": 1,
+      "records": 1,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "faa5c7b2724ae87f27ec6dc07781bd9d9b58d73f803660e97def4ef6c7d11cd5"
+      }
+    }
+  ]
+}

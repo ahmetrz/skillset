@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T10:23:36.061Z",
+  "source": "skills-b2-exact-rescue",
+  "sourceSystem": "skills-sh-b2",
+  "partition": 0,
+  "partitions": 1,
+  "totalMissingAtStart": 5918,
+  "assignedUnits": 1,
+  "completedUnits": 1,
+  "failedUnits": 0,
+  "skills": 14,
+  "inScope": 9,
+  "policyFacts": 0,
+  "records": 14,
+  "units": [
+    {
+      "source_key": "b2:skills-sh/exact-b2-v1/bucket-21/0016993-spartypkp-claude-os-public.json.gz",
+      "source_system": "skills-sh-b2",
+      "status": "done",
+      "rows_scanned": 14,
+      "skills_indexed": 14,
+      "records": 14,
+      "snapshot": {
+        "transport": "b2-exact-rescue",
+        "packSha256": "08b28654cd0a5da438679348138182e742b413cdc42891523a74d9b483cfdac0"
+      }
+    }
+  ]
+}
