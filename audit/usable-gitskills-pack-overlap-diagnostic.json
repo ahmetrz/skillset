@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-09-05T20:24:15.247Z",
+  "packCount": 642,
+  "uniqueShardIds": 18528,
+  "totalShardRefs": 18528,
+  "duplicateShardIds": 0,
+  "duplicateShardRefs": 0,
+  "duplicates": [],
+  "minShard": 119412,
+  "maxShard": 137971,
+  "gaps": [
+    {
+      "after": 119467,
+      "before": 119484,
+      "gap": 16
+    },
+    {
+      "after": 119491,
+      "before": 119496,
+      "gap": 4
+    },
+    {
+      "after": 119503,
+      "before": 119516,
+      "gap": 12
+    }
+  ]
+}
