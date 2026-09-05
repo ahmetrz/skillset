@@ -1,0 +1,180 @@
+name: Usable skillset GitSkills B2 targeted repair v1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/usable-gitskills-b2-repair-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: usable-gitskills-b2-repair-v1
+  cancel-in-progress: true
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  BULK_PARTITIONS: '8'
+  SOURCE_RUN_ID: '33989621712'
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - env:
+          BULK_PLAN_OUT: usable-gitskills-b2-full-plan.json
+        run: node scripts/usable-gitskills-full-plan-v1.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-gitskills-b2-repair-plan
+          path: usable-gitskills-b2-full-plan.json
+          compression-level: 0
+
+  p0:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests aiohttp
+      - uses: actions/download-artifact@v4
+        with: {name: usable-gitskills-b2-repair-plan, path: .}
+      - env:
+          BULK_PLAN: usable-gitskills-b2-full-plan.json
+          BULK_PARTITION: '0'
+          BULK_PARTITIONS: '8'
+          BULK_OUT_DIR: gitskills-b2-repair
+        run: python scripts/final-audit-gitskills-parquet-extract-v5.py
+      - env:
+          BULK_PARTITION: '0'
+          BULK_PARTITIONS: '8'
+          BULK_OUT_DIR: gitskills-b2-repair
+        run: node scripts/final-audit-gitskills-parquet-transform-v5.mjs
+      - run: rm -f gitskills-b2-repair/raw-*.ndjson.gz gitskills-b2-repair/units-*.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-gitskills-b2-repair-p0
+          path: |
+            gitskills-b2-repair/features-*.ndjson.gz
+            gitskills-b2-repair/manifest-*.json
+          compression-level: 0
+
+  p6:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        subpart: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests aiohttp
+      - uses: actions/download-artifact@v4
+        with: {name: usable-gitskills-b2-repair-plan, path: .}
+      - env:
+          BULK_PLAN: usable-gitskills-b2-full-plan.json
+          BULK_PARTITION: '6'
+          BULK_PARTITIONS: '8'
+          BULK_ITEM_SUBPART: ${{ matrix.subpart }}
+          BULK_ITEM_SUBPARTS: '4'
+          BULK_OUT_DIR: gitskills-b2-repair
+        run: python scripts/final-audit-gitskills-parquet-extract-v5.py
+      - env:
+          BULK_PARTITION: '6'
+          BULK_PARTITIONS: '8'
+          BULK_ITEM_SUBPART: ${{ matrix.subpart }}
+          BULK_ITEM_SUBPARTS: '4'
+          BULK_OUT_DIR: gitskills-b2-repair
+        run: node scripts/final-audit-gitskills-parquet-transform-v5.mjs
+      - run: rm -f gitskills-b2-repair/raw-*.ndjson.gz gitskills-b2-repair/units-*.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-gitskills-b2-repair-p6-${{ matrix.subpart }}
+          path: |
+            gitskills-b2-repair/features-*.ndjson.gz
+            gitskills-b2-repair/manifest-*.json
+          compression-level: 0
+
+  reduce:
+    needs: [p0,p6]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+
+      - name: Download successful P1-P5/P7 from original run
+        uses: actions/download-artifact@v4
+        with:
+          pattern: usable-gitskills-b2-full-*
+          path: gitskills-b2-repair
+          merge-multiple: true
+          github-token: ${{ github.token }}
+          run-id: ${{ env.SOURCE_RUN_ID }}
+
+      - name: Download repaired P0/P6
+        uses: actions/download-artifact@v4
+        with:
+          pattern: usable-gitskills-b2-repair-*
+          path: gitskills-b2-repair
+          merge-multiple: true
+
+      - name: Remove plan files and stale partials
+        shell: bash
+        run: |
+          rm -f gitskills-b2-repair/usable-gitskills-b2-full-plan.json
+          find gitskills-b2-repair -type f -name '*p06-s*-of-04-of-08*' -print
+
+      - name: Combine repaired P6 subparts
+        env:
+          REPAIR_DIR: gitskills-b2-repair
+        run: node scripts/usable-gitskills-b2-repair-combine-v1.mjs
+
+      - name: Prove all 642 packs and all representatives
+        env:
+          GITSKILLS_FULL_DIR: gitskills-b2-repair
+          GITSKILLS_GATE_OUT: audit/usable-gitskills-b2-full-gate.json
+          GITSKILLS_B2_EXPECTED: '830231'
+        run: node scripts/usable-gitskills-full-reduce-v1.mjs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-gitskills-b2-full-features-v1
+          path: gitskills-b2-repair/*
+          compression-level: 0
+          retention-days: 90
+
+      - name: Persist authoritative B2 gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-gitskills-b2-full-gate.json
+          git commit -m "audit: persist repaired full GitSkills B2 gate" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
