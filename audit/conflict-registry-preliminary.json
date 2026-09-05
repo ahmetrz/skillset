@@ -23,7 +23,7 @@
         }
       },
       "recommendation": "proceed, except materially ambiguous/high-risk actions",
-      "yourSelection": ""
+      "yourSelection": "proceed, except materially ambiguous/high-risk actions"
     },
     {
       "topic": "testing",
@@ -44,7 +44,7 @@
         }
       },
       "recommendation": "first",
-      "yourSelection": ""
+      "yourSelection": "first"
     },
     {
       "topic": "git_destructive",
@@ -65,7 +65,7 @@
         }
       },
       "recommendation": "forbid",
-      "yourSelection": ""
+      "yourSelection": "forbid"
     },
     {
       "topic": "production",
@@ -86,7 +86,7 @@
         }
       },
       "recommendation": "approval",
-      "yourSelection": ""
+      "yourSelection": "approval"
     },
     {
       "topic": "priority",
@@ -107,7 +107,7 @@
         }
       },
       "recommendation": "security",
-      "yourSelection": ""
+      "yourSelection": "security"
     },
     {
       "topic": "memory",
@@ -128,7 +128,7 @@
         }
       },
       "recommendation": "stateless by default; persistent only when explicitly scoped",
-      "yourSelection": ""
+      "yourSelection": "stateless by default; persistent only when explicitly scoped"
     },
     {
       "topic": "branch",
@@ -149,7 +149,7 @@
         }
       },
       "recommendation": "pr",
-      "yourSelection": ""
+      "yourSelection": "pr"
     },
     {
       "topic": "provider",
@@ -256,7 +256,7 @@
         ]
       },
       "recommendation": "agnostic",
-      "yourSelection": ""
+      "yourSelection": "agnostic"
     },
     {
       "topic": "coverage",
@@ -663,7 +663,7 @@
         }
       ],
       "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
-      "yourSelection": ""
+      "yourSelection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
     },
     {
       "topic": "max_attempts",
@@ -855,7 +855,7 @@
         }
       ],
       "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
-      "yourSelection": ""
+      "yourSelection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
     },
     {
       "topic": "retry",
@@ -1262,7 +1262,7 @@
         }
       ],
       "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
-      "yourSelection": ""
+      "yourSelection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
     },
     {
       "topic": "score",
@@ -1669,7 +1669,7 @@
         }
       ],
       "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
-      "yourSelection": ""
+      "yourSelection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
     },
     {
       "topic": "threshold",
@@ -2076,7 +2076,7 @@
         }
       ],
       "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
-      "yourSelection": ""
+      "yourSelection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
     },
     {
       "topic": "timeout",
@@ -2483,7 +2483,7 @@
         }
       ],
       "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
-      "yourSelection": ""
+      "yourSelection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
     },
     {
       "topic": "tool:ansible",
@@ -2506,7 +2506,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:awk",
@@ -2529,7 +2529,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:bun",
@@ -2552,7 +2552,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:curl",
@@ -2575,7 +2575,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:docker",
@@ -2598,7 +2598,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:gh",
@@ -2621,7 +2621,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:git",
@@ -2644,7 +2644,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:grep",
@@ -2667,7 +2667,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:jest",
@@ -2690,7 +2690,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:jq",
@@ -2713,7 +2713,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:kubectl",
@@ -2736,7 +2736,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:npm",
@@ -2759,7 +2759,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:playwright",
@@ -2782,7 +2782,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:pnpm",
@@ -2805,7 +2805,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:pytest",
@@ -2828,7 +2828,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:rg",
@@ -2851,7 +2851,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:ripgrep",
@@ -2874,7 +2874,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:sed",
@@ -2897,7 +2897,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:supabase",
@@ -2920,7 +2920,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:terraform",
@@ -2943,7 +2943,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:vitest",
@@ -2966,7 +2966,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:wget",
@@ -2989,7 +2989,7 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     },
     {
       "topic": "tool:yarn",
@@ -3012,7 +3012,9 @@
         }
       ],
       "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
-      "yourSelection": ""
+      "yourSelection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
     }
-  ]
+  ],
+  "selectionStatus": "USER_APPROVED",
+  "selectionsApprovedAt": "2026-09-05T10:35:05.282Z"
 }
