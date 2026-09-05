@@ -104,3 +104,5 @@ jobs:
           git commit -m "chore: persist final master skill set outputs" || exit 0
           git pull --rebase origin gitskills-migration-run
           git push origin HEAD:gitskills-migration-run
+
+# trigger final master build after approved conflict registry
