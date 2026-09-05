@@ -6,6 +6,10 @@ on:
     types: [completed]
   workflow_dispatch:
 
+concurrency:
+  group: final-audit-writefree-downstream-v4
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
