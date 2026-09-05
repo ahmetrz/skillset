@@ -1,0 +1,3018 @@
+{
+  "generatedAt": "2026-09-05T10:26:21.400Z",
+  "status": "BLOCKED_INCOMPLETE_AUDIT",
+  "sourceReady": true,
+  "nearReady": false,
+  "conflicts": [
+    {
+      "topic": "clarification",
+      "left": {
+        "stance": "ask",
+        "count": 69415,
+        "example": {
+          "contentHash": "003c866c5efb8fddacb3eb16beb744ba20e79a686dc71fc1c0832e3406a75d77",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945268"
+        }
+      },
+      "right": {
+        "stance": "proceed",
+        "count": 65318,
+        "example": {
+          "contentHash": "1d2795c70ff39c7aa23c0f798291e73ca6af3644a048b4cab95687a95f7be80a",
+          "locator": "hf://mvaccargiu/gitskills/artifacts/1209015"
+        }
+      },
+      "recommendation": "proceed, except materially ambiguous/high-risk actions",
+      "yourSelection": ""
+    },
+    {
+      "topic": "testing",
+      "left": {
+        "stance": "first",
+        "count": 53026,
+        "example": {
+          "contentHash": "462507ba928536ab56d39950609d466caa364ae06a11e9bb138c46cad1c0b01c",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119732-119733-119734-119735-119736-119737-119738-119739-119740-119741-119742-119743-119744-119745-119746-119747-119748-119749-119750-119751-119752-119753-119754-119755.json.gz#row=1975336"
+        }
+      },
+      "right": {
+        "stance": "after",
+        "count": 6791,
+        "example": {
+          "contentHash": "22fbaddb2d1150630f24726801329d54233346ca0ec2b194e4e61e48c7cc5753",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/skills-sh/exact-b2-v1/bucket-24/0019248-santiagoisper-bope_version_definitiva.json.gz#file=.agents%2Fskills%2Fgstack%2Fship%2FSKILL.md"
+        }
+      },
+      "recommendation": "first",
+      "yourSelection": ""
+    },
+    {
+      "topic": "git_destructive",
+      "left": {
+        "stance": "forbid",
+        "count": 8012,
+        "example": {
+          "contentHash": "89a92cac461d07f51f0a75388129fcdc62b19668313465c25a8fb34b3f4bb1fd",
+          "locator": "hf://mvaccargiu/gitskills/artifacts/1445052"
+        }
+      },
+      "right": {
+        "stance": "allow",
+        "count": 136,
+        "example": {
+          "contentHash": "e45dfa816966486fea5f21eb5756b82ed882442aea0e27486ed48a07c3b62382",
+          "locator": "hf://mvaccargiu/gitskills/artifacts/1608666"
+        }
+      },
+      "recommendation": "forbid",
+      "yourSelection": ""
+    },
+    {
+      "topic": "production",
+      "left": {
+        "stance": "approval",
+        "count": 73171,
+        "example": {
+          "contentHash": "22fbaddb2d1150630f24726801329d54233346ca0ec2b194e4e61e48c7cc5753",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/skills-sh/exact-b2-v1/bucket-24/0019248-santiagoisper-bope_version_definitiva.json.gz#file=.agents%2Fskills%2Fgstack%2Fship%2FSKILL.md"
+        }
+      },
+      "right": {
+        "stance": "auto",
+        "count": 415,
+        "example": {
+          "contentHash": "d471067c769950ea8db1f17b35ba6f435039c2ef098aabf5d58abb7fcf1fd6c2",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121316-121317-121318-121319-121320-121321-121322-121323-121324-121325-121326-121327-121328-121329-121330-121331-121332-121333-121334-121335-121336-121337-121338-121339.json.gz#row=2132155"
+        }
+      },
+      "recommendation": "approval",
+      "yourSelection": ""
+    },
+    {
+      "topic": "priority",
+      "left": {
+        "stance": "security",
+        "count": 3887,
+        "example": {
+          "contentHash": "527f6d38ab0b30270bf2296274aa918b14218d13b58f69f3904b345a1ebb98cd",
+          "locator": "hf://mvaccargiu/gitskills/artifacts/1161893"
+        }
+      },
+      "right": {
+        "stance": "speed",
+        "count": 618,
+        "example": {
+          "contentHash": "0994db0f2994e4517c2d6f0b203030770a5fb05f37da2d04c146a727400bc4ac",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/skills-sh/exact-b2-v1/bucket-19/0015055-eugworld-board-of-advisors.json.gz#file=tech-expert%2FSKILL.md"
+        }
+      },
+      "recommendation": "security",
+      "yourSelection": ""
+    },
+    {
+      "topic": "memory",
+      "left": {
+        "stance": "stateless",
+        "count": 14605,
+        "example": {
+          "contentHash": "0994db0f2994e4517c2d6f0b203030770a5fb05f37da2d04c146a727400bc4ac",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/skills-sh/exact-b2-v1/bucket-19/0015055-eugworld-board-of-advisors.json.gz#file=tech-expert%2FSKILL.md"
+        }
+      },
+      "right": {
+        "stance": "persistent",
+        "count": 5487,
+        "example": {
+          "contentHash": "0d62e0b3bfc0af3d15fac471fa404939b20b8963e45c1cfacd483d77db36d645",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121580-121581-121582-121583-121584-121585-121586-121587-121588-121589-121590-121591-121592-121593-121594-121595-121596-121597-121598-121599-121600-121601-121602-121603.json.gz#row=2159164"
+        }
+      },
+      "recommendation": "stateless by default; persistent only when explicitly scoped",
+      "yourSelection": ""
+    },
+    {
+      "topic": "branch",
+      "left": {
+        "stance": "pr",
+        "count": 67213,
+        "example": {
+          "contentHash": "00534fd1acc797945288db2d4515405e2773c5bec30e2290410d198360eb070b",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120332-120333-120334-120335-120336-120337-120338-120339-120340-120341-120342-120343-120344-120345-120346-120347-120348-120349-120350-120351-120352-120353-120354-120355.json.gz#row=2035593"
+        }
+      },
+      "right": {
+        "stance": "direct_main",
+        "count": 70,
+        "example": {
+          "contentHash": "0ae9b5c9b6989019ca595b42a9c64a282859eff4c49c7eea4b5d802c73de31f3",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120740-120741-120742-120743-120744-120745-120746-120747-120748-120749-120750-120751-120752-120753-120754-120755-120756-120757-120758-120759-120760-120761-120762-120763.json.gz#row=2075547"
+        }
+      },
+      "recommendation": "pr",
+      "yourSelection": ""
+    },
+    {
+      "topic": "provider",
+      "left": {
+        "stance": "agnostic",
+        "count": 3015,
+        "example": {
+          "contentHash": "a895067e26a40498ac36fb0c5ac2c7c9718e26a1f47231d7f9d31c66ca22a908",
+          "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1960376"
+        }
+      },
+      "right": {
+        "stance": "provider_forced",
+        "count": 13452,
+        "variants": [
+          {
+            "stance": "forced:claude",
+            "count": 5433,
+            "example": {
+              "contentHash": "14fd10c6319269dac577739e300b5b53e1e3a7bb9f934df3fd2af682d55fb702",
+              "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1976111"
+            }
+          },
+          {
+            "stance": "forced:opus",
+            "count": 796,
+            "example": {
+              "contentHash": "22fbaddb2d1150630f24726801329d54233346ca0ec2b194e4e61e48c7cc5753",
+              "locator": "b2://skillset-corpus-v2-trzahmet93/skills-sh/exact-b2-v1/bucket-24/0019248-santiagoisper-bope_version_definitiva.json.gz#file=.agents%2Fskills%2Fgstack%2Fship%2FSKILL.md"
+            }
+          },
+          {
+            "stance": "forced:sonnet",
+            "count": 405,
+            "example": {
+              "contentHash": "7c84d52e85c8f975eff8d738fac7578044c916cb66f23dc0b9ccf751946705f5",
+              "locator": "b2://skillset-corpus-v2-trzahmet93/skills-sh/exact-b2-v1/bucket-21/0016984-slamb2k-mad-skills.json.gz#file=skills%2Fbuild%2FSKILL.md"
+            }
+          },
+          {
+            "stance": "forced:anthropic",
+            "count": 238,
+            "example": {
+              "contentHash": "8feef6424d6398a2e648318a7af553308e87adde9e747cea4e095fc4c9706bfb",
+              "locator": "hf://mvaccargiu/gitskills/artifacts/1793441"
+            }
+          },
+          {
+            "stance": "forced:openai",
+            "count": 556,
+            "example": {
+              "contentHash": "afae028686c11924fb93654c6a6ffc0e122d40932a78c02346981beb701ee13e",
+              "locator": "hf://mvaccargiu/gitskills/artifacts/1795281"
+            }
+          },
+          {
+            "stance": "forced:codex",
+            "count": 3279,
+            "example": {
+              "contentHash": "0623f82840090f667b951dfcd7f241c952c1dc04812b377c9d4e9c381f70a441",
+              "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-122420-122421-122422-122423-122424-122425-122426-122427-122428-122429-122430-122431-122432-122433-122434-122435-122436-122437-122438-122439-122440-122441-122442-122443.json.gz#row=2242787"
+            }
+          },
+          {
+            "stance": "forced:gemini",
+            "count": 915,
+            "example": {
+              "contentHash": "240baa7179d83c571eaac8b0134a38294534b568d331a8533de073fb09c3e8a3",
+              "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120764-120765-120766-120767-120768-120769-120770-120771-120772-120773-120774-120775-120776-120777-120778-120779-120780-120781-120782-120783-120784-120785-120786-120787.json.gz#row=2078038"
+            }
+          },
+          {
+            "stance": "forced:cursor",
+            "count": 1221,
+            "example": {
+              "contentHash": "3a3eaaf0bb1ea33040af3f07133ed2b80ca29de55bbdcdb4de5d428a1ae4e9b0",
+              "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120692-120693-120694-120695-120696-120697-120698-120699-120700-120701-120702-120703-120704-120705-120706-120707-120708-120709-120710-120711-120712-120713-120714-120715.json.gz#row=2070464"
+            }
+          },
+          {
+            "stance": "forced:copilot",
+            "count": 591,
+            "example": {
+              "contentHash": "0bef889b8f3503efa72284c3adbc196be989c2cc804eb8133b89dd0ebdfa14fa",
+              "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-122204-122205-122206-122207-122208-122209-122210-122211-122212-122213-122214-122215-122216-122217-122218-122219-122220-122221-122222-122223-122224-122225-122226-122227.json.gz#row=2220908"
+            }
+          },
+          {
+            "stance": "forced:cline",
+            "count": 7,
+            "example": {
+              "contentHash": "13abfa52eaa210587d9c1ec8645c04a5bada75a0c11a8fe557764ee637c1e296",
+              "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121172-121173-121174-121175-121176-121177-121178-121179-121180-121181-121182-121183-121184-121185-121186-121187-121188-121189-121190-121191-121192-121193-121194-121195.json.gz#row=2119507"
+            }
+          },
+          {
+            "stance": "forced:aider",
+            "count": 11,
+            "example": {
+              "contentHash": "5480da4784753923ccea194fb6a78e63359b751d47192361cc6a9762882b685f",
+              "locator": "hf://mvaccargiu/gitskills/artifacts/1445375"
+            }
+          }
+        ]
+      },
+      "recommendation": "agnostic",
+      "yourSelection": ""
+    },
+    {
+      "topic": "coverage",
+      "variants": [
+        {
+          "value": "80%",
+          "count": 6681,
+          "example": {
+            "contentHash": "000012c536b1722ecc94e18df1fe44a5341f559338c901712752165b22e24201",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941756"
+          }
+        },
+        {
+          "value": "1",
+          "count": 3307,
+          "example": {
+            "contentHash": "0011cf80768e9aab60e1ba54d7178c3e5d98b4940e7d68290549e8aae5e03f92",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942383"
+          }
+        },
+        {
+          "value": "10",
+          "count": 3056,
+          "example": {
+            "contentHash": "00abd637e83121b17d949fba0252b1a6c1924b2b57c912d1185ec89ae4d5d22e",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944741"
+          }
+        },
+        {
+          "value": "100%",
+          "count": 2979,
+          "example": {
+            "contentHash": "002dc41eacd3664ae4f346a2972e130f65e8183d545b75f1dd437387b41ce1c2",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945107"
+          }
+        },
+        {
+          "value": "7",
+          "count": 2533,
+          "example": {
+            "contentHash": "02fcecc09e214ab9426739fae961fa3e736e85601b97c06220b4031f8a792542",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1955958"
+          }
+        },
+        {
+          "value": "3",
+          "count": 2463,
+          "example": {
+            "contentHash": "0049e050721c0597de2c550a5e940965cda7fb5525e3afa11aeebaf7af5d392f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945244"
+          }
+        },
+        {
+          "value": "2",
+          "count": 2459,
+          "example": {
+            "contentHash": "0043a076f07a298a757d137e400502f8f74be4bde400c75573d555638f254deb",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954259"
+          }
+        },
+        {
+          "value": "5",
+          "count": 1788,
+          "example": {
+            "contentHash": "00d873c80043e05b7743f78cdedd188b6f6a2b3e32a54493d684ef5b907dfde5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953607"
+          }
+        },
+        {
+          "value": "90%",
+          "count": 1704,
+          "example": {
+            "contentHash": "000dff1bed445b1ad4db43aece17e1b6de6acc0bc57fc3f7e756a2dda9f65987",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942539"
+          }
+        },
+        {
+          "value": "0",
+          "count": 1347,
+          "example": {
+            "contentHash": "016c8124b604730759ce9b37f41a840ca0fd1de449565c3a81d7c0d8181b22c4",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942335"
+          }
+        },
+        {
+          "value": "4",
+          "count": 1169,
+          "example": {
+            "contentHash": "00deb4486144c3128606a5bbb9d623d2055a8896b9aaf6268a72812503cb7c22",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953101"
+          }
+        },
+        {
+          "value": "85%",
+          "count": 1026,
+          "example": {
+            "contentHash": "0023927da14d93d6be5e10c4c9b9bd38b48aabc5ab9dfe77c9e3a97f26f38613",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952658"
+          }
+        },
+        {
+          "value": "95%",
+          "count": 995,
+          "example": {
+            "contentHash": "007a7ac265356c9b90ca322319aff95b578dca4a95ebaa1dc9eb670a15d4e5fc",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943243"
+          }
+        },
+        {
+          "value": "70%",
+          "count": 908,
+          "example": {
+            "contentHash": "0218eaa3ce2396a33d55bfe6bca66b50a6d5e791c0c52632b5ec4e8b4b2d5555",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943923"
+          }
+        },
+        {
+          "value": "80",
+          "count": 794,
+          "example": {
+            "contentHash": "004f885ded60f73938a07115b3183bfe6b03dc80df4698d53ebe126decbf6c53",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944808"
+          }
+        },
+        {
+          "value": "60%",
+          "count": 640,
+          "example": {
+            "contentHash": "002201bbce5727886199fdeac7e04213fdfd43ace11c808738873f8525bcc303",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945507"
+          }
+        },
+        {
+          "value": "100",
+          "count": 584,
+          "example": {
+            "contentHash": "0171a6801b590dfcb7aefbd45cdfb4cb53c0de86d5a12baddbfb09403bf2aa6f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1957044"
+          }
+        },
+        {
+          "value": "6",
+          "count": 546,
+          "example": {
+            "contentHash": "03f79d66773f304010fea82da2cdbfbe77bf4817f1bc57efe1043a3fd15d191b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943025"
+          }
+        },
+        {
+          "value": "0%",
+          "count": 490,
+          "example": {
+            "contentHash": "039c0647e8e895394771b746875e89ec1ea633333f2ee4fc5bd74984cc265609",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942383"
+          }
+        },
+        {
+          "value": "50%",
+          "count": 481,
+          "example": {
+            "contentHash": "00925c395acfb606d6ba4960209835cefd7725f91d12ec6eeb7dd8835504d696",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954646"
+          }
+        },
+        {
+          "value": "75%",
+          "count": 430,
+          "example": {
+            "contentHash": "00b16421509997f799979549262aec1797d83c8a41a3847f9c63503e72c3e307",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119684-119685-119686-119687-119688-119689-119690-119691-119692-119693-119694-119695-119696-119697-119698-119699-119700-119701-119702-119703-119704-119705-119706-119707-119708-119709-119710-119711-119712-119713-119714-119715.json.gz#row=1969552"
+          }
+        },
+        {
+          "value": "8",
+          "count": 409,
+          "example": {
+            "contentHash": "0293a635b01842375c82eee0226eac68aeddeacb28016183e2da21d9a8367255",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120476-120477-120478-120479-120480-120481-120482-120483-120484-120485-120486-120487-120488-120489-120490-120491-120492-120493-120494-120495-120496-120497-120498-120499.json.gz#row=2047885"
+          }
+        },
+        {
+          "value": "87%",
+          "count": 372,
+          "example": {
+            "contentHash": "0252f41bae1d20da65cd2e2ebe9744f41de17016f2def464fbad5014b4a6a963",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945341"
+          }
+        },
+        {
+          "value": "30",
+          "count": 355,
+          "example": {
+            "contentHash": "02e8b565f341bccaa147d5e335594869c678b1ea275e0081011730346712b0c5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119684-119685-119686-119687-119688-119689-119690-119691-119692-119693-119694-119695-119696-119697-119698-119699-119700-119701-119702-119703-119704-119705-119706-119707-119708-119709-119710-119711-119712-119713-119714-119715.json.gz#row=1969833"
+          }
+        },
+        {
+          "value": "50",
+          "count": 309,
+          "example": {
+            "contentHash": "0779993e9487940a75c5a3ce5f4a66eb45b55c1f7fa03ff7bb50cfe837299ddc",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943397"
+          }
+        },
+        {
+          "value": "001",
+          "count": 301,
+          "example": {
+            "contentHash": "0224567b770fbbc3d6c8c233ece1bc682ed3795e55d026545ecc23f3d5bda0d0",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941506"
+          }
+        },
+        {
+          "value": "2026",
+          "count": 295,
+          "example": {
+            "contentHash": "00e7f8bf53d4bb8055eb0f0121af5ee02d4a7915d90d9e2788e41859b2e0af6c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941438"
+          }
+        },
+        {
+          "value": "20",
+          "count": 283,
+          "example": {
+            "contentHash": "03dd88725fb97a921643aa4938b59536fb0e3f01f79330a81590dc476dc454b5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958128"
+          }
+        },
+        {
+          "value": "90",
+          "count": 272,
+          "example": {
+            "contentHash": "02a6f402df0ee3a88b508e2d4ede1b7bea2445486d6361e854d54499656420d3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943879"
+          }
+        },
+        {
+          "value": "9",
+          "count": 266,
+          "example": {
+            "contentHash": "05854dad3136944b67b3c42f597600f4fa60c93041a23f65c7f9f56f3daf2b63",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1977206"
+          }
+        },
+        {
+          "value": "15",
+          "count": 260,
+          "example": {
+            "contentHash": "017495d5ecf3ac237b0b898a217aaf9bd05eee320f849e13d0185cfe1b2e85f3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958128"
+          }
+        },
+        {
+          "value": "10%",
+          "count": 254,
+          "example": {
+            "contentHash": "08d5f414e8c042891d847b8d18081594e992fa553e8eb9c1011a4b105d6ffce3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119852-119853-119854-119855-119856-119857-119858-119859-119860-119861-119862-119863-119864-119865-119866-119867-119868-119869-119870-119871-119872-119873-119874-119875.json.gz#row=1987330"
+          }
+        },
+        {
+          "value": "11",
+          "count": 254,
+          "example": {
+            "contentHash": "046dbb59749022549d6e76eb8010ba5b109cd5ab6c17e91f4f8339ac3c83b200",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958275"
+          }
+        },
+        {
+          "value": "200",
+          "count": 246,
+          "example": {
+            "contentHash": "027530b7b6dfec8bbae1354900099a613c10ab2dbff78744e7e0c997410e29bf",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1975808"
+          }
+        },
+        {
+          "value": "40%",
+          "count": 240,
+          "example": {
+            "contentHash": "084d9b81607ff914f1d8f8da1775c998134c813fb54bd146e0719c7e25e7b670",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942283"
+          }
+        },
+        {
+          "value": "12",
+          "count": 231,
+          "example": {
+            "contentHash": "067fb53796c71a5bd682ca044d12aeb2a5c3c68c0fdc4c7d8d7fb558b655bdc8",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945745"
+          }
+        },
+        {
+          "value": "20%",
+          "count": 223,
+          "example": {
+            "contentHash": "0056484dd851fb7450d047cac185baed88e9db6d8ffb148652d63cc4922c1911",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1976922"
+          }
+        },
+        {
+          "value": "002",
+          "count": 202,
+          "example": {
+            "contentHash": "01401db1c7b2222405816c0fa72b57e3eea197cb2ab256f2eb88cd482d0d94c5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953722"
+          }
+        },
+        {
+          "value": "70",
+          "count": 190,
+          "example": {
+            "contentHash": "033b73f3f50e299305e8f3c7e1d008e2b4b279f21cc9b814e799dc35d68cf997",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953217"
+          }
+        },
+        {
+          "value": "0.5",
+          "count": 182,
+          "example": {
+            "contentHash": "0382f4a3fce3118899075a944c1a19d1fc96a551c8eb639601033ff7cebd9420",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952838"
+          }
+        },
+        {
+          "value": "30%",
+          "count": 178,
+          "example": {
+            "contentHash": "0731c0e6f76f627cfa3cbe8115e60f0e8646f1cbd3532b6d38d8391bf1e1db27",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945666"
+          }
+        },
+        {
+          "value": "003",
+          "count": 175,
+          "example": {
+            "contentHash": "0001b627523deb25c1cf798056f74a77450a67996d7e96b3197b6e7400e4ae1a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954297"
+          }
+        },
+        {
+          "value": "5%",
+          "count": 174,
+          "example": {
+            "contentHash": "09e99c8594134a11e3834e94086c2c4b79d2112c6f3c402627b0ab52250fa8d9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119852-119853-119854-119855-119856-119857-119858-119859-119860-119861-119862-119863-119864-119865-119866-119867-119868-119869-119870-119871-119872-119873-119874-119875.json.gz#row=1987330"
+          }
+        },
+        {
+          "value": "8%",
+          "count": 169,
+          "example": {
+            "contentHash": "9d619931b86f3a7421b49c11c3c39c2e796d7adf61b49b42931d05b38605501d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-127716-127717-127718-127719-127720-127721-127722-127723-127724-127725-127726-127727-127728-127729-127730-127731-127732-127733-127734-127735-127736-127737-127738-127739-127740-127741-127742-127743-127744-127745-127746-127747.json.gz#row=2773637"
+          }
+        },
+        {
+          "value": "25",
+          "count": 166,
+          "example": {
+            "contentHash": "06469cdd1249d199cc7c5410dccb917f4f06e8ac9337e16ed62bf1d007009e07",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119852-119853-119854-119855-119856-119857-119858-119859-119860-119861-119862-119863-119864-119865-119866-119867-119868-119869-119870-119871-119872-119873-119874-119875.json.gz#row=1985570"
+          }
+        },
+        {
+          "value": "24",
+          "count": 160,
+          "example": {
+            "contentHash": "01b05b4cd279e09957797b97298ee301d125a955512d4f2b988b9e73f2010e6a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120140-120141-120142-120143-120144-120145-120146-120147-120148-120149-120150-120151-120152-120153-120154-120155-120156-120157-120158-120159-120160-120161-120162-120163.json.gz#row=2015226"
+          }
+        },
+        {
+          "value": "500",
+          "count": 159,
+          "example": {
+            "contentHash": "01daa3c4947b16dfbce1ceea4756d14c19ad193eea3489ca5a2287f070bed045",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958671"
+          }
+        },
+        {
+          "value": "78%",
+          "count": 154,
+          "example": {
+            "contentHash": "152b14e51ea7db53ed8760cbdbc7fc08fbb85fc66273dba02369c9001c800602",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959231"
+          }
+        },
+        {
+          "value": "85",
+          "count": 144,
+          "example": {
+            "contentHash": "032a0d0f7d4d9322e4a0ca08555bfd15e2cb63807994c6689b93a6dc122e90b6",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119684-119685-119686-119687-119688-119689-119690-119691-119692-119693-119694-119695-119696-119697-119698-119699-119700-119701-119702-119703-119704-119705-119706-119707-119708-119709-119710-119711-119712-119713-119714-119715.json.gz#row=1968517"
+          }
+        },
+        {
+          "value": "92%",
+          "count": 141,
+          "example": {
+            "contentHash": "01938ab4f30dac9040efc85cc6f084b519ec0c691ad5e7f6bde3d2be0b1c3f60",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943271"
+          }
+        }
+      ],
+      "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
+      "yourSelection": ""
+    },
+    {
+      "topic": "max_attempts",
+      "variants": [
+        {
+          "value": "3",
+          "count": 97,
+          "example": {
+            "contentHash": "00ab1a84eac1b281971779b328f5c4bd7a529ed20c1f8fe7f6a2cd95d1b1379b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1955027"
+          }
+        },
+        {
+          "value": "5",
+          "count": 54,
+          "example": {
+            "contentHash": "220ae8c73d4c9986ba80d3b52a0316bc01d76d790c13972035e0d141f1d10665",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121196-121197-121198-121199-121200-121201-121202-121203-121204-121205-121206-121207-121208-121209-121210-121211-121212-121213-121214-121215-121216-121217-121218-121219.json.gz#row=2120842"
+          }
+        },
+        {
+          "value": "10",
+          "count": 34,
+          "example": {
+            "contentHash": "04eec9b148996eae87aa3f9df84756057bf0c42b6fc43b1eaf9d82257da88252",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120764-120765-120766-120767-120768-120769-120770-120771-120772-120773-120774-120775-120776-120777-120778-120779-120780-120781-120782-120783-120784-120785-120786-120787.json.gz#row=2076887"
+          }
+        },
+        {
+          "value": "20",
+          "count": 19,
+          "example": {
+            "contentHash": "0ece750e88284d4666b46dcba5aaecb641aa3d00b32e153585634ef852bdafd2",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-126484-126485-126486-126487-126488-126489-126490-126491-126492-126493-126494-126495-126496-126497-126498-126499-126500-126501-126502-126503-126504-126505-126506-126507.json.gz#row=2649753"
+          }
+        },
+        {
+          "value": "2",
+          "count": 14,
+          "example": {
+            "contentHash": "67c3d7c50697210e3bcf74b121c603e3a2978334e6942e1fb431dd6037d7e579",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-128644-128645-128646-128647-128648-128649-128650-128651-128652-128653-128654-128655-128656-128657-128658-128659-128660-128661-128662-128663-128664-128665-128666-128667-128668-128669-128670-128671-128672-128673-128674-128675.json.gz#row=2864733"
+          }
+        },
+        {
+          "value": "1",
+          "count": 12,
+          "example": {
+            "contentHash": "73bb0a2a3a5f0feeead3214b5ed97b650e195188a679fa3bfbf52d85cd7999b6",
+            "locator": "hf://mvaccargiu/gitskills/artifacts/1193237"
+          }
+        },
+        {
+          "value": "4",
+          "count": 9,
+          "example": {
+            "contentHash": "ab52cc19b6273a890c1b37fdc701a127dd95605b69a31402b4e17db380f3b374",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-128932-128933-128934-128935-128936-128937-128938-128939-128940-128941-128942-128943-128944-128945-128946-128947-128948-128949-128950-128951-128952-128953-128954-128955-128956-128957-128958-128959-128960-128961-128962-128963.json.gz#row=2896291"
+          }
+        },
+        {
+          "value": "30",
+          "count": 3,
+          "example": {
+            "contentHash": "b707b3169f941b23a1fcdc30861ee41afcf78028a2779ff529b5fe04736d44ef",
+            "locator": "hf://mvaccargiu/gitskills/artifacts/836851"
+          }
+        },
+        {
+          "value": "60",
+          "count": 3,
+          "example": {
+            "contentHash": "2dacdfb9c62c199a46c0fa9b40742759ef6722953e1c2bdb48cba6421f6383e6",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3499884",
+            "evidence": "| Max attempts | 60 attempts (≈10 minutes) |"
+          }
+        },
+        {
+          "value": "1000",
+          "count": 2,
+          "example": {
+            "contentHash": "b2d978234b4ee675e7400bf79786a39ce605683123e138c41a6ca990d5edd712",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-127588-127589-127590-127591-127592-127593-127594-127595-127596-127597-127598-127599-127600-127601-127602-127603-127604-127605-127606-127607-127608-127609-127610-127611-127612-127613-127614-127615-127616-127617-127618-127619.json.gz#row=2759184"
+          }
+        },
+        {
+          "value": "10%",
+          "count": 1,
+          "example": {
+            "contentHash": "6f8ce6ef3569bedfa6665f8c6ad0f7835e5e530ce69f373f071acaa408cdfb0b",
+            "locator": "hf://mvaccargiu/gitskills/artifacts/634546"
+          }
+        },
+        {
+          "value": "15s",
+          "count": 1,
+          "example": {
+            "contentHash": "a8db54aefccb1d1ef649211606dd5e38cede1d13f2b6900178c1dd2091d4467c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120764-120765-120766-120767-120768-120769-120770-120771-120772-120773-120774-120775-120776-120777-120778-120779-120780-120781-120782-120783-120784-120785-120786-120787.json.gz#row=2078082"
+          }
+        },
+        {
+          "value": "3m",
+          "count": 1,
+          "example": {
+            "contentHash": "947a789dbf378c02bd01c234033eab5f4f6158fc72feea8e522620052f115a8e",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-122636-122637-122638-122639-122640-122641-122642-122643-122644-122645-122646-122647-122648-122649-122650-122651-122652-122653-122654-122655-122656-122657-122658-122659.json.gz#row=2264800"
+          }
+        },
+        {
+          "value": "50",
+          "count": 1,
+          "example": {
+            "contentHash": "851785ee0cbcf7aa652202b52b094ecbbecf722a045041609a41661d004cb3a8",
+            "locator": "hf://mvaccargiu/gitskills/artifacts/1394345"
+          }
+        },
+        {
+          "value": "30s",
+          "count": 1,
+          "example": {
+            "contentHash": "c67650b799ced5d390badfc47963421564cab5fb4c4de5e6987d484958c617e5",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3062725",
+            "evidence": "Failed --> Connecting : exponential backoff\\n6 max attempts, 30s max delay"
+          }
+        },
+        {
+          "value": "25",
+          "count": 1,
+          "example": {
+            "contentHash": "f769e24b6e728a60cf798b106f2605e679079f78d42e9ba5017f509c29e49c02",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3112849",
+            "evidence": "- Maximum attempts: 25 (unless the user says otherwise)."
+          }
+        },
+        {
+          "value": "8",
+          "count": 1,
+          "example": {
+            "contentHash": "1ce88462cfebfbfa6a23703e1123d0368c250278ad850e80dee108a0481c44a5",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3133673",
+            "evidence": "- Max attempts: 8."
+          }
+        },
+        {
+          "value": "40",
+          "count": 1,
+          "example": {
+            "contentHash": "edf574df25d3bb0fb474e8d4014714f0810073563f2c1ed3bd239318b7da844a",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3294731",
+            "evidence": "- Max attempts: 40 (for 600s total timeout)"
+          }
+        },
+        {
+          "value": "24",
+          "count": 1,
+          "example": {
+            "contentHash": "648d58c3f7758641ef76e5607d77f4657aef10e7024c52c0c96537d806bb89ba",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3325154",
+            "evidence": "- Max attempts: 24 (~24h total wall-clock)."
+          }
+        },
+        {
+          "value": "7",
+          "count": 1,
+          "example": {
+            "contentHash": "b06de2ee3a9e8da54eb4981877dd2785af6ebe3cd17d6df99ec0802016cde977",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3399791",
+            "evidence": "Otherwise, mark the task `BLOCKED` with a `blocked_reason` explaining max attempts reached or fix disabled, then proceed to Step 7."
+          }
+        },
+        {
+          "value": "20s",
+          "count": 1,
+          "example": {
+            "contentHash": "e71ea1d0f47a2a15cf157c6c3966e269ab8f339a5a26219afe377325c1fdf77b",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3471382",
+            "evidence": "- Default: Legacy mode with 5 max attempts, exponential backoff up to 20 seconds"
+          }
+        },
+        {
+          "value": "15",
+          "count": 1,
+          "example": {
+            "contentHash": "28b0bba31281b44ed6a97cd945d4af9cbc063750e796276ceac13ae556352f74",
+            "locator": "hf-parquet://mvaccargiu/gitskills/artifacts/3610912",
+            "evidence": "- Max attempts: 15-30 (30-60 seconds total)"
+          }
+        }
+      ],
+      "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
+      "yourSelection": ""
+    },
+    {
+      "topic": "retry",
+      "variants": [
+        {
+          "value": "3",
+          "count": 8878,
+          "example": {
+            "contentHash": "000ee0c8859c78176f5e74fd4cda6d98d95c7aa9b806bade1cbee228d10215d6",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941816"
+          }
+        },
+        {
+          "value": "5",
+          "count": 3295,
+          "example": {
+            "contentHash": "001367d1d4dfc8fc5b93bb2042847f94c040bb16b28f331f1b03b0a2b3e1a408",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941331"
+          }
+        },
+        {
+          "value": "2",
+          "count": 2823,
+          "example": {
+            "contentHash": "0070160cb1b75aa9529ef5d3022b8ef01525a4b24df32d3dec3ea5eb4efe3dc4",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943934"
+          }
+        },
+        {
+          "value": "1",
+          "count": 1901,
+          "example": {
+            "contentHash": "006a9fd790b6deb0eb5e0da98064de633ed7ae22ca03708f0cc6c638103f61fc",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941816"
+          }
+        },
+        {
+          "value": "0",
+          "count": 994,
+          "example": {
+            "contentHash": "01553203fed3e8c7ada7254481f71a10d6abede08965c4681354ccec6c2b440c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1955786"
+          }
+        },
+        {
+          "value": "429",
+          "count": 975,
+          "example": {
+            "contentHash": "0096e916486eace35b597e0db0b1b0c000ebbd6d5e3a6827fc6fc7545a950e05",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942096"
+          }
+        },
+        {
+          "value": "30s",
+          "count": 742,
+          "example": {
+            "contentHash": "008a0618e3e70851ce5a556e282527eb49bd15715829f90a045cc622fa96c3ce",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941924"
+          }
+        },
+        {
+          "value": "10",
+          "count": 396,
+          "example": {
+            "contentHash": "01c95d72023ff16464813ba8239a2330cfa74366f651378ae5343a88313c61de",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1957418"
+          }
+        },
+        {
+          "value": "4",
+          "count": 367,
+          "example": {
+            "contentHash": "0022298cb34298f892fbb7373ec0cccb11b7c6413bdae9d01cbd36afe5579c0a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1955284"
+          }
+        },
+        {
+          "value": "60s",
+          "count": 278,
+          "example": {
+            "contentHash": "02c3b2023b247ef44969b7cb940953841db0ddbb5c556be35a0f6da73860cf57",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944910"
+          }
+        },
+        {
+          "value": "1s",
+          "count": 212,
+          "example": {
+            "contentHash": "025d25b123a563a5df25ef7987ff7447ac4b6f43bc281c462b2c0acec11feb79",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119852-119853-119854-119855-119856-119857-119858-119859-119860-119861-119862-119863-119864-119865-119866-119867-119868-119869-119870-119871-119872-119873-119874-119875.json.gz#row=1986020"
+          }
+        },
+        {
+          "value": "5s",
+          "count": 205,
+          "example": {
+            "contentHash": "0265aeb9cd2254005d5cfffb2c7787f2f8bbd4fe5bc7492cb799a5368d5aa14b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120380-120381-120382-120383-120384-120385-120386-120387-120388-120389-120390-120391-120392-120393-120394-120395-120396-120397-120398-120399-120400-120401-120402-120403.json.gz#row=2040228"
+          }
+        },
+        {
+          "value": "30",
+          "count": 154,
+          "example": {
+            "contentHash": "029248d291671c9c2a00b19b30318f01119c6ba142a67a04aced463721fe4d50",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120476-120477-120478-120479-120480-120481-120482-120483-120484-120485-120486-120487-120488-120489-120490-120491-120492-120493-120494-120495-120496-120497-120498-120499.json.gz#row=2047749"
+          }
+        },
+        {
+          "value": "60",
+          "count": 144,
+          "example": {
+            "contentHash": "006d3d23bfc95c930bb51524870281576fd2561666f1d155b5d7afee4dcaaaf4",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945004"
+          }
+        },
+        {
+          "value": "2s",
+          "count": 122,
+          "example": {
+            "contentHash": "0493cab98a1c2f8fdb2064d2750ee4f547a10a9b9d516b228fda4973260c8036",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120284-120285-120286-120287-120288-120289-120290-120291-120292-120293-120294-120295-120296-120297-120298-120299-120300-120301-120302-120303-120304-120305-120306-120307.json.gz#row=2029427"
+          }
+        },
+        {
+          "value": "200",
+          "count": 109,
+          "example": {
+            "contentHash": "1418b5320d36ba37ac969e0679e80d252331b012fded4a166b38830697d083b8",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120764-120765-120766-120767-120768-120769-120770-120771-120772-120773-120774-120775-120776-120777-120778-120779-120780-120781-120782-120783-120784-120785-120786-120787.json.gz#row=2077558"
+          }
+        },
+        {
+          "value": "6",
+          "count": 97,
+          "example": {
+            "contentHash": "034aa4e8f046acf18eb0b6e9a316fb162ef0a6f19dec51faba68a4ff46317164",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121244-121245-121246-121247-121248-121249-121250-121251-121252-121253-121254-121255-121256-121257-121258-121259-121260-121261-121262-121263-121264-121265-121266-121267.json.gz#row=2124725"
+          }
+        },
+        {
+          "value": "8",
+          "count": 90,
+          "example": {
+            "contentHash": "00fe99bf8e4cf489b08187b6b06319c3d2b47406a741e17c8d811517d187f5c0",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120764-120765-120766-120767-120768-120769-120770-120771-120772-120773-120774-120775-120776-120777-120778-120779-120780-120781-120782-120783-120784-120785-120786-120787.json.gz#row=2078058"
+          }
+        },
+        {
+          "value": "500",
+          "count": 89,
+          "example": {
+            "contentHash": "01a2986843db56d3c65666fd4d30e2e2914d2b490773048384c8980bf1107492",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1977206"
+          }
+        },
+        {
+          "value": "7",
+          "count": 80,
+          "example": {
+            "contentHash": "01580ce47714b1567add19ac78d38533c55876023e92f733cb285e97d2dfbfe3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-128100-128101-128102-128103-128104-128105-128106-128107-128108-128109-128110-128111-128112-128113-128114-128115-128116-128117-128118-128119-128120-128121-128122-128123-128124-128125-128126-128127-128128-128129-128130-128131.json.gz#row=2812268"
+          }
+        },
+        {
+          "value": "20",
+          "count": 79,
+          "example": {
+            "contentHash": "2bda77ac00c25f66ddb870da7fa8942313a111bd8a91275d1f45973102f1e0ac",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954305"
+          }
+        },
+        {
+          "value": "429s",
+          "count": 72,
+          "example": {
+            "contentHash": "11459feec0955162a07729916afc1ccfd8a48a19c3464f63e0766119ac60a6d5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121148-121149-121150-121151-121152-121153-121154-121155-121156-121157-121158-121159-121160-121161-121162-121163-121164-121165-121166-121167-121168-121169-121170-121171.json.gz#row=2115347"
+          }
+        },
+        {
+          "value": "503",
+          "count": 71,
+          "example": {
+            "contentHash": "014cd01f0b665680ccd0aa6b534260441d71e71ded2100c77e5ddff695087dd2",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120716-120717-120718-120719-120720-120721-120722-120723-120724-120725-120726-120727-120728-120729-120730-120731-120732-120733-120734-120735-120736-120737-120738-120739.json.gz#row=2073041"
+          }
+        },
+        {
+          "value": "403",
+          "count": 70,
+          "example": {
+            "contentHash": "06c718f66f5baa2c8b4cad6f0b2aaed22e354190aa9cf4e2ad04fa3b54763115",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119948-119949-119950-119951-119952-119953-119954-119955-119956-119957-119958-119959-119960-119961-119962-119963-119964-119965-119966-119967-119968-119969-119970-119971.json.gz#row=1996383"
+          }
+        },
+        {
+          "value": "401",
+          "count": 70,
+          "example": {
+            "contentHash": "1ef52f2fe351b666a6fd168a1136087d004a3582e71d0fe1ddea05c87118cfb3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121196-121197-121198-121199-121200-121201-121202-121203-121204-121205-121206-121207-121208-121209-121210-121211-121212-121213-121214-121215-121216-121217-121218-121219.json.gz#row=2120055"
+          }
+        },
+        {
+          "value": "12",
+          "count": 68,
+          "example": {
+            "contentHash": "034aa4e8f046acf18eb0b6e9a316fb162ef0a6f19dec51faba68a4ff46317164",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121964-121965-121966-121967-121968-121969-121970-121971-121972-121973-121974-121975-121976-121977-121978-121979-121980-121981-121982-121983-121984-121985-121986-121987.json.gz#row=2197230"
+          }
+        },
+        {
+          "value": "10s",
+          "count": 66,
+          "example": {
+            "contentHash": "1384295c304daba701f333f2eec8938bbd2d76cb2e49e550dedc59dbb382206a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-122732-122733-122734-122735-122736-122737-122738-122739-122740-122741-122742-122743-122744-122745-122746-122747-122748-122749-122750-122751-122752-122753-122754-122755.json.gz#row=2274202"
+          }
+        },
+        {
+          "value": "1000",
+          "count": 59,
+          "example": {
+            "contentHash": "0c8595b1b423ad89d07cab1c1492fdb46a65e1710b53a5f5bba405d8f5874d50",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942410"
+          }
+        },
+        {
+          "value": "24h",
+          "count": 57,
+          "example": {
+            "contentHash": "08fd5c163000ffa585d3254065a2300606823f0de464393314ec90d03f9fb533",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120236-120237-120238-120239-120240-120241-120242-120243-120244-120245-120246-120247-120248-120249-120250-120251-120252-120253-120254-120255-120256-120257-120258-120259.json.gz#row=2025350"
+          }
+        },
+        {
+          "value": "5m",
+          "count": 54,
+          "example": {
+            "contentHash": "0d03c7e17c11d35c17a5c561a3c7d7c0183070bfb5158a09d3478f94e00e378f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119852-119853-119854-119855-119856-119857-119858-119859-119860-119861-119862-119863-119864-119865-119866-119867-119868-119869-119870-119871-119872-119873-119874-119875.json.gz#row=1985924"
+          }
+        },
+        {
+          "value": "100",
+          "count": 53,
+          "example": {
+            "contentHash": "00f6da3e5c34b2ea4f29f2888199190dabfbe27d8fbe5806ee168296f1a2b9d8",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119652-119653-119654-119655-119656-119657-119658-119659-119660-119661-119662-119663-119664-119665-119666-119667-119668-119669-119670-119671-119672-119673-119674-119675-119676-119677-119678-119679-119680-119681-119682-119683.json.gz#row=1965436"
+          }
+        },
+        {
+          "value": "15",
+          "count": 51,
+          "example": {
+            "contentHash": "383eeec9b7418483fc7e13982a76d8184c95dc8c096e0f719c497e4cd6f171e4",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121340-121341-121342-121343-121344-121345-121346-121347-121348-121349-121350-121351-121352-121353-121354-121355-121356-121357-121358-121359-121360-121361-121362-121363.json.gz#row=2135879"
+          }
+        },
+        {
+          "value": "100ms",
+          "count": 51,
+          "example": {
+            "contentHash": "00195d4472420408e6451adbec1c04451bd39387b49de8bd1f1caa0571ea0053",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-122060-122061-122062-122063-122064-122065-122066-122067-122068-122069-122070-122071-122072-122073-122074-122075-122076-122077-122078-122079-122080-122081-122082-122083.json.gz#row=2206212"
+          }
+        },
+        {
+          "value": "300",
+          "count": 47,
+          "example": {
+            "contentHash": "03e0af7a8c8dc47e6286f2b6f8eebf04e3df56ae80bcb2991313b0ac5e9e96bc",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-127652-127653-127654-127655-127656-127657-127658-127659-127660-127661-127662-127663-127664-127665-127666-127667-127668-127669-127670-127671-127672-127673-127674-127675-127676-127677-127678-127679-127680-127681-127682-127683.json.gz#row=2767836"
+          }
+        },
+        {
+          "value": "3s",
+          "count": 44,
+          "example": {
+            "contentHash": "1d66de9f12087dd8b9fe9908ba1d7fecf86c7a005238d705daf50e0af158f1e1",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-126612-126613-126614-126615-126616-126617-126618-126619-126620-126621-126622-126623-126624-126625-126626-126627-126628-126629-126630-126631-126632-126633-126634-126635-126636-126637-126638-126639-126640-126641-126642-126643.json.gz#row=2661588"
+          }
+        },
+        {
+          "value": "50",
+          "count": 43,
+          "example": {
+            "contentHash": "02928ce99c4cf37f3f6cc340cd4878f224b0edbe1ad227a494084e8437bddab3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121772-121773-121774-121775-121776-121777-121778-121779-121780-121781-121782-121783-121784-121785-121786-121787-121788-121789-121790-121791-121792-121793-121794-121795.json.gz#row=2179442"
+          }
+        },
+        {
+          "value": "1m",
+          "count": 41,
+          "example": {
+            "contentHash": "3cb04316a508a6021bd75df5c018389f746f8cabebf6f135731111fb1e7448b7",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119652-119653-119654-119655-119656-119657-119658-119659-119660-119661-119662-119663-119664-119665-119666-119667-119668-119669-119670-119671-119672-119673-119674-119675-119676-119677-119678-119679-119680-119681-119682-119683.json.gz#row=1968226"
+          }
+        },
+        {
+          "value": "408",
+          "count": 41,
+          "example": {
+            "contentHash": "2859925ef23dd02e2238f39b853347a017ea6e315a6effa39a8b90fd155a6166",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-123308-123309-123310-123311-123312-123313-123314-123315-123316-123317-123318-123319-123320-123321-123322-123323-123324-123325-123326-123327-123328-123329-123330-123331.json.gz#row=2332063"
+          }
+        },
+        {
+          "value": "2m",
+          "count": 38,
+          "example": {
+            "contentHash": "17b639bf963aabb2c2efd5fbc4877faf2c3bf5b41cc597405d8b622b5d5f0c7d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120140-120141-120142-120143-120144-120145-120146-120147-120148-120149-120150-120151-120152-120153-120154-120155-120156-120157-120158-120159-120160-120161-120162-120163.json.gz#row=2014294"
+          }
+        },
+        {
+          "value": "40%",
+          "count": 35,
+          "example": {
+            "contentHash": "20c3fd5cf25894a94092f873f466dd2bc3565625695c9db74ab864aaa472038b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-126980-126981-126982-126983-126984-126985-126986-126987-126988-126989-126990-126991-126992-126993-126994-126995-126996-126997-126998-126999-127000-127001-127002-127003-127004-127005-127006-127007-127008-127009-127010-127011.json.gz#row=2698705"
+          }
+        },
+        {
+          "value": "400",
+          "count": 34,
+          "example": {
+            "contentHash": "3f01312a3bdfe1c745c966b84b7cafd4de59f337ddcb62a7a70b75f79529af39",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120668-120669-120670-120671-120672-120673-120674-120675-120676-120677-120678-120679-120680-120681-120682-120683-120684-120685-120686-120687-120688-120689-120690-120691.json.gz#row=2068808"
+          }
+        },
+        {
+          "value": "500ms",
+          "count": 34,
+          "example": {
+            "contentHash": "2d35500b27c806837b67acf0394bbcd8f9f110977d9afc28c1bc4421ff5ce85d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120764-120765-120766-120767-120768-120769-120770-120771-120772-120773-120774-120775-120776-120777-120778-120779-120780-120781-120782-120783-120784-120785-120786-120787.json.gz#row=2077610"
+          }
+        },
+        {
+          "value": "72h",
+          "count": 31,
+          "example": {
+            "contentHash": "001367d1d4dfc8fc5b93bb2042847f94c040bb16b28f331f1b03b0a2b3e1a408",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-129508-129509-129510-129511-129512-129513-129514-129515-129516-129517-129518-129519-129520-129521-129522-129523-129524-129525-129526-129527-129528-129529-129530-129531-129532-129533-129534-129535-129536-129537-129538-129539.json.gz#row=2952118"
+          }
+        },
+        {
+          "value": "1.0",
+          "count": 29,
+          "example": {
+            "contentHash": "16c76d61268537e5393e66307b4f45138376df1924d9c11e359e84f8cc2720a4",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-128740-128741-128742-128743-128744-128745-128746-128747-128748-128749-128750-128751-128752-128753-128754-128755-128756-128757-128758-128759-128760-128761-128762-128763-128764-128765-128766-128767-128768-128769-128770-128771.json.gz#row=2874097"
+          }
+        },
+        {
+          "value": "9",
+          "count": 28,
+          "example": {
+            "contentHash": "0ef152646a3f61564cb45767704af52f386810c78ff8aea1ca33dfbbf4fb6be7",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-127076-127077-127078-127079-127080-127081-127082-127083-127084-127085-127086-127087-127088-127089-127090-127091-127092-127093-127094-127095-127096-127097-127098-127099-127100-127101-127102-127103-127104-127105-127106-127107.json.gz#row=2708593"
+          }
+        },
+        {
+          "value": "502",
+          "count": 25,
+          "example": {
+            "contentHash": "482c0364ca37b04d27bcbe712ef14cd9ced17e3bfa10abe959edf060768e1baa",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-128004-128005-128006-128007-128008-128009-128010-128011-128012-128013-128014-128015-128016-128017-128018-128019-128020-128021-128022-128023-128024-128025-128026-128027-128028-128029-128030-128031-128032-128033-128034-128035.json.gz#row=2800805"
+          }
+        },
+        {
+          "value": "120s",
+          "count": 25,
+          "example": {
+            "contentHash": "066feeb2eddee7779028303da4719bfa6d980c383d14ba72a55c746ebe3f43ed",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-127780-127781-127782-127783-127784-127785-127786-127787-127788-127789-127790-127791-127792-127793-127794-127795-127796-127797-127798-127799-127800-127801-127802-127803-127804-127805-127806-127807-127808-127809-127810-127811.json.gz#row=2780462"
+          }
+        },
+        {
+          "value": "5000",
+          "count": 25,
+          "example": {
+            "contentHash": "023f3e96731c609b204a13ff8413d18b6296a637bf3bc053acb9d2a3d1d08ac8",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120812-120813-120814-120815-120816-120817-120818-120819-120820-120821-120822-120823-120824-120825-120826-120827-120828-120829-120830-120831-120832-120833-120834-120835.json.gz#row=2083579"
+          }
+        },
+        {
+          "value": "120",
+          "count": 23,
+          "example": {
+            "contentHash": "1b205cf042ed4087c122fe575bbb7b1992c77c680f2ae5c4619f289310c85f55",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-128100-128101-128102-128103-128104-128105-128106-128107-128108-128109-128110-128111-128112-128113-128114-128115-128116-128117-128118-128119-128120-128121-128122-128123-128124-128125-128126-128127-128128-128129-128130-128131.json.gz#row=2810341"
+          }
+        },
+        {
+          "value": "19",
+          "count": 23,
+          "example": {
+            "contentHash": "8b138411669b9d92eea107a5731fb663a9effe1a4f5722f557bf6b4285cb88fa",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/skills-sh/exact-b2-v1/bucket-07/0001091-jukeyman-jukeyman-skills.json.gz#file=skills%2Fsaas-packs--shopify-pack--shopify-reliability-patterns%2FSKILL.md"
+          }
+        }
+      ],
+      "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
+      "yourSelection": ""
+    },
+    {
+      "topic": "score",
+      "variants": [
+        {
+          "value": "0",
+          "count": 1371,
+          "example": {
+            "contentHash": "0035d6adcea0c3043e415ec7001317f01925fd4b61e1fc66d3f2ec50691de305",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944924"
+          }
+        },
+        {
+          "value": "1",
+          "count": 1141,
+          "example": {
+            "contentHash": "0079605ce0323504e72a3b9ba90d2584d4ccc101eab295294cfff290e6344a2f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945714"
+          }
+        },
+        {
+          "value": "10",
+          "count": 835,
+          "example": {
+            "contentHash": "00f67939dd0860901c9d9793d6ab26b80bde4e6156a91a8d87e0111d832f386f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945715"
+          }
+        },
+        {
+          "value": "100",
+          "count": 427,
+          "example": {
+            "contentHash": "01848610a3946acbf1786194e1d269ad6873db168e4c9caa3fda0066f2882a9e",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1957255"
+          }
+        },
+        {
+          "value": "3",
+          "count": 400,
+          "example": {
+            "contentHash": "01fdab77481018d1cc5e213b67c6d665e965e017148e170e7bc28f36e9c0d72a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959274"
+          }
+        },
+        {
+          "value": "5",
+          "count": 379,
+          "example": {
+            "contentHash": "0023abfdab2ceeee61918f35e1dd875d5008bb06a63041adc5965a9be29af995",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959274"
+          }
+        },
+        {
+          "value": "2",
+          "count": 355,
+          "example": {
+            "contentHash": "00f6403f8c8f3c7b20bcb62aa7c3055c23ae74d1e6d92152cf9639c6c45eee41",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120140-120141-120142-120143-120144-120145-120146-120147-120148-120149-120150-120151-120152-120153-120154-120155-120156-120157-120158-120159-120160-120161-120162-120163.json.gz#row=2016192"
+          }
+        },
+        {
+          "value": "8",
+          "count": 318,
+          "example": {
+            "contentHash": "02a526be28607a56288b7fe81dddff3d341c3960cb78c54580eab859f20cd781",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120140-120141-120142-120143-120144-120145-120146-120147-120148-120149-120150-120151-120152-120153-120154-120155-120156-120157-120158-120159-120160-120161-120162-120163.json.gz#row=2015462"
+          }
+        },
+        {
+          "value": "70",
+          "count": 300,
+          "example": {
+            "contentHash": "051a7560c81ea5e954ead17a96546e8b393ffb648815d4cbeb1e53f94c5e8267",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119716-119717-119718-119719-119720-119721-119722-119723-119724-119725-119726-119727-119728-119729-119730-119731-126508-126509-126510-126511-126512-126513-126514-126515-126516-126517-126518-126519-126520-126521-126522-126523.json.gz#row=2651724"
+          }
+        },
+        {
+          "value": "4",
+          "count": 299,
+          "example": {
+            "contentHash": "02ef3273cab20728a04efed09ef2ee2d8e2017abbcaa7c04d76c227d16b96194",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954276"
+          }
+        },
+        {
+          "value": "0.0",
+          "count": 244,
+          "example": {
+            "contentHash": "05745a8ac6957c74a305a9c14eccff45c21224c0a358a6eb11e4eb4f3782cd54",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120524-120525-120526-120527-120528-120529-120530-120531-120532-120533-120534-120535-120536-120537-120538-120539-120540-120541-120542-120543-120544-120545-120546-120547.json.gz#row=2054773"
+          }
+        },
+        {
+          "value": "6",
+          "count": 239,
+          "example": {
+            "contentHash": "07dc5e9f3519e8610252cdc2ca71ba931000246604255f7c8f5450a31e498e49",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959976"
+          }
+        },
+        {
+          "value": "7",
+          "count": 207,
+          "example": {
+            "contentHash": "05f09c43b43365f00aa7f2671b860bc53eeeeeacc100c8f0018b0eeda220bf5d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119684-119685-119686-119687-119688-119689-119690-119691-119692-119693-119694-119695-119696-119697-119698-119699-119700-119701-119702-119703-119704-119705-119706-119707-119708-119709-119710-119711-119712-119713-119714-119715.json.gz#row=1969509"
+          }
+        },
+        {
+          "value": "3.5",
+          "count": 203,
+          "example": {
+            "contentHash": "00a83cc84f96111abc52c47c912ea397ccf318ba0b4682a7e9410bd39564f982",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119852-119853-119854-119855-119856-119857-119858-119859-119860-119861-119862-119863-119864-119865-119866-119867-119868-119869-119870-119871-119872-119873-119874-119875.json.gz#row=1986818"
+          }
+        },
+        {
+          "value": "90",
+          "count": 199,
+          "example": {
+            "contentHash": "0613f1f984a66751d1b480dd36557a55cf1fbed1a4547abc057283d04ed95ff9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945086"
+          }
+        },
+        {
+          "value": "9",
+          "count": 192,
+          "example": {
+            "contentHash": "19800fa6425d9019a937059f4c4a2f34d38248a3190ed097bd8a29e135c15259",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120716-120717-120718-120719-120720-120721-120722-120723-120724-120725-120726-120727-120728-120729-120730-120731-120732-120733-120734-120735-120736-120737-120738-120739.json.gz#row=2073275"
+          }
+        },
+        {
+          "value": "80",
+          "count": 189,
+          "example": {
+            "contentHash": "004ac06950daf73c0fb592c24224efd6b56a77e0948bb75785cd6eca8483319a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120572-120573-120574-120575-120576-120577-120578-120579-120580-120581-120582-120583-120584-120585-120586-120587-120588-120589-120590-120591-120592-120593-120594-120595.json.gz#row=2058477"
+          }
+        },
+        {
+          "value": "0.7",
+          "count": 185,
+          "example": {
+            "contentHash": "01d1d24017792cb5b99600ae0abe9a59177ddc26030ea0d7c1d8e51ef21fcca5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119652-119653-119654-119655-119656-119657-119658-119659-119660-119661-119662-119663-119664-119665-119666-119667-119668-119669-119670-119671-119672-119673-119674-119675-119676-119677-119678-119679-119680-119681-119682-119683.json.gz#row=1967435"
+          }
+        },
+        {
+          "value": "60",
+          "count": 165,
+          "example": {
+            "contentHash": "010dd17f6ce371420b3c10203e819b4c43255893549bba2d73609ff7d1b7b0d5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1955284"
+          }
+        },
+        {
+          "value": "50",
+          "count": 145,
+          "example": {
+            "contentHash": "037c1d6516544517dc75f9c55894c7c29a54581318470251c89635d5aebe4ef9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120092-120093-120094-120095-120096-120097-120098-120099-120100-120101-120102-120103-120104-120105-120106-120107-120108-120109-120110-120111-120112-120113-120114-120115.json.gz#row=2009816"
+          }
+        },
+        {
+          "value": "80%",
+          "count": 140,
+          "example": {
+            "contentHash": "028f94dd0f3d1f97bc18802732a8a2356292867ed0720a4b9d7f38c8a7ab580c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953032"
+          }
+        },
+        {
+          "value": "20",
+          "count": 135,
+          "example": {
+            "contentHash": "0c7add45905370843a4fcb476641e066430e3f20403478361c6dc36fe4dcc035",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121724-121725-121726-121727-121728-121729-121730-121731-121732-121733-121734-121735-121736-121737-121738-121739-121740-121741-121742-121743-121744-121745-121746-121747.json.gz#row=2174692"
+          }
+        },
+        {
+          "value": "85",
+          "count": 133,
+          "example": {
+            "contentHash": "05b877490a09e8ce2cdf8c3f94e6870288df4043f4023af3fcb36b78a0bfc587",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944890"
+          }
+        },
+        {
+          "value": "0.5",
+          "count": 130,
+          "example": {
+            "contentHash": "036405f650cbf5b9bd8bed9593915837162b86dbcdd26d9d42d55d58e6b4ec67",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119804-119805-119806-119807-119808-119809-119810-119811-119812-119813-119814-119815-119816-119817-119818-119819-119820-119821-119822-119823-119824-119825-119826-119827.json.gz#row=1981780"
+          }
+        },
+        {
+          "value": "75",
+          "count": 123,
+          "example": {
+            "contentHash": "0ba1b35f7d0ed24341fc5d2a92fc0c2f8e67ab27e0b0c5a6e60c8cc01d3d78e9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=3796896"
+          }
+        },
+        {
+          "value": "30",
+          "count": 108,
+          "example": {
+            "contentHash": "039c0647e8e895394771b746875e89ec1ea633333f2ee4fc5bd74984cc265609",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1958806"
+          }
+        },
+        {
+          "value": "5%",
+          "count": 97,
+          "example": {
+            "contentHash": "19e578957707a69179e39b11b462bccfa2f12c957d879cf2b1cfb51d34684774",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-126612-126613-126614-126615-126616-126617-126618-126619-126620-126621-126622-126623-126624-126625-126626-126627-126628-126629-126630-126631-126632-126633-126634-126635-126636-126637-126638-126639-126640-126641-126642-126643.json.gz#row=2661629"
+          }
+        },
+        {
+          "value": "90%",
+          "count": 94,
+          "example": {
+            "contentHash": "0541a67d655554b4d5cf49eb8704a40a1cef6c2ac2b5b88aeb8c6416d0353f14",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121820-121821-121822-121823-121824-121825-121826-121827-121828-121829-121830-121831-121832-121833-121834-121835-121836-121837-121838-121839-121840-121841-121842-121843.json.gz#row=2183055"
+          }
+        },
+        {
+          "value": "1.0",
+          "count": 93,
+          "example": {
+            "contentHash": "024e2706e80d80360b1caeccfc4684af10950faff47408bdf68e2e0f39617c9c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943360"
+          }
+        },
+        {
+          "value": "0.3",
+          "count": 91,
+          "example": {
+            "contentHash": "03314dcb83aae70442423d386a0da931f55e65debb8fd4370165a92879d49f83",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119716-119717-119718-119719-119720-119721-119722-119723-119724-119725-119726-119727-119728-119729-119730-119731-126508-126509-126510-126511-126512-126513-126514-126515-126516-126517-126518-126519-126520-126521-126522-126523.json.gz#row=1972769"
+          }
+        },
+        {
+          "value": "95%",
+          "count": 82,
+          "example": {
+            "contentHash": "042c351c9a966502f1c03b68d9df10709f1c7ad67fdd8557093c1bca9baf593d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953045"
+          }
+        },
+        {
+          "value": "7.5",
+          "count": 76,
+          "example": {
+            "contentHash": "0af32808acf8d796daf2d55d846e15895389f70c1877e37972323b78e912882a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120236-120237-120238-120239-120240-120241-120242-120243-120244-120245-120246-120247-120248-120249-120250-120251-120252-120253-120254-120255-120256-120257-120258-120259.json.gz#row=2024575"
+          }
+        },
+        {
+          "value": "95",
+          "count": 75,
+          "example": {
+            "contentHash": "19821fcf314de86d04f7825c92dc2a1f3ac3e764b74075d284651b540105432a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120476-120477-120478-120479-120480-120481-120482-120483-120484-120485-120486-120487-120488-120489-120490-120491-120492-120493-120494-120495-120496-120497-120498-120499.json.gz#row=2048073"
+          }
+        },
+        {
+          "value": "0.95",
+          "count": 68,
+          "example": {
+            "contentHash": "34e116eba827869dd4f8019a6df3cc63c787b85cd3ddb4d3fc1bc52cc8320b0d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120764-120765-120766-120767-120768-120769-120770-120771-120772-120773-120774-120775-120776-120777-120778-120779-120780-120781-120782-120783-120784-120785-120786-120787.json.gz#row=2078375"
+          }
+        },
+        {
+          "value": "0.9",
+          "count": 67,
+          "example": {
+            "contentHash": "0258e7c53ae8ec022a4529904140abe0c1ea664b991e40da43d87f519a096785",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943402"
+          }
+        },
+        {
+          "value": "15",
+          "count": 60,
+          "example": {
+            "contentHash": "143b93cadf61595ce795ab73ab22707a8bc4e7e670fe4d9f25f99242bbafc829",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958128"
+          }
+        },
+        {
+          "value": "40",
+          "count": 59,
+          "example": {
+            "contentHash": "12d0bdc497e39fb7a75e8ea39558c815359921ab90695733b6072b59e968bf5f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953381"
+          }
+        },
+        {
+          "value": "7.5m",
+          "count": 58,
+          "example": {
+            "contentHash": "0ffbbb6c89e2a58b5d7fee718ab10db7ac663243eac22adb441722b278bd7da0",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/skills-sh/exact-b2-v1/bucket-04/0002283-henriquescastilho-my-claude.json.gz#file=.codex%2Fvendor_imports%2Fclaude%2Fmarketplaces%2Fclaude-code-templates%2Fcli-tool%2Fcomponents%2Fskills%2Fscientific%2Fscientific-schematics%2FSKILL.md"
+          }
+        },
+        {
+          "value": "0.6",
+          "count": 57,
+          "example": {
+            "contentHash": "11fe5ccba5d390a8825e6c31a5cf2b7a5da85d538ab3d8f14d7339a2d1ffd372",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945933"
+          }
+        },
+        {
+          "value": "60%",
+          "count": 55,
+          "example": {
+            "contentHash": "02777392355b3ece828bca058f05b9ecd97d5f6616f1dd43f60e9f9717ec74bb",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1977508"
+          }
+        },
+        {
+          "value": "3.0",
+          "count": 53,
+          "example": {
+            "contentHash": "05745a8ac6957c74a305a9c14eccff45c21224c0a358a6eb11e4eb4f3782cd54",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-122204-122205-122206-122207-122208-122209-122210-122211-122212-122213-122214-122215-122216-122217-122218-122219-122220-122221-122222-122223-122224-122225-122226-122227.json.gz#row=2222624"
+          }
+        },
+        {
+          "value": "50%",
+          "count": 53,
+          "example": {
+            "contentHash": "0ff3d8a61622821d9cd4d8740252c9d4073745dbb856d7e479c3f925e9009272",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119804-119805-119806-119807-119808-119809-119810-119811-119812-119813-119814-119815-119816-119817-119818-119819-119820-119821-119822-119823-119824-119825-119826-119827.json.gz#row=1982049"
+          }
+        },
+        {
+          "value": "100%",
+          "count": 50,
+          "example": {
+            "contentHash": "0be501bff5042394d5b8388ce3cff8582d429ba83009d81bba5d6799df12ad45",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120284-120285-120286-120287-120288-120289-120290-120291-120292-120293-120294-120295-120296-120297-120298-120299-120300-120301-120302-120303-120304-120305-120306-120307.json.gz#row=2029084"
+          }
+        },
+        {
+          "value": "0.85",
+          "count": 49,
+          "example": {
+            "contentHash": "0ad89aa98b8133a0178bfbdb5557aa51c8b2c15e1270569b9ef10acda6d433c0",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120044-120045-120046-120047-120048-120049-120050-120051-120052-120053-120054-120055-120056-120057-120058-120059-120060-120061-120062-120063-120064-120065-120066-120067.json.gz#row=2006713"
+          }
+        },
+        {
+          "value": "85%",
+          "count": 49,
+          "example": {
+            "contentHash": "5a995b9bc0d3df51a7d255d8b6a4ba302856cf9eed0308c9e037c5e60e569ea2",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953045"
+          }
+        },
+        {
+          "value": "4.0",
+          "count": 48,
+          "example": {
+            "contentHash": "03f79d66773f304010fea82da2cdbfbe77bf4817f1bc57efe1043a3fd15d191b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-123308-123309-123310-123311-123312-123313-123314-123315-123316-123317-123318-123319-123320-123321-123322-123323-123324-123325-123326-123327-123328-123329-123330-123331.json.gz#row=2331336"
+          }
+        },
+        {
+          "value": "12",
+          "count": 42,
+          "example": {
+            "contentHash": "03f79d66773f304010fea82da2cdbfbe77bf4817f1bc57efe1043a3fd15d191b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-123884-123885-123886-123887-123888-123889-123890-123891-123892-123893-123894-123895-123896-123897-123898-123899-123900-123901-123902-123903-123904-123905-123906-123907.json.gz#row=2389076"
+          }
+        },
+        {
+          "value": "40%",
+          "count": 41,
+          "example": {
+            "contentHash": "3ce2b950a6f909ea67405345c66b4837585598edeb4667d7f3eee8c9db5d0814",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-128132-128133-128134-128135-128136-128137-128138-128139-128140-128141-128142-128143-128144-128145-128146-128147-128148-128149-128150-128151-128152-128153-128154-128155-128156-128157-128158-128159-128160-128161-128162-128163.json.gz#row=2815254"
+          }
+        },
+        {
+          "value": "70%",
+          "count": 40,
+          "example": {
+            "contentHash": "0ff3d8a61622821d9cd4d8740252c9d4073745dbb856d7e479c3f925e9009272",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-121004-121005-121006-121007-121008-121009-121010-121011-121012-121013-121014-121015-121016-121017-121018-121019-121020-121021-121022-121023-121024-121025-121026-121027.json.gz#row=2102320"
+          }
+        },
+        {
+          "value": "8.0",
+          "count": 39,
+          "example": {
+            "contentHash": "0dd947d71b8f77f1723f3d59016b46ce5a158523fa82ed20a7d64451196042af",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-122348-122349-122350-122351-122352-122353-122354-122355-122356-122357-122358-122359-122360-122361-122362-122363-122364-122365-122366-122367-122368-122369-122370-122371.json.gz#row=2237013"
+          }
+        }
+      ],
+      "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
+      "yourSelection": ""
+    },
+    {
+      "topic": "threshold",
+      "variants": [
+        {
+          "value": "3",
+          "count": 2706,
+          "example": {
+            "contentHash": "002d56414f0491fd7a1b67936a437d35ca0f89182a6f5cb815d63173d1c2880d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942781"
+          }
+        },
+        {
+          "value": "5",
+          "count": 2393,
+          "example": {
+            "contentHash": "0052d67a98c2a4ea85a570293ed6d8b662de4ac2266e55f147bc11249d2239e3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945383"
+          }
+        },
+        {
+          "value": "1",
+          "count": 2280,
+          "example": {
+            "contentHash": "002d56414f0491fd7a1b67936a437d35ca0f89182a6f5cb815d63173d1c2880d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942647"
+          }
+        },
+        {
+          "value": "2",
+          "count": 2222,
+          "example": {
+            "contentHash": "001b0d26d761b3c7a6d113492ce511a44a677148a17342fa4d3766cad044315f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953116"
+          }
+        },
+        {
+          "value": "75%",
+          "count": 2058,
+          "example": {
+            "contentHash": "0030e65e000f5ba400c702b4a742d4629c2831f3ed2e0b485099f4ef5eda7743",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1977557"
+          }
+        },
+        {
+          "value": "10",
+          "count": 1897,
+          "example": {
+            "contentHash": "005f93522cfde8f8cb0684fa8457c1f7f1ada677bb0875bf934700b7b77b9702",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944088"
+          }
+        },
+        {
+          "value": "0.5",
+          "count": 1832,
+          "example": {
+            "contentHash": "0038351de06981414f2b1ce86ab34d6f7ee65fb3353a1df4575ee13d88e03775",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=3796015"
+          }
+        },
+        {
+          "value": "0",
+          "count": 1795,
+          "example": {
+            "contentHash": "000244468022531a460515238b21048e254799786b19a76cd5ca6775852ce742",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945709"
+          }
+        },
+        {
+          "value": "100",
+          "count": 1238,
+          "example": {
+            "contentHash": "01f42ba550666df0678887beaf0f60c6e5c290284bb8b9fa159f711cb362d515",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953475"
+          }
+        },
+        {
+          "value": "50",
+          "count": 1223,
+          "example": {
+            "contentHash": "0071f1645d1f841f94c1089673d21fc3ec7a2dfbd4a8afcb41def8379ca96faf",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941932"
+          }
+        },
+        {
+          "value": "0.7",
+          "count": 1162,
+          "example": {
+            "contentHash": "006d916ed81858edc6902eb99681eb40add85c3928d493edb96e3882cd8387cf",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945382"
+          }
+        },
+        {
+          "value": "80",
+          "count": 1043,
+          "example": {
+            "contentHash": "0198b83fa347edc44af96e6bcfad9bb3f9373b7a4d14c1d0537b649840545d38",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941329"
+          }
+        },
+        {
+          "value": "0.05",
+          "count": 992,
+          "example": {
+            "contentHash": "000ec7813056e88c6490045f5a49495741f095bbe2a0af5fd4ef284904c4ccf3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119716-119717-119718-119719-119720-119721-119722-119723-119724-119725-119726-119727-119728-119729-119730-119731-126508-126509-126510-126511-126512-126513-126514-126515-126516-126517-126518-126519-126520-126521-126522-126523.json.gz#row=2651087"
+          }
+        },
+        {
+          "value": "0.8",
+          "count": 872,
+          "example": {
+            "contentHash": "005dab8bb791a46d8127ff51bda77ceefab9706731edb348302209829acfad9f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953465"
+          }
+        },
+        {
+          "value": "0.1",
+          "count": 824,
+          "example": {
+            "contentHash": "0038351de06981414f2b1ce86ab34d6f7ee65fb3353a1df4575ee13d88e03775",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943402"
+          }
+        },
+        {
+          "value": "30",
+          "count": 823,
+          "example": {
+            "contentHash": "03ad9461c34c9b00f7894e65353c2cadd04b133ee005a1941e32cc31a886325e",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952673"
+          }
+        },
+        {
+          "value": "80%",
+          "count": 766,
+          "example": {
+            "contentHash": "02a4ca6f93650c3bc3fccf09cd4e2afad32863d26b8aed55a518afc8935f27a0",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942149"
+          }
+        },
+        {
+          "value": "5%",
+          "count": 739,
+          "example": {
+            "contentHash": "0063cae3a12a56c344c7bc8452005e102740dd58a0ab60f9c075beed469ee5bf",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1976182"
+          }
+        },
+        {
+          "value": "0.3",
+          "count": 722,
+          "example": {
+            "contentHash": "008cf412bd76ddfdc656af2e21b0a149a6741d2732ac83b03cd4b4f63c17cdb8",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1961519"
+          }
+        },
+        {
+          "value": "0.2",
+          "count": 718,
+          "example": {
+            "contentHash": "008cf412bd76ddfdc656af2e21b0a149a6741d2732ac83b03cd4b4f63c17cdb8",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942693"
+          }
+        },
+        {
+          "value": "20",
+          "count": 689,
+          "example": {
+            "contentHash": "060dbeb4f7aa031181f367e60a6ce9ed6471538d6b10b891a91c5f49f730ffb7",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119900-119901-119902-119903-119904-119905-119906-119907-119908-119909-119910-119911-119912-119913-119914-119915-119916-119917-119918-119919-119920-119921-119922-119923.json.gz#row=1991214"
+          }
+        },
+        {
+          "value": "4",
+          "count": 667,
+          "example": {
+            "contentHash": "002d56414f0491fd7a1b67936a437d35ca0f89182a6f5cb815d63173d1c2880d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944088"
+          }
+        },
+        {
+          "value": "0.85",
+          "count": 605,
+          "example": {
+            "contentHash": "0237dce33af16ce12e78c815ec7c944e6bf239d75d860f621765a9687e3c4bc1",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944162"
+          }
+        },
+        {
+          "value": "90",
+          "count": 587,
+          "example": {
+            "contentHash": "0104a4d86210696f24608c87efad218459b51365d911551fd89e20334503a13f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945086"
+          }
+        },
+        {
+          "value": "70",
+          "count": 553,
+          "example": {
+            "contentHash": "014ff7ab2588f79b44a736300a683575a985c839ea9a4f4e3968cbfc47e56ad8",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119652-119653-119654-119655-119656-119657-119658-119659-119660-119661-119662-119663-119664-119665-119666-119667-119668-119669-119670-119671-119672-119673-119674-119675-119676-119677-119678-119679-119680-119681-119682-119683.json.gz#row=1966053"
+          }
+        },
+        {
+          "value": "0.95",
+          "count": 514,
+          "example": {
+            "contentHash": "001b0d26d761b3c7a6d113492ce511a44a677148a17342fa4d3766cad044315f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952508"
+          }
+        },
+        {
+          "value": "7",
+          "count": 508,
+          "example": {
+            "contentHash": "001f806bae9107d41698259e8af9d787c7ffc292a670ddab7cb0c15b27376360",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943310"
+          }
+        },
+        {
+          "value": "500",
+          "count": 488,
+          "example": {
+            "contentHash": "00be5291bceb530c80374fa804e5e359c6206c756940642739db0c89d19bb4e4",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1957159"
+          }
+        },
+        {
+          "value": "0.9",
+          "count": 480,
+          "example": {
+            "contentHash": "0142361be2d6b35e286d2c51f5a5a8982e0a0b0714da3af2fb51b33b6e7e106b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119716-119717-119718-119719-119720-119721-119722-119723-119724-119725-119726-119727-119728-119729-119730-119731-126508-126509-126510-126511-126512-126513-126514-126515-126516-126517-126518-126519-126520-126521-126522-126523.json.gz#row=1972552"
+          }
+        },
+        {
+          "value": "0.0",
+          "count": 479,
+          "example": {
+            "contentHash": "0021d633b8708964c89c3ed3f2672b203014085fd223e2ee32a8f5123261b1b3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1955947"
+          }
+        },
+        {
+          "value": "0.6",
+          "count": 465,
+          "example": {
+            "contentHash": "04eb32ae8256cdd35926647775f3639f6f55fc96eec1b1a7d8d429aa4ec29311",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1960993"
+          }
+        },
+        {
+          "value": "10%",
+          "count": 460,
+          "example": {
+            "contentHash": "014005f6cd3764e8c656784b63e3314c7f1baf954512b246ca20742643274365",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1960378"
+          }
+        },
+        {
+          "value": "15",
+          "count": 451,
+          "example": {
+            "contentHash": "04266d54376388caa78799ef967221dd853d70d668ca8c9a53f7a849309e20f1",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942643"
+          }
+        },
+        {
+          "value": "0.01",
+          "count": 435,
+          "example": {
+            "contentHash": "0257b85229e7412211fe96a4c7135d7102caa805fb65e729bdb2b0f595447d36",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942017"
+          }
+        },
+        {
+          "value": "6",
+          "count": 426,
+          "example": {
+            "contentHash": "01480555e05d1beed1b6f43e8e0d58390f4d2da00751f23bd4817fb79a2b6ccb",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959591"
+          }
+        },
+        {
+          "value": "1.0",
+          "count": 396,
+          "example": {
+            "contentHash": "014758aaa350a2d5a60138dd64a6b38c16bc53ce160548f57de53bb9b2adc862",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943499"
+          }
+        },
+        {
+          "value": "60",
+          "count": 366,
+          "example": {
+            "contentHash": "01e56dee914d13d0953d6ef6d683443f843b02b7e72c4337f3fe20563681f01b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1956441"
+          }
+        },
+        {
+          "value": "90%",
+          "count": 363,
+          "example": {
+            "contentHash": "0196c57cbf79a7fab222109c0195942b21e7a2135b7fa4d54cd6f8d2fc0491ec",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119756-119757-119758-119759-119760-119761-119762-119763-119764-119765-119766-119767-119768-119769-119770-119771-119772-119773-119774-119775-119776-119777-119778-119779.json.gz#row=1977557"
+          }
+        },
+        {
+          "value": "70%",
+          "count": 359,
+          "example": {
+            "contentHash": "008cf412bd76ddfdc656af2e21b0a149a6741d2732ac83b03cd4b4f63c17cdb8",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119948-119949-119950-119951-119952-119953-119954-119955-119956-119957-119958-119959-119960-119961-119962-119963-119964-119965-119966-119967-119968-119969-119970-119971.json.gz#row=1995703"
+          }
+        },
+        {
+          "value": "20%",
+          "count": 344,
+          "example": {
+            "contentHash": "019290627f728f3403568a4509a7ff04fdb01aaa1060c6d6d45290e9ac68d98c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952719"
+          }
+        },
+        {
+          "value": "50%",
+          "count": 328,
+          "example": {
+            "contentHash": "043a6a533a05ac7d9cd13675907b6e0d1d58b4239f899b80dc83e42730c64c93",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959291"
+          }
+        },
+        {
+          "value": "0.15",
+          "count": 319,
+          "example": {
+            "contentHash": "0bbb23fac8f9247143f153b740876a2a848efbedf3647d9e9a8851feb4745e47",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120284-120285-120286-120287-120288-120289-120290-120291-120292-120293-120294-120295-120296-120297-120298-120299-120300-120301-120302-120303-120304-120305-120306-120307.json.gz#row=2028720"
+          }
+        },
+        {
+          "value": "1%",
+          "count": 313,
+          "example": {
+            "contentHash": "0122af79a9e791d7962b965b8c831d73e222681c16dd961a969ed830a2355651",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942017"
+          }
+        },
+        {
+          "value": "8",
+          "count": 309,
+          "example": {
+            "contentHash": "043921e3a8883ff3ffb871789309484f92c2dfaefe3b8795ab40b78b8cb3cb11",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119684-119685-119686-119687-119688-119689-119690-119691-119692-119693-119694-119695-119696-119697-119698-119699-119700-119701-119702-119703-119704-119705-119706-119707-119708-119709-119710-119711-119712-119713-119714-119715.json.gz#row=1970717"
+          }
+        },
+        {
+          "value": "85",
+          "count": 307,
+          "example": {
+            "contentHash": "04b491ed12c29756d3d2c9f726173b275491b843c015c7c7667aa64ffc294819",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942149"
+          }
+        },
+        {
+          "value": "1000",
+          "count": 297,
+          "example": {
+            "contentHash": "007efaba7c9b0fb987df6b0257f452be235b451054bfbdc376464e6bfff24597",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120092-120093-120094-120095-120096-120097-120098-120099-120100-120101-120102-120103-120104-120105-120106-120107-120108-120109-120110-120111-120112-120113-120114-120115.json.gz#row=2010738"
+          }
+        },
+        {
+          "value": "85%",
+          "count": 287,
+          "example": {
+            "contentHash": "03e574c23f311a876075dac2e08daa10698718d490ce403a566376bb35c143d3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944879"
+          }
+        },
+        {
+          "value": "0.50",
+          "count": 268,
+          "example": {
+            "contentHash": "06e3d0fb787b55cea2d93bc4cfb6276157499e042927f7149f3a1228444a70a7",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120620-120621-120622-120623-120624-120625-120626-120627-120628-120629-120630-120631-120632-120633-120634-120635-120636-120637-120638-120639-120640-120641-120642-120643.json.gz#row=2063198"
+          }
+        },
+        {
+          "value": "0.75",
+          "count": 252,
+          "example": {
+            "contentHash": "05a6e6164fcf081175d095856ec531a99db4c9028a851988b2ab8dd6683710f3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953131"
+          }
+        },
+        {
+          "value": "200",
+          "count": 249,
+          "example": {
+            "contentHash": "08480434947845ef041c9fb26856fff30ee604602c6cfdc46f73da0d726ede2c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119900-119901-119902-119903-119904-119905-119906-119907-119908-119909-119910-119911-119912-119913-119914-119915-119916-119917-119918-119919-119920-119921-119922-119923.json.gz#row=1991214"
+          }
+        }
+      ],
+      "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
+      "yourSelection": ""
+    },
+    {
+      "topic": "timeout",
+      "variants": [
+        {
+          "value": "30",
+          "count": 11951,
+          "example": {
+            "contentHash": "0010c87bc9ca533deeed1ecd2dd8583313830d4dddee74cbe9e54147d4fa56b0",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941376"
+          }
+        },
+        {
+          "value": "10",
+          "count": 5258,
+          "example": {
+            "contentHash": "001b63cd896a94d21d19539ce2f1879d49b8a7a1dae933f7ebed7f3131440a7f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941337"
+          }
+        },
+        {
+          "value": "5",
+          "count": 4570,
+          "example": {
+            "contentHash": "001367d1d4dfc8fc5b93bb2042847f94c040bb16b28f331f1b03b0a2b3e1a408",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942211"
+          }
+        },
+        {
+          "value": "60",
+          "count": 4145,
+          "example": {
+            "contentHash": "00069609a3ae106e7640abc6746e390d0f45283ecd0a11f7875b06d1273a2452",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942062"
+          }
+        },
+        {
+          "value": "30s",
+          "count": 3920,
+          "example": {
+            "contentHash": "002f4499e9105f803d3477bdee46b308d3e5b9e30c6c76ea74123909943697fe",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=3795852"
+          }
+        },
+        {
+          "value": "300",
+          "count": 3548,
+          "example": {
+            "contentHash": "001460ddbc2b0d9c674c1c65aef1f1486eef75d23ca3c7c12e3ea8f0c6daa5c9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941817"
+          }
+        },
+        {
+          "value": "5000",
+          "count": 3473,
+          "example": {
+            "contentHash": "000f49debda2366ff7d167bd37534b7a60aa0226adc13d1cd00cc39c7bd226fd",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941981"
+          }
+        },
+        {
+          "value": "5s",
+          "count": 3438,
+          "example": {
+            "contentHash": "00dc04e5c18a581e9df12b5d8c5092d9b1677439b43425649c791656e3aed704",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942756"
+          }
+        },
+        {
+          "value": "5m",
+          "count": 3082,
+          "example": {
+            "contentHash": "00069609a3ae106e7640abc6746e390d0f45283ecd0a11f7875b06d1273a2452",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942643"
+          }
+        },
+        {
+          "value": "120",
+          "count": 3022,
+          "example": {
+            "contentHash": "00069609a3ae106e7640abc6746e390d0f45283ecd0a11f7875b06d1273a2452",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941992"
+          }
+        },
+        {
+          "value": "30000",
+          "count": 2932,
+          "example": {
+            "contentHash": "000f49debda2366ff7d167bd37534b7a60aa0226adc13d1cd00cc39c7bd226fd",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943379"
+          }
+        },
+        {
+          "value": "15",
+          "count": 2330,
+          "example": {
+            "contentHash": "0104a4d86210696f24608c87efad218459b51365d911551fd89e20334503a13f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945094"
+          }
+        },
+        {
+          "value": "10s",
+          "count": 2253,
+          "example": {
+            "contentHash": "005722287a91369c4380d044475140caea0d2f8c0510f44a068a5844dfdd0b4d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942288"
+          }
+        },
+        {
+          "value": "600",
+          "count": 2229,
+          "example": {
+            "contentHash": "00165a5b644402a0c3793f9977a73c7ab8848c49f0b5992a8acd197de2340c27",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954831"
+          }
+        },
+        {
+          "value": "10000",
+          "count": 2166,
+          "example": {
+            "contentHash": "00022966b5da536e46b7f509d7d3b6b0eab9d5dd0fcffbce119af2ba220991f9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941757"
+          }
+        },
+        {
+          "value": "2",
+          "count": 2145,
+          "example": {
+            "contentHash": "01e842a3d2aeb4cc83b73187e927a9ff75751db46331c7083c57c977b5ea6a11",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952714"
+          }
+        },
+        {
+          "value": "60s",
+          "count": 1982,
+          "example": {
+            "contentHash": "0004c336ecf3a078d06c1136bb1202380b0fa2ae30f8744703ee1f4d30d7015c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=3795852"
+          }
+        },
+        {
+          "value": "10m",
+          "count": 1752,
+          "example": {
+            "contentHash": "0052d67a98c2a4ea85a570293ed6d8b662de4ac2266e55f147bc11249d2239e3",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945519"
+          }
+        },
+        {
+          "value": "300000",
+          "count": 1736,
+          "example": {
+            "contentHash": "03a480551fcc592a2cc5942a1974f811110638c51b3fe1ccecd3a59c8bd44dbc",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952551"
+          }
+        },
+        {
+          "value": "1",
+          "count": 1695,
+          "example": {
+            "contentHash": "007da3fc311f54846e6a0caafa1aa5749503a0c090115a2bff8c1c3fe5c34e08",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945198"
+          }
+        },
+        {
+          "value": "3",
+          "count": 1583,
+          "example": {
+            "contentHash": "001460ddbc2b0d9c674c1c65aef1f1486eef75d23ca3c7c12e3ea8f0c6daa5c9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941468"
+          }
+        },
+        {
+          "value": "15m",
+          "count": 1504,
+          "example": {
+            "contentHash": "008a0618e3e70851ce5a556e282527eb49bd15715829f90a045cc622fa96c3ce",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945431"
+          }
+        },
+        {
+          "value": "60000",
+          "count": 1383,
+          "example": {
+            "contentHash": "012f7d613e7cd626c0ba6088c749f3a9f435314d1597ff9841638b44e0095c0d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943463"
+          }
+        },
+        {
+          "value": "120s",
+          "count": 1341,
+          "example": {
+            "contentHash": "00dfa4daa35b008a75c7aa8e5291e459ac4ec10976f5ade7ed1cabd017ac37b4",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945937"
+          }
+        },
+        {
+          "value": "30m",
+          "count": 1339,
+          "example": {
+            "contentHash": "001dee9dd6573a242c1386d7ab50907e439e13e331104e733b625ab18fdc4253",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1956392"
+          }
+        },
+        {
+          "value": "0",
+          "count": 1313,
+          "example": {
+            "contentHash": "00930f73106eb2ba668973f963e71fa9bcae1f7ee9987d30dbf73f7998fb1019",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954857"
+          }
+        },
+        {
+          "value": "3s",
+          "count": 1258,
+          "example": {
+            "contentHash": "0065b2e7534540457a29f36412a2b29bdec7c5c86f5c0d5878f3f7af4128a7a9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942756"
+          }
+        },
+        {
+          "value": "300s",
+          "count": 1187,
+          "example": {
+            "contentHash": "01f0df2fc792e0d2dc470aec283914a0f9f9e7d7ea74e020efdf8a42a45adda2",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958468"
+          }
+        },
+        {
+          "value": "180",
+          "count": 1132,
+          "example": {
+            "contentHash": "029f3c956bb8c38c42d57437bdca006ad142d84a0542d3683610cf5ee40b6f94",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958572"
+          }
+        },
+        {
+          "value": "3600",
+          "count": 995,
+          "example": {
+            "contentHash": "0070d894bc7f62f2c1e98cfb1332e3efa0c947f8b85c58a92b6666b19f7e62e6",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953314"
+          }
+        },
+        {
+          "value": "120000",
+          "count": 918,
+          "example": {
+            "contentHash": "002cb23028f5f5d9fd0e97aa06f5b65914bfc3f96743dd32e3b1741031d72758",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958014"
+          }
+        },
+        {
+          "value": "600000",
+          "count": 846,
+          "example": {
+            "contentHash": "0142070c4c1eab2b7936cad60cac31d86d4ed6e40b8ea6e55d43edf7fa28565a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119652-119653-119654-119655-119656-119657-119658-119659-119660-119661-119662-119663-119664-119665-119666-119667-119668-119669-119670-119671-119672-119673-119674-119675-119676-119677-119678-119679-119680-119681-119682-119683.json.gz#row=1965750"
+          }
+        },
+        {
+          "value": "15000",
+          "count": 803,
+          "example": {
+            "contentHash": "007f7c9c56b6ef40de9fa0347111ba4045a0caa41027dcd708f9ddaca52f2b32",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1960739"
+          }
+        },
+        {
+          "value": "20",
+          "count": 773,
+          "example": {
+            "contentHash": "00618ee4e5ec9972b185c90292abe75258cec681786cb697ae7680de64cf8f53",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943260"
+          }
+        },
+        {
+          "value": "15s",
+          "count": 708,
+          "example": {
+            "contentHash": "021d988bae8c3f42c5c099c7dda804da1787cf7e7e278946cdc79bab108b3613",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954884"
+          }
+        },
+        {
+          "value": "600s",
+          "count": 625,
+          "example": {
+            "contentHash": "00550055993850595aba7079c7de948f4758f9688f4fa28c75af51e9d22b2b96",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942253"
+          }
+        },
+        {
+          "value": "1800",
+          "count": 603,
+          "example": {
+            "contentHash": "001460ddbc2b0d9c674c1c65aef1f1486eef75d23ca3c7c12e3ea8f0c6daa5c9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952551"
+          }
+        },
+        {
+          "value": "30.0",
+          "count": 582,
+          "example": {
+            "contentHash": "01c5ec010d01e273f1e1056be1c29b70cdce09a7e09bdd19a6ccec5741edfb50",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1961583"
+          }
+        },
+        {
+          "value": "3000",
+          "count": 570,
+          "example": {
+            "contentHash": "06ce7c6daab1b114e3c982a04811cf2129a3868f18fe94806392fc10f1a48a54",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959587"
+          }
+        },
+        {
+          "value": "90",
+          "count": 489,
+          "example": {
+            "contentHash": "0251c7c11f51a662d9146654b1155add6b56246e126ed7a9823e120600bd82c5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943411"
+          }
+        },
+        {
+          "value": "5.0",
+          "count": 463,
+          "example": {
+            "contentHash": "04f2261a2dea3abbf39f3d2f5926f944cb3fffa930cf2e6c7437e7feda2dc44c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944372"
+          }
+        },
+        {
+          "value": "4",
+          "count": 458,
+          "example": {
+            "contentHash": "03f20efcd57779e7bacd2ff33e2c824140ac2f1a9da2b7c25f6b50a6cd504457",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1957441"
+          }
+        },
+        {
+          "value": "900",
+          "count": 439,
+          "example": {
+            "contentHash": "01ea18dd4865d93368b0baa682ba01aa805be59d9f4ee751255d01352e11e251",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941420"
+          }
+        },
+        {
+          "value": "1000",
+          "count": 429,
+          "example": {
+            "contentHash": "05ec95fd3afaa498da03674730023b77eb8cb66fc180d5df8d45f8edd994434c",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1955468"
+          }
+        },
+        {
+          "value": "180s",
+          "count": 414,
+          "example": {
+            "contentHash": "00fe99bf8e4cf489b08187b6b06319c3d2b47406a741e17c8d811517d187f5c0",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1955591"
+          }
+        },
+        {
+          "value": "2h",
+          "count": 402,
+          "example": {
+            "contentHash": "006917a464ad1188708ee0a2c57bba3913e54e00bc59c748d673d05acb6adedd",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945803"
+          }
+        },
+        {
+          "value": "2m",
+          "count": 390,
+          "example": {
+            "contentHash": "007bbf50c8dbaa899a778d223e728fa29a53a13e57dc86c4daca828b89d0a743",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119852-119853-119854-119855-119856-119857-119858-119859-119860-119861-119862-119863-119864-119865-119866-119867-119868-119869-119870-119871-119872-119873-119874-119875.json.gz#row=1986108"
+          }
+        },
+        {
+          "value": "45000",
+          "count": 380,
+          "example": {
+            "contentHash": "001fe406d9c77b04ea4c75034b4223b7d38c54ed4183e001165141cf175a369a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119996-119997-119998-119999-120000-120001-120002-120003-120004-120005-120006-120007-120008-120009-120010-120011-120012-120013-120014-120015-120016-120017-120018-120019.json.gz#row=2001429"
+          }
+        },
+        {
+          "value": "20m",
+          "count": 370,
+          "example": {
+            "contentHash": "0b170cee003964bb8819f77bbf7700d94acd5d645e18a81c2f6920d7af80c42e",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119948-119949-119950-119951-119952-119953-119954-119955-119956-119957-119958-119959-119960-119961-119962-119963-119964-119965-119966-119967-119968-119969-119970-119971.json.gz#row=1997031"
+          }
+        },
+        {
+          "value": "2s",
+          "count": 349,
+          "example": {
+            "contentHash": "00f571e9833b742c3a15708658ab88b97f13524c2e27028c692144ac0702ed39",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944190"
+          }
+        }
+      ],
+      "recommendation": "avoid one global hard-coded value; choose a context/risk-specific default with an override",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:ansible",
+      "variants": [
+        {
+          "value": "never",
+          "count": 65,
+          "example": {
+            "contentHash": "1887ae74672f9568d39ee4dba8494c64c1a35c38517d9112a927d064521ff69b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1955973"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 50,
+          "example": {
+            "contentHash": "03894872ba1cce94b9f896f4611a90f0bca69736d558d190b4a017ffa18a70d5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-122636-122637-122638-122639-122640-122641-122642-122643-122644-122645-122646-122647-122648-122649-122650-122651-122652-122653-122654-122655-122656-122657-122658-122659.json.gz#row=2265386"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:awk",
+      "variants": [
+        {
+          "value": "never",
+          "count": 112,
+          "example": {
+            "contentHash": "0151c5c9db50b33002bbd3b229d1ae09482c103db1b0b90114672aeb165d06ec",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120956-120957-120958-120959-120960-120961-120962-120963-120964-120965-120966-120967-120968-120969-120970-120971-120972-120973-120974-120975-120976-120977-120978-120979.json.gz#row=2097195"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 83,
+          "example": {
+            "contentHash": "0db3362799808c140f4bdc0e160ee4ae4c62447825e3a94cb2abb1413d1da95a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119804-119805-119806-119807-119808-119809-119810-119811-119812-119813-119814-119815-119816-119817-119818-119819-119820-119821-119822-119823-119824-119825-119826-119827.json.gz#row=1980542"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:bun",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 852,
+          "example": {
+            "contentHash": "0085de2ffea24a8b57d9b206fc8d7eda4734eaa9df752b87c88f160289a66bb7",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1956849"
+          }
+        },
+        {
+          "value": "never",
+          "count": 435,
+          "example": {
+            "contentHash": "0131598cea48bca42a461e01546ae19b79bcb67eafa474710f45a0f2edb610b9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953896"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:curl",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 1193,
+          "example": {
+            "contentHash": "00cc2ae9146805c0a191482bf301344b2238673c79a5ad9c46cf32cbb4195c9f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943553"
+          }
+        },
+        {
+          "value": "never",
+          "count": 1021,
+          "example": {
+            "contentHash": "0026ddcd680414e29a42469199913e4ecb0ecd776a037d34c342594d4557e662",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941440"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:docker",
+      "variants": [
+        {
+          "value": "never",
+          "count": 1218,
+          "example": {
+            "contentHash": "0020bd9e161602827e27cfc6c226c2d00d90340ed798ba36fef7962c0c7e4b76",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945190"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 877,
+          "example": {
+            "contentHash": "0028ef785ad03782396ae7af7e3107d9a1ea08fb9dff0318452adaf78b7f3617",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953041"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:gh",
+      "variants": [
+        {
+          "value": "never",
+          "count": 2573,
+          "example": {
+            "contentHash": "0026a5925ddcc0205be44594f1dc38484b9b7f1eae53672965781372a2688658",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942692"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 2121,
+          "example": {
+            "contentHash": "0060f7ca4af0f855f43b68fa471fa0cc52dbeeda6d379506c2c3e9b1d5b7eec6",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958025"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:git",
+      "variants": [
+        {
+          "value": "never",
+          "count": 10148,
+          "example": {
+            "contentHash": "000bc24a8389cb947ab1ebea82c21e7bde7b0bb1bd9287a83ed6896f993c2785",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941564"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 4383,
+          "example": {
+            "contentHash": "0004954c813a21a9ed66624218e46401ac572b2f50679c4b1d3e3653ba960cff",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942525"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:grep",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 3898,
+          "example": {
+            "contentHash": "000909625862e7ecda1ed92cb534af2e96e7fc265f2bbbcc11a36083d956afb5",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1942775"
+          }
+        },
+        {
+          "value": "never",
+          "count": 1397,
+          "example": {
+            "contentHash": "0061873503122314ca051efde976eb85910efe43ed5674c3df68afb777331349",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952998"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:jest",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 222,
+          "example": {
+            "contentHash": "09de24d75c7df330be278317279439541f02e46d394b4d157f1615b01f36abc9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119652-119653-119654-119655-119656-119657-119658-119659-119660-119661-119662-119663-119664-119665-119666-119667-119668-119669-119670-119671-119672-119673-119674-119675-119676-119677-119678-119679-119680-119681-119682-119683.json.gz#row=1966101"
+          }
+        },
+        {
+          "value": "never",
+          "count": 144,
+          "example": {
+            "contentHash": "02fafe041dfaf8c9252a7380006edab5d440d3cdf8637defb54bc9042f01c238",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119716-119717-119718-119719-119720-119721-119722-119723-119724-119725-119726-119727-119728-119729-119730-119731-126508-126509-126510-126511-126512-126513-126514-126515-126516-126517-126518-126519-126520-126521-126522-126523.json.gz#row=1972594"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:jq",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 530,
+          "example": {
+            "contentHash": "014ec52c23f310dff540aa5d7f88ef20e7fe5b321632987aa0502d674f00d8e1",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1960668"
+          }
+        },
+        {
+          "value": "never",
+          "count": 262,
+          "example": {
+            "contentHash": "0133e5dfa7dbf4e95ee13fded833473b9b964d1c9f24416005f6f30e9d77227a",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119996-119997-119998-119999-120000-120001-120002-120003-120004-120005-120006-120007-120008-120009-120010-120011-120012-120013-120014-120015-120016-120017-120018-120019.json.gz#row=1999658"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:kubectl",
+      "variants": [
+        {
+          "value": "never",
+          "count": 267,
+          "example": {
+            "contentHash": "0187ad9811e732f0d5619ea769d2aaa759e8571891fc1eb3f786471ef8538844",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958468"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 142,
+          "example": {
+            "contentHash": "0191249ed3f386cb9bd29a2d6bebcbe60033133ba2912b90e0a3e77001c34add",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941381"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:npm",
+      "variants": [
+        {
+          "value": "never",
+          "count": 2257,
+          "example": {
+            "contentHash": "0096083d08fa3051df5865a3812b9a0eb760c7ad58526619f8c2dda6f534ce81",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944149"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 1889,
+          "example": {
+            "contentHash": "0085de2ffea24a8b57d9b206fc8d7eda4734eaa9df752b87c88f160289a66bb7",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=3796916"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:playwright",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 1320,
+          "example": {
+            "contentHash": "0026ddcd680414e29a42469199913e4ecb0ecd776a037d34c342594d4557e662",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1952472"
+          }
+        },
+        {
+          "value": "never",
+          "count": 1008,
+          "example": {
+            "contentHash": "02083eb0f999010d0820377f99b1fdafe13108b5ff2b4f726584228612caf192",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=3795722"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:pnpm",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 1059,
+          "example": {
+            "contentHash": "003b8c457d6282915590f49ae4e925939f6ad9758b55e053034e5f295df79e23",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=3796916"
+          }
+        },
+        {
+          "value": "never",
+          "count": 817,
+          "example": {
+            "contentHash": "00ae3942659e32f1dfe49033d178e5bb0bcb1d26832f30f1781a73b042d765ee",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119684-119685-119686-119687-119688-119689-119690-119691-119692-119693-119694-119695-119696-119697-119698-119699-119700-119701-119702-119703-119704-119705-119706-119707-119708-119709-119710-119711-119712-119713-119714-119715.json.gz#row=1969848"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:pytest",
+      "variants": [
+        {
+          "value": "never",
+          "count": 440,
+          "example": {
+            "contentHash": "00ac11427acf714a09c5c69751ed298f8fe5dc5f02a3603c70b7d73763945df6",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943849"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 411,
+          "example": {
+            "contentHash": "011484e71dda2fea9347852e300531c1d447543d34b937b553b773f803171dc6",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119556-119557-119558-119559-119560-119561-119562-119563-119564-119565-119566-119567-119568-119569-119570-119571-119572-119573-119574-119575-119576-119577-119578-119579-119580-119581-119582-119583-119584-119585-119586-119587.json.gz#row=1958660"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:rg",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 715,
+          "example": {
+            "contentHash": "000035307d4f7861adbcc6d40232381f83aa4d263af15faf3364357e97500733",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1944045"
+          }
+        },
+        {
+          "value": "never",
+          "count": 193,
+          "example": {
+            "contentHash": "058e8f419f015aad588d120c222c35f515965f606a9cfb73d695689372730dbc",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959554"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:ripgrep",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 89,
+          "example": {
+            "contentHash": "0cf320d5c06d45b8c92371f7b6ae24d9651d1397fa0e31acec8385db4ae88ee9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959901"
+          }
+        },
+        {
+          "value": "never",
+          "count": 31,
+          "example": {
+            "contentHash": "01299f4e9e7e3084b7593d0cf5c97d86fe0fe5908b7c4486a1d3a45d5d509b23",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120140-120141-120142-120143-120144-120145-120146-120147-120148-120149-120150-120151-120152-120153-120154-120155-120156-120157-120158-120159-120160-120161-120162-120163.json.gz#row=2015740"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:sed",
+      "variants": [
+        {
+          "value": "never",
+          "count": 309,
+          "example": {
+            "contentHash": "0151c5c9db50b33002bbd3b229d1ae09482c103db1b0b90114672aeb165d06ec",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=3796165"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 165,
+          "example": {
+            "contentHash": "017261b30c628cb0108d2236557e2bffc77ecbfea4688aa194a8a473c7cf547d",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119588-119589-119590-119591-119592-119593-119594-119595-119596-119597-119598-119599-119600-119601-119602-119603-119604-119605-119606-119607-119608-119609-119610-119611-119612-119613-119614-119615-119616-119617-119618-119619.json.gz#row=1959703"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:supabase",
+      "variants": [
+        {
+          "value": "never",
+          "count": 280,
+          "example": {
+            "contentHash": "025d270ecf230c52996e845f2cdd78eda367adc54485e06ac4584cbcbce0fec4",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941663"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 252,
+          "example": {
+            "contentHash": "00c65d959991f06d4ff8e1480f290e07ca887c0a2818732dd75aa41d7517c27b",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119412-119413-119414-119415-119416-119417-119418-119419-119420-119421-119422-119423-119424-119425-119426-119427-137956-137957-137958-137959-137960-137961-137962-137963-137964-137965-137966-137967-137968-137969-137970-137971.json.gz#row=1941663"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:terraform",
+      "variants": [
+        {
+          "value": "never",
+          "count": 468,
+          "example": {
+            "contentHash": "01ce1cd7dabc20e6352158e99bfb10eda44741b128d42eb71795c9abe585b21f",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1942831"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 309,
+          "example": {
+            "contentHash": "02ef26c3bf8e97b05f8a898736afc28b73f551386fe40319bc5bc16b3341d804",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1943289"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:vitest",
+      "variants": [
+        {
+          "value": "prefer",
+          "count": 266,
+          "example": {
+            "contentHash": "097102e11bcc808c8f0a5a970ba3ce1f1b811ed930598f4eaa497bd5b18f44dd",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119428-119429-119430-119431-119432-119433-119434-119435-119436-119437-119438-119439-119440-119441-119442-119443-119444-119445-119446-119447-119448-119449-119450-119451-119452-119453-119454-119455-119456-119457-119458-119459.json.gz#row=1945356"
+          }
+        },
+        {
+          "value": "never",
+          "count": 225,
+          "example": {
+            "contentHash": "00deb4486144c3128606a5bbb9d623d2055a8896b9aaf6268a72812503cb7c22",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1954416"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:wget",
+      "variants": [
+        {
+          "value": "never",
+          "count": 93,
+          "example": {
+            "contentHash": "16cc7c3923bb4bb6338adbeb90af9a90f19652b75be20a8fc7e9941ffe2f84e7",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-120956-120957-120958-120959-120960-120961-120962-120963-120964-120965-120966-120967-120968-120969-120970-120971-120972-120973-120974-120975-120976-120977-120978-120979.json.gz#row=2097402"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 24,
+          "example": {
+            "contentHash": "0b8648481497cbaea2839c1bdf7069983e46cab0e3449b9a5b32d17a0233ca96",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-127460-127461-127462-127463-127464-127465-127466-127467-127468-127469-127470-127471-127472-127473-127474-127475-127476-127477-127478-127479-127480-127481-127482-127483-127484-127485-127486-127487-127488-127489-127490-127491.json.gz#row=2748333"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    },
+    {
+      "topic": "tool:yarn",
+      "variants": [
+        {
+          "value": "never",
+          "count": 341,
+          "example": {
+            "contentHash": "0131598cea48bca42a461e01546ae19b79bcb67eafa474710f45a0f2edb610b9",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119684-119685-119686-119687-119688-119689-119690-119691-119692-119693-119694-119695-119696-119697-119698-119699-119700-119701-119702-119703-119704-119705-119706-119707-119708-119709-119710-119711-119712-119713-119714-119715.json.gz#row=1971486"
+          }
+        },
+        {
+          "value": "prefer",
+          "count": 255,
+          "example": {
+            "contentHash": "0085de2ffea24a8b57d9b206fc8d7eda4734eaa9df752b87c88f160289a66bb7",
+            "locator": "b2://skillset-corpus-v2-trzahmet93/gitskills/discovery-b2-v2/pack-119524-119525-119526-119527-119528-119529-119530-119531-119532-119533-119534-119535-119536-119537-119538-119539-119540-119541-119542-119543-119544-119545-119546-119547-119548-119549-119550-119551-119552-119553-119554-119555.json.gz#row=1953685"
+          }
+        }
+      ],
+      "recommendation": "prefer portable/default tooling; never-ban only when safety or compatibility requires it",
+      "yourSelection": ""
+    }
+  ]
+}

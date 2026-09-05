@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-09-05T10:26:21.410Z",
+  "sourceReady": true,
+  "nearReady": false,
+  "near": {
+    "partitions": 0,
+    "candidates": 0,
+    "nearDuplicates": 0,
+    "coverageCandidates": 0,
+    "unresolvedOversizedGroups": 0
+  },
+  "conflictCount": 37,
+  "newUniquePolicyHashesScanned": 743852
+}
