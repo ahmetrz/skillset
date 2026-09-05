@@ -1,0 +1,61 @@
+name: Usable skillset skills.sh anomaly exact B2 rescue v1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/usable-skills-sh-anomaly-b2-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: usable-skills-sh-anomaly-b2-v1
+  cancel-in-progress: true
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+  B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+  B2_BUCKET: ${{ secrets.B2_BUCKET }}
+  B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+
+jobs:
+  rescue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - name: Resolve all anomalous acquisition packs from B2 source of truth
+        env:
+          SKILLS_GATE_IN: audit/usable-skills-sh-source-gate.json
+          ANOMALY_OUT: skills-sh-anomaly-out
+        run: node scripts/usable-skills-sh-anomaly-b2-v1.mjs
+      - name: Preserve anomaly outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usable-skills-sh-anomaly-exact-b2-v1
+          path: skills-sh-anomaly-out/*
+          if-no-files-found: warn
+          compression-level: 0
+          retention-days: 90
+      - name: Persist anomaly status
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s skills-sh-anomaly-out/manifest-skills-sh-anomaly-exact-b2-v1.json
+          cp skills-sh-anomaly-out/manifest-skills-sh-anomaly-exact-b2-v1.json audit/usable-skills-sh-anomaly-b2.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-skills-sh-anomaly-b2.json
+          git commit -m "audit: persist skills.sh anomaly B2 resolution" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
