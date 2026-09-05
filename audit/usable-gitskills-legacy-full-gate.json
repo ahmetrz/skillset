@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-09-05T20:28:34.086Z",
+  "status": "ALL_GITSKILLS_LEGACY_RANGE_VERIFIED",
+  "rawRowsExpected": 1913200,
+  "rawRowsObserved": 1913200,
+  "sourceUnitsExpected": 19132,
+  "sourceUnitsObserved": 19132,
+  "records": 1047755,
+  "distinctContentHashes": 1047755,
+  "duplicatesWithinDedupPrimarySnapshot": 0,
+  "inScope": 686387,
+  "uncategorized": 361368,
+  "featureFiles": 8,
+  "manifestFiles": 8,
+  "hardGate": {
+    "all19132ShardsScanned": true,
+    "dedupPrimaryUnique": true,
+    "noScopeExclusion": true,
+    "usablePipelineAllowed": true
+  }
+}
