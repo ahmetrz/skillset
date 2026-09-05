@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: write
-  actions: read
 
 concurrency:
   group: final-master-skill-set-v1
@@ -19,23 +18,106 @@ env:
   TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
   TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
   RELEASE_TAG: final-audit-v4-turbo
-  UPSTREAM_AUDIT_RUN: '33960615125'
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      complete: ${{ steps.state.outputs.complete }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Prepare current write-free source snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf master-source master-merge
+          mkdir -p master-source master-merge
+          base="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG"
+          grep -E '^(features-.*\.ndjson\.gz|manifest-.*\.json)$' audit/final-audit-v4-release-assets.txt | \
+            xargs -P 20 -I{} sh -c 'curl -fsSL --retry 3 --retry-delay 1 --retry-all-errors "$1/{}" -o "$2/{}"' _ "$base" master-source
+          if [ -d audit/b2-tail-assets ]; then
+            cp audit/b2-tail-assets/features-*.ndjson.gz master-source/ 2>/dev/null || true
+            cp audit/b2-tail-assets/manifest-*.json master-source/ 2>/dev/null || true
+          fi
+      - name: Rebuild deterministic near inputs
+        env:
+          AUDIT_V4_INPUT: master-source
+          AUDIT_V4_MERGE_OUT: master-merge
+          NEAR_PARTITIONS: '20'
+          NEAR_PARTITION_MODE: range
+        run: node scripts/final-audit-v4-merge.mjs
+      - name: Assert source gate
+        id: state
+        shell: bash
+        run: |
+          set -euo pipefail
+          complete=$(jq -r '.complete' master-merge/final-audit-v4-status.json)
+          test "$complete" = true
+          echo "complete=$complete" >> "$GITHUB_OUTPUT"
+      - name: Handoff near inputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-master-near-inputs
+          path: master-merge/near-new-*.ndjson.gz
+          if-no-files-found: error
+          compression-level: 0
+
+  near:
+    needs: prepare
+    if: needs.prepare.outputs.complete == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        partition: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - uses: actions/download-artifact@v4
+        with:
+          name: final-master-near-inputs
+          path: near-input
+      - name: Compute assigned near/coverage shard
+        shell: bash
+        env:
+          NEAR_PARTITION: ${{ matrix.partition }}
+          NEAR_PARTITIONS: '20'
+          NEAR_OUT_DIR: near-out
+        run: |
+          set -euo pipefail
+          mkdir -p near-out
+          p=$(printf '%02d' "$NEAR_PARTITION")
+          export NEAR_NEW_FILE="near-input/near-new-p${p}.ndjson.gz"
+          node scripts/final-audit-near-range-v6.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-master-near-${{ matrix.partition }}
+          path: near-out/*
+          if-no-files-found: error
+          compression-level: 0
+
   build:
+    needs: [prepare, near]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
       NODE_OPTIONS: --max-old-space-size=6144
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: gitskills-migration-run
+        with: {ref: gitskills-migration-run}
       - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
+        with: {node-version: '22'}
       - run: npm install --no-save --no-audit --no-fund @libsql/client
-
       - name: Prepare exact feature shards
         shell: bash
         run: |
@@ -48,17 +130,12 @@ jobs:
           if [ -d audit/b2-tail-assets ]; then
             cp audit/b2-tail-assets/features-*.ndjson.gz master-features/ 2>/dev/null || true
           fi
-          test "$(find master-features -type f -name 'features-*.ndjson.gz' | wc -l)" -gt 0
-
-      - name: Download completed near graph snapshot
+      - name: Download same-run near graph
         uses: actions/download-artifact@v4
         with:
-          pattern: near-*
+          pattern: final-master-near-*
           path: master-near
           merge-multiple: true
-          github-token: ${{ github.token }}
-          run-id: ${{ env.UPSTREAM_AUDIT_RUN }}
-
       - name: Build no-loss canonical master and taxonomy
         env:
           MASTER_FEATURE_DIR: master-features
@@ -66,7 +143,6 @@ jobs:
           MASTER_OUT_DIR: final-master-out
           AUDIT_DIR: audit
         run: node scripts/final-master-build-v1.mjs
-
       - name: Upload full final master package
         id: upload
         uses: actions/upload-artifact@v4
@@ -76,7 +152,6 @@ jobs:
           if-no-files-found: error
           compression-level: 0
           retention-days: 90
-
       - name: Persist final master checkpoints
         shell: bash
         env:
@@ -93,7 +168,6 @@ jobs:
           const p='audit/final-master-manifest.json';
           const j=JSON.parse(fs.readFileSync(p,'utf8'));
           j.workflowRunId=process.env.GITHUB_RUN_ID;
-          j.upstreamAuditRunId=process.env.UPSTREAM_AUDIT_RUN;
           j.artifactId=process.env.ARTIFACT_ID||null;
           j.artifactUrl=process.env.ARTIFACT_URL||null;
           fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n');
@@ -105,4 +179,4 @@ jobs:
           git pull --rebase origin gitskills-migration-run
           git push origin HEAD:gitskills-migration-run
 
-# trigger final master build after approved conflict registry
+# same-run artifact lane avoids GitHub REST cross-run rate limits
