@@ -27,14 +27,21 @@ if(expectedTotal!==Number(inv.correctedAuditTarget?.sourceRecordsBeforeCrossSour
 
 const occSeen=new Set(),hashSeen=new Set(),perSystem=new Map(),logicalSeen=new Set(),logicalPerSystem=new Map(),contentPerSystem=new Map();
 function add(r){
-  const sys=String(r.source_system||''),sk=String(r.source_key||''),ik=String(r.item_key||''),h=String(r.content_hash||'').toLowerCase(),repo=String(r.repo||'').trim().toLowerCase(),p=String(r.path||r.item_key||'').replace(/\\\\/g,'/').replace(/^\\.\\//,'').replace(/^\\/+|\\/+$/g,'');
+  const sys=String(r.source_system||'');
+  const sk=String(r.source_key||'');
+  const ik=String(r.item_key||'');
+  const h=String(r.content_hash||'').toLowerCase();
+  const repo=String(r.repo||'').trim().toLowerCase();
+  const rawPath=String(r.path||r.item_key||'');
+  const p=rawPath.split('\\').join('/').replace(/^\.\//,'').replace(/^\/+|\/+$/g,'');
   if(!sys||!sk||!ik||!/^[0-9a-f]{64}$/.test(h))return;
-  const oid=keyHash(sys+'\0'+sk+'\0'+ik);
+  const oid=keyHash(sys+'\u0000'+sk+'\u0000'+ik);
   if(!occSeen.has(oid)){occSeen.add(oid);perSystem.set(sys,(perSystem.get(sys)||0)+1)}
   hashSeen.add(h);
-  if(!contentPerSystem.has(sys))contentPerSystem.set(sys,new Set());contentPerSystem.get(sys).add(h);
-  const logical=sys==='skills-sh-b2'?(repo&&p?repo+'\\0'+p:sk+'\\0'+ik):h;
-  const lid=keyHash(sys+'\\0'+logical);
+  if(!contentPerSystem.has(sys))contentPerSystem.set(sys,new Set());
+  contentPerSystem.get(sys).add(h);
+  const logical=sys==='skills-sh-b2'?(repo&&p?repo+'\u0000'+p:sk+'\u0000'+ik):h;
+  const lid=keyHash(sys+'\u0000'+logical);
   if(!logicalSeen.has(lid)){logicalSeen.add(lid);logicalPerSystem.set(sys,(logicalPerSystem.get(sys)||0)+1)}
 }
 
@@ -65,7 +72,7 @@ const distinctContentHashesBySystem=Object.fromEntries([...contentPerSystem.entr
 const checks={};
 for(const [sys,n] of Object.entries(expected)){const metric=sys==='skills-sh-b2'?'repo+path':'distinct_content_hash';const v=sys==='skills-sh-b2'?Number(observed[sys]||0):Number(distinctContentHashesBySystem[sys]||0);checks[sys]={metric,expected:n,observed:v,complete:v===n}}
 const unknownSystems=Object.keys(observedRawOccurrenceKeys).filter(x=>!(x in expected));
-const logicalTotal=Object.entries(checks).reduce((s,[,x])=>s+Number(x.observed||0),0);
+const logicalTotal=Object.values(checks).reduce((s,x)=>s+Number(x.observed||0),0);
 const complete=Object.values(checks).every(x=>x.complete)&&logicalTotal===expectedTotal&&unknownSystems.length===0;
 const result={
   generatedAt:new Date().toISOString(),
