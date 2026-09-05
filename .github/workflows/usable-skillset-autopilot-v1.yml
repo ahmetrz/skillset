@@ -1,0 +1,329 @@
+name: Usable skillset autopilot v1
+
+on:
+  workflow_run:
+    workflows:
+      - "Usable skillset all-platform final gate v1"
+    types: [completed]
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/usable-skillset-autopilot-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: usable-skillset-autopilot-v1
+  cancel-in-progress: false
+
+jobs:
+  source-lock:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      allowed: ${{ steps.gate.outputs.allowed }}
+      expected_records: ${{ steps.gate.outputs.expected_records }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - id: gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          allowed=false
+          expected=0
+          if [ -s audit/usable-all-source-final-gate.json ]; then
+            allowed=$(jq -r '.hardGate.usablePipelineAllowed == true' audit/usable-all-source-final-gate.json)
+            expected=$(jq -r '.totalSourceRecordsBeforeCrossSourceDedup // 0' audit/usable-all-source-final-gate.json)
+          fi
+          echo "allowed=$allowed" >> "$GITHUB_OUTPUT"
+          echo "expected_records=$expected" >> "$GITHUB_OUTPUT"
+          echo "usablePipelineAllowed=$allowed expectedRecords=$expected"
+
+  legacy-atoms:
+    needs: source-lock
+    if: ${{ needs.source-lock.outputs.allowed == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        partition: [0,1,2,3,4,5,6,7]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests aiohttp
+      - name: Materialize verified legacy raw range
+        env:
+          LEGACY_PARTITION: ${{ matrix.partition }}
+          LEGACY_PARTITIONS: '8'
+          LEGACY_OUT_DIR: usable-gitskills-legacy
+        run: python scripts/usable-gitskills-legacy-full-extract-v1.py
+      - name: Extract capability atoms
+        shell: bash
+        run: |
+          p=$(printf '%02d' "${{ matrix.partition }}")
+          CAP_INPUT="usable-gitskills-legacy/raw-gitskills-legacy-full-p${p}-of-08.ndjson.gz" \
+          CAP_OUTPUT="usable-atoms/atoms-legacy-p${p}-of-08.ndjson.gz" \
+          CAP_SOURCE_SYSTEM="gitskills-legacy-hf" \
+          node scripts/usable-capability-extract-v1.mjs
+      - name: Remove raw text
+        if: always()
+        run: rm -f usable-gitskills-legacy/raw-*.ndjson.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-atoms-legacy-${{ matrix.partition }}
+          path: |
+            usable-atoms/*.ndjson.gz
+            usable-gitskills-legacy/manifest-*.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+  b2-plan:
+    needs: source-lock
+    if: ${{ needs.source-lock.outputs.allowed == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - env:
+          BULK_PLAN_OUT: usable-gitskills-b2-full-plan.json
+          BULK_PARTITIONS: '8'
+        run: node scripts/usable-gitskills-full-plan-v1.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-b2-plan
+          path: usable-gitskills-b2-full-plan.json
+          if-no-files-found: error
+          compression-level: 0
+
+  b2-atoms:
+    needs: [source-lock,b2-plan]
+    if: ${{ needs.source-lock.outputs.allowed == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        partition: [0,1,2,3,4,5,6,7]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests aiohttp
+      - uses: actions/download-artifact@v4
+        with:
+          name: usable-b2-plan
+          path: .
+      - name: Materialize verified B2 raw ranges
+        env:
+          BULK_PLAN: usable-gitskills-b2-full-plan.json
+          BULK_PARTITION: ${{ matrix.partition }}
+          BULK_PARTITIONS: '8'
+          BULK_OUT_DIR: usable-gitskills-b2
+        run: python scripts/final-audit-gitskills-parquet-extract-v5.py
+      - name: Extract capability atoms
+        shell: bash
+        run: |
+          p=$(printf '%02d' "${{ matrix.partition }}")
+          CAP_INPUT="usable-gitskills-b2/raw-git-b2-bulk-p${p}.ndjson.gz" \
+          CAP_OUTPUT="usable-atoms/atoms-b2-p${p}-of-08.ndjson.gz" \
+          CAP_SOURCE_SYSTEM="gitskills-b2" \
+          node scripts/usable-capability-extract-v1.mjs
+      - name: Remove raw text
+        if: always()
+        run: rm -f usable-gitskills-b2/raw-*.ndjson.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-atoms-b2-${{ matrix.partition }}
+          path: |
+            usable-atoms/*.ndjson.gz
+            usable-gitskills-b2/units-*.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+  skills-sh-atoms:
+    needs: source-lock
+    if: ${{ needs.source-lock.outputs.allowed == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        partition: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      B2_ACCESS_KEY_ID: ${{ secrets.B2_ACCESS_KEY_ID }}
+      B2_SECRET_ACCESS_KEY: ${{ secrets.B2_SECRET_ACCESS_KEY }}
+      B2_BUCKET: ${{ secrets.B2_BUCKET }}
+      B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
+      - name: Materialize exact SHA-verified skills.sh packs
+        env:
+          SKILLS_PARTITION: ${{ matrix.partition }}
+          SKILLS_PARTITIONS: '16'
+          SKILLS_RAW_OUT_DIR: usable-skills-sh-raw
+        run: node scripts/usable-skills-sh-raw-v1.mjs
+      - name: Extract capability atoms
+        shell: bash
+        run: |
+          p=$(printf '%02d' "${{ matrix.partition }}")
+          CAP_INPUT="usable-skills-sh-raw/raw-skills-sh-p${p}-of-16.ndjson.gz" \
+          CAP_OUTPUT="usable-atoms/atoms-skills-sh-p${p}-of-16.ndjson.gz" \
+          CAP_SOURCE_SYSTEM="skills-sh-b2" \
+          node scripts/usable-capability-extract-v1.mjs
+      - name: Remove raw text
+        if: always()
+        run: rm -f usable-skills-sh-raw/raw-*.ndjson.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-atoms-skills-sh-${{ matrix.partition }}
+          path: |
+            usable-atoms/*.ndjson.gz
+            usable-skills-sh-raw/manifest-*.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+  consolidate:
+    needs: [source-lock,legacy-atoms,b2-atoms,skills-sh-atoms]
+    if: ${{ always() && needs.source-lock.outputs.allowed == 'true' && needs.legacy-atoms.result == 'success' && needs.b2-atoms.result == 'success' && needs.skills-sh-atoms.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: usable-atoms-*
+          path: capability-atoms
+          merge-multiple: true
+      - name: No-loss capability consolidation
+        env:
+          CAP_ATOMS_DIR: capability-atoms
+          CAP_CONSOLIDATED_OUT: usable-consolidated
+        run: python scripts/usable-capability-consolidate-v1.py
+      - name: Remove temporary SQLite index
+        run: rm -f usable-consolidated/capability-index.sqlite3*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-consolidated-v1
+          path: usable-consolidated/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+  synthesize-validate-package:
+    needs: [source-lock,consolidate]
+    if: ${{ needs.consolidate.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/download-artifact@v4
+        with:
+          name: usable-consolidated-v1
+          path: usable-consolidated
+      - name: Synthesize compact canonical skills
+        env:
+          CAP_CONSOLIDATED_DIR: usable-consolidated
+          USABLE_PACKAGE_OUT: usable-package
+          POLICY_OVERLAY: audit/final-policy-overlay.json
+        run: python scripts/usable-skill-synthesize-v1.py
+      - name: Final no-loss/runtime gate
+        env:
+          SOURCE_GATE: audit/usable-all-source-final-gate.json
+          CAP_CONSOLIDATED_DIR: usable-consolidated
+          USABLE_PACKAGE_DIR: usable-package
+          USABLE_VALIDATION_OUT: usable-package/validation.json
+        run: python scripts/usable-final-validate-v1.py
+      - id: runtime
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-usable-skillset-v1
+          path: |
+            usable-package/final-usable-skillset.tar.gz
+            usable-package/catalog.ndjson.gz
+            usable-package/usable-manifest.json
+            usable-package/validation.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-usable-skillset-audit-v1
+          path: |
+            usable-consolidated/capability-families.ndjson.gz
+            usable-consolidated/family-members.ndjson.gz
+            usable-consolidated/coverage-map.ndjson.gz
+            usable-consolidated/consolidation-stats.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+      - name: Persist compact authoritative final status
+        shell: bash
+        env:
+          RUNTIME_ARTIFACT_ID: ${{ steps.runtime.outputs.artifact-id }}
+        run: |
+          set -euo pipefail
+          cp usable-package/validation.json audit/usable-final-validation.json
+          cp usable-package/usable-manifest.json audit/usable-final-manifest.json
+          cp usable-consolidated/consolidation-stats.json audit/usable-final-consolidation-stats.json
+          python - <<'PY'
+          import json,os
+          p='audit/usable-final-manifest.json'
+          x=json.load(open(p))
+          x['workflowRunId']=os.environ.get('GITHUB_RUN_ID')
+          x['runtimeArtifactId']=os.environ.get('RUNTIME_ARTIFACT_ID')
+          x['status']='USABLE_FINAL'
+          open(p,'w').write(json.dumps(x,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-final-validation.json audit/usable-final-manifest.json audit/usable-final-consolidation-stats.json
+          git commit -m "usable: persist authoritative final usable skillset status" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
