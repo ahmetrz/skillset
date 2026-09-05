@@ -1,0 +1,69 @@
+name: Usable skillset all-source coverage gate v1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/usable-source-coverage-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: usable-source-coverage-v1
+  cancel-in-progress: true
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  RELEASE_TAG: final-audit-v4-turbo
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+
+      - name: Download all write-free feature shards
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf coverage-features
+          mkdir -p coverage-features
+          base="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG"
+          grep -E '^features-.*\.ndjson\.gz$' audit/final-audit-v4-release-assets.txt | \
+            sort -u | \
+            xargs -P 20 -I{} sh -c 'curl -fsSL --retry 3 --retry-delay 1 --retry-all-errors "$1/{}" -o "$2/{}"' _ "$base" coverage-features
+          if [ -d audit/b2-tail-assets ]; then
+            cp audit/b2-tail-assets/features-*.ndjson.gz coverage-features/ 2>/dev/null || true
+          fi
+          echo "feature_files=$(find coverage-features -type f -name 'features-*.ndjson.gz' | wc -l)"
+
+      - name: Verify GitSkills + skills.sh full source union
+        env:
+          COVERAGE_FEATURE_DIR: coverage-features
+          COVERAGE_OUT: audit/usable-source-coverage.json
+        run: node scripts/usable-source-coverage-v1.mjs
+
+      - name: Persist authoritative coverage gate
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s audit/usable-source-coverage.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-source-coverage.json
+          git commit -m "audit: persist all-source usable skill coverage gate" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
