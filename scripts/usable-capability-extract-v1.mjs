@@ -4,6 +4,7 @@ import path from 'node:path';
 import readline from 'node:readline';
 import {createGunzip,createGzip} from 'node:zlib';
 import {createHash} from 'node:crypto';
+import {feature} from './final-audit-feature-core-v4.mjs';
 
 const input=process.env.CAP_INPUT;
 const output=process.env.CAP_OUTPUT||'capability-atoms.ndjson.gz';
@@ -88,15 +89,16 @@ for await(const line of rl){
   const actions=bulletsFrom(sec,ACTION,16),validate=bulletsFrom(sec,VALID,8),safety=bulletsFrom(sec,SAFE,8);
   const toks=simTokens(title,desc,actions);
   const capabilityKey=sha(toks.slice(0,12).sort().join('\u0000')).slice(0,24);
-  const contentHash=String(r.content_hash||r.contentHash||sha(text));
+  const ff=feature(text,String(r.locator||''));
+  const contentHash=String(r.content_hash||r.contentHash||ff.h||sha(text));
   const atom={
     v:1,source_system:String(r.source_system||r.sourceSystem||sourceSystem),
     source_key:String(r.source_key||r.sourceKey||''),item_key:String(r.item_key||r.itemKey||''),
     repo:r.repo||null,path:r.path||null,locator:r.locator||null,content_hash:contentHash,
     title:title.slice(0,180),description:desc.slice(0,600),
     capability_key:capabilityKey,tokens:toks,actions,validate,safety,
-    sdlc_mask:Number(r.sdlc_mask||0),social_mask:Number(r.social_mask||0),
-    risk_mask:Number(r.risk_mask||0),provider_mask:Number(r.provider_mask||0)
+    sdlc_mask:Number(r.sdlc_mask??ff.sdlc_mask??0),social_mask:Number(r.social_mask??ff.social_mask??0),
+    risk_mask:Number(r.risk_mask??ff.risk_mask??0),provider_mask:Number(r.provider_mask??ff.provider_mask??0)
   };
   gz.write(JSON.stringify(atom)+'\n');rows++;
 }
