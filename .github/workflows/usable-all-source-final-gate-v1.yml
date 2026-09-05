@@ -1,0 +1,41 @@
+name: Usable skillset all-platform final gate v1
+
+on:
+  workflow_run:
+    workflows:
+      - "Usable skillset GitSkills B2 full reconstruction v1"
+      - "Usable skillset GitSkills legacy full reconstruction v1"
+      - "Usable skillset skills.sh final source gate v1"
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: usable-all-source-final-gate-v1
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Verify all platforms
+        run: node scripts/usable-all-source-final-gate-v1.mjs
+      - name: Persist final platform gate
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s audit/usable-all-source-final-gate.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-all-source-final-gate.json
+          git commit -m "audit: persist all-platform usable source gate" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
