@@ -22,12 +22,12 @@ env:
 jobs:
   rescue:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 35
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 6
       matrix:
-        partition: [0,1,2,3]
+        partition: [0,1,2,3,4,5,6,7,8,9,10,11]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -49,7 +49,7 @@ jobs:
           MANIFEST_DIR: tail-manifests
           RESCUE_OUT: pack-sha-rescue-out
           AUDIT_PARTITION: ${{ matrix.partition }}
-          AUDIT_PARTITIONS: '4'
+          AUDIT_PARTITIONS: '12'
           RESCUE_LABEL: ${{ github.run_id }}
         run: node scripts/final-audit-skills-pack-sha-rescue-v7.mjs
       - name: Publish verified feature and provenance shards
@@ -57,4 +57,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release upload "$RELEASE_TAG" pack-sha-rescue-out/* --clobber
-# occurrence-hash current-tree rescue v7.4
+# isolated tail rescue v7.5
