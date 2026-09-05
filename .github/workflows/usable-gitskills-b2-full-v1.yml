@@ -1,0 +1,129 @@
+name: Usable skillset GitSkills B2 full reconstruction v1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/usable-gitskills-b2-full-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: usable-gitskills-b2-full-v1
+  cancel-in-progress: false
+
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  BULK_PARTITIONS: '8'
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - name: Build all-642-pack plan
+        env:
+          BULK_PLAN_OUT: usable-gitskills-b2-full-plan.json
+        run: node scripts/usable-gitskills-full-plan-v1.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-gitskills-b2-full-plan
+          path: usable-gitskills-b2-full-plan.json
+          if-no-files-found: error
+          compression-level: 0
+
+  bulk:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        partition: [0,1,2,3,4,5,6,7]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests aiohttp
+      - uses: actions/download-artifact@v4
+        with:
+          name: usable-gitskills-b2-full-plan
+          path: .
+      - name: Extract every assigned acquisition row from HF parquet
+        env:
+          BULK_PLAN: usable-gitskills-b2-full-plan.json
+          BULK_PARTITION: ${{ matrix.partition }}
+          BULK_PARTITIONS: '8'
+          BULK_OUT_DIR: usable-gitskills-full
+        run: python scripts/final-audit-gitskills-parquet-extract-v5.py
+      - name: Build complete feature shard without scope filtering
+        env:
+          BULK_PARTITION: ${{ matrix.partition }}
+          BULK_PARTITIONS: '8'
+          BULK_OUT_DIR: usable-gitskills-full
+        run: node scripts/final-audit-gitskills-parquet-transform-v5.mjs
+      - name: Remove raw source cache
+        if: always()
+        run: rm -f usable-gitskills-full/raw-*.ndjson.gz usable-gitskills-full/units-*.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: usable-gitskills-b2-full-${{ matrix.partition }}
+          path: |
+            usable-gitskills-full/features-*.ndjson.gz
+            usable-gitskills-full/manifest-*.json
+          if-no-files-found: error
+          compression-level: 0
+
+  reduce:
+    needs: bulk
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: usable-gitskills-b2-full-*
+          path: gitskills-full
+          merge-multiple: true
+      - name: Prove all GitSkills B2 representatives
+        env:
+          GITSKILLS_FULL_DIR: gitskills-full
+          GITSKILLS_GATE_OUT: audit/usable-gitskills-b2-full-gate.json
+          GITSKILLS_B2_EXPECTED: '830231'
+        run: node scripts/usable-gitskills-full-reduce-v1.mjs
+      - name: Preserve complete derived snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: usable-gitskills-b2-full-features-v1
+          path: gitskills-full/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+      - name: Persist gate
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s audit/usable-gitskills-b2-full-gate.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-gitskills-b2-full-gate.json
+          git commit -m "audit: persist full GitSkills B2 reconstruction gate" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
