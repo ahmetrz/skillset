@@ -1,0 +1,155 @@
+{
+  "generatedAt": "2026-09-05T10:35:05.282Z",
+  "approvedBy": "user",
+  "approvalScope": "all 37 registry recommendations accepted",
+  "selections": [
+    {
+      "topic": "clarification",
+      "selection": "proceed, except materially ambiguous/high-risk actions"
+    },
+    {
+      "topic": "testing",
+      "selection": "first"
+    },
+    {
+      "topic": "git_destructive",
+      "selection": "forbid"
+    },
+    {
+      "topic": "production",
+      "selection": "approval"
+    },
+    {
+      "topic": "priority",
+      "selection": "security"
+    },
+    {
+      "topic": "memory",
+      "selection": "stateless by default; persistent only when explicitly scoped"
+    },
+    {
+      "topic": "branch",
+      "selection": "pr"
+    },
+    {
+      "topic": "provider",
+      "selection": "agnostic"
+    },
+    {
+      "topic": "coverage",
+      "selection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
+    },
+    {
+      "topic": "max_attempts",
+      "selection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
+    },
+    {
+      "topic": "retry",
+      "selection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
+    },
+    {
+      "topic": "score",
+      "selection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
+    },
+    {
+      "topic": "threshold",
+      "selection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
+    },
+    {
+      "topic": "timeout",
+      "selection": "avoid one global hard-coded value; choose a context/risk-specific default with an override"
+    },
+    {
+      "topic": "tool:ansible",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:awk",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:bun",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:curl",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:docker",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:gh",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:git",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:grep",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:jest",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:jq",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:kubectl",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:npm",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:playwright",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:pnpm",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:pytest",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:rg",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:ripgrep",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:sed",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:supabase",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:terraform",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:vitest",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:wget",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    },
+    {
+      "topic": "tool:yarn",
+      "selection": "prefer portable/default tooling; never-ban only when safety or compatibility requires it"
+    }
+  ]
+}
