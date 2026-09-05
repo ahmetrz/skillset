@@ -70,7 +70,7 @@ if(!sourceUniqueHashes)throw new Error('no_master_hashes');
 class DSU{constructor(){this.p=new Map();this.merges=0}find(x){let p=this.p.get(x);if(!p)return x;let r=p;while(this.p.has(r))r=this.p.get(r);let cur=x;while(this.p.has(cur)){const n=this.p.get(cur);this.p.set(cur,r);cur=n}return r}union(a,b){let ra=this.find(a),rb=this.find(b);if(ra===rb)return false;const lo=ra<rb?ra:rb,hi=ra<rb?rb:ra;this.p.set(hi,lo);this.merges++;return true}}
 const dsu=new DSU();
 const coverageWriter=gzWriter(path.join(outDir,'final-coverage-relations.ndjson.gz'));
-const nearFiles=(await walk(nearDir)).filter(p=>/^near-p\\d{2}-of-\\d{2}\\.ndjson\\.gz$/i.test(path.basename(p)));
+const nearFiles=(await walk(nearDir)).filter(p=>/^near-p\d{2}-of-\d{2}\.ndjson\.gz$/i.test(path.basename(p)));
 let nearRows=0,nearDuplicateRows=0,coverageRows=0,missingEdgeNodes=0;
 for(const p of nearFiles){
   for await(const e of ndjsonGz(p)){
