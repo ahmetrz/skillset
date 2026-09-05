@@ -1,0 +1,234 @@
+{
+  "generatedAt": "2026-09-05T20:19:26.242Z",
+  "status": "ALL_ANOMALIES_EXACT_B2_VERIFIED",
+  "anomalySources": 32,
+  "completedSources": 32,
+  "failedSources": 0,
+  "records": 12301,
+  "report": [
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-02/0005283-pink-technologies-cortex.json.gz",
+      "source": "pink-technologies/cortex",
+      "status": "exact_b2_verified",
+      "files": 40,
+      "packSha256": "0f4f02344b72f43b243c7cda51a84f4851956ba793bb428e564411044ae37a8e"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-05/0003335-erbsland-dev-skills.json.gz",
+      "source": "erbsland-dev/skills",
+      "status": "exact_b2_verified",
+      "files": 8,
+      "packSha256": "7684b6dfd4dad3a05919a159e46cd5fcd9c7564ddfcc22446034ff9cbb6da5c0"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-07/0002094-shterneregen-telegram-home-bot.json.gz",
+      "source": "shterneregen/telegram-home-bot",
+      "status": "exact_b2_verified",
+      "files": 8,
+      "packSha256": "0454d1ac9f83a8772b6fa23d74ad3a221d07487214c35448bb3cb50a36cfa019"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-08/0008739-dynatrace-oss-ai-config-manager.json.gz",
+      "source": "dynatrace-oss/ai-config-manager",
+      "status": "exact_b2_verified",
+      "files": 32,
+      "packSha256": "fe55e011828b2fe8263603e63f061ba611e93b48b239dd88bceda805717533e2"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-10/0009343-infynno-solutions-software-engineering-skills.json.gz",
+      "source": "infynno-solutions/software-engineering-skills",
+      "status": "exact_b2_verified",
+      "files": 141,
+      "packSha256": "4e15fbb8d44428ade9bc0bf2083f9bee8ce7e5cafbfa1d446da599e969ae7061"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-11/0006819-rugved1652-skills.json.gz",
+      "source": "rugved1652/skills",
+      "status": "exact_b2_verified",
+      "files": 24,
+      "packSha256": "3ec6c97570beca305f058e9e6debbb2ab4aa3630417e837a1cf2e2a46f0ec30f"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-13/0010545-kkagiri-tenacityfms.json.gz",
+      "source": "kkagiri/tenacityfms",
+      "status": "exact_b2_verified",
+      "files": 13,
+      "packSha256": "468e1d51672ffbcfbdb848b850f3a147b5b44f71c53f34bf77642a8f255ef2bf"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-17/0013730-warpcode-dotfiles.json.gz",
+      "source": "warpcode/dotfiles",
+      "status": "exact_b2_verified",
+      "files": 48,
+      "packSha256": "e1e8fa002737755036722c4a57c795ed5d7d7c70760a9a30faa355b03405e30a"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-17/0013824-zhizhunbao-ai-dev-config.json.gz",
+      "source": "zhizhunbao/ai-dev-config",
+      "status": "exact_b2_verified",
+      "files": 129,
+      "packSha256": "ee82d207a679389673215f08b5c07a6392a8a0231f8e2003e7dd8a33ddacc6f5"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-21/0016573-fabiomatricardi-agents-studies.json.gz",
+      "source": "fabiomatricardi/agents-studies",
+      "status": "exact_b2_verified",
+      "files": 6,
+      "packSha256": "3eeb03be05b52b9c7e2e32efce60b03d7d0670895c4b7ab4fb60e704285a9979"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-22/0017825-wyzzzz-hope-my-skills.json.gz",
+      "source": "wyzzzz-hope/my-skills",
+      "status": "exact_b2_verified",
+      "files": 6,
+      "packSha256": "7a99907a74d32434f4e2e0ec50a0cb1416fcce1545f4f53d41b960c1852a1814"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-23/0018216-kbarbel640-del-skills.json.gz",
+      "source": "kbarbel640-del/skills",
+      "status": "exact_b2_verified",
+      "files": 6891,
+      "packSha256": "b11318963875a65a742aa5a3ac0b899596579e6dc1ed8874058507ea4605a023"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-26/0019638-goldengrape-skills.json.gz",
+      "source": "goldengrape/skills",
+      "status": "exact_b2_verified",
+      "files": 20,
+      "packSha256": "88a9692726cb0b17376aa3a42ec470d887d638efe59c689d04e8156ae2411959"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-29/0020932-1225zhangqian-awesome-cloudbase-examples.json.gz",
+      "source": "1225zhangqian/awesome-cloudbase-examples",
+      "status": "exact_b2_verified",
+      "files": 826,
+      "packSha256": "e851533a1419a0809c21fec2feb58acb1b2edd9190bc6d175bf78144b71ff481"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-29/0021110-digirati-co-uk-madoc-platform.json.gz",
+      "source": "digirati-co-uk/madoc-platform",
+      "status": "exact_b2_verified",
+      "files": 45,
+      "packSha256": "7a3738ccc155369d374cf04ad92db89580431737fe5727247e1945fd59042db1"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-30/0023500-fengqiliu-pm-skills.json.gz",
+      "source": "fengqiliu/pm-skills",
+      "status": "exact_b2_verified",
+      "files": 27,
+      "packSha256": "ca6f78cb52586e95f1282dfafe8c6ce3b4ccb6e0835275e21f6a87f94940e351"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-30/0023951-todoe-obsidian-vault-skills.json.gz",
+      "source": "todoe/obsidian-vault-skills",
+      "status": "exact_b2_verified",
+      "files": 14,
+      "packSha256": "534e83c15afff0d278d38c48ede4bbe8decaba7363f8a954918f0944fc01a4ff"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-02/0005084-k0d3x8its-dotfiles.json.gz",
+      "source": "k0d3x8its/dotfiles",
+      "status": "exact_b2_verified",
+      "files": 66,
+      "packSha256": "967b77f7722e5826634318ab9905fe42736af970e520c568dafca6b55471d3bc"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-08/0010142-xilnick-project-constitution-protocol.json.gz",
+      "source": "xilnick/project-constitution-protocol",
+      "status": "exact_b2_verified",
+      "files": 1,
+      "packSha256": "5c91fbb47e1abcaf461972561cb94c9c6f6b5ef6a2ac869c5cbbf2af1b76dc77"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-09/0007408-laohuad-laohu-ai-visual.json.gz",
+      "source": "laohuad/laohu-ai-visual",
+      "status": "exact_b2_verified",
+      "files": 9,
+      "packSha256": "905e732656ea8fd3d5a382687d495c780af838361eea700a5e8897252c3b354a"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-13/0010469-infranodus-skills.json.gz",
+      "source": "infranodus/skills",
+      "status": "exact_b2_verified",
+      "files": 15,
+      "packSha256": "599b552df129ea02e74d2ca1d59432565e13a80e024eb018153b109398497ae8"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-16/0011641-tenequm-nanoclaw.json.gz",
+      "source": "tenequm/nanoclaw",
+      "status": "exact_b2_verified",
+      "files": 61,
+      "packSha256": "ca97976c84c8d64f1e513b09ee41b2f08171b984e5ed0ab56d9e16e3b6aee0d8"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-17/0013756-xluos-one-profile.json.gz",
+      "source": "xluos/one-profile",
+      "status": "exact_b2_verified",
+      "files": 1,
+      "packSha256": "3f839c7e0561cdc6f65b1e6897e012b02f418fdb62676c38f7330004c1d93bc3"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-19/0015017-diegopacheco-ai-playground.json.gz",
+      "source": "diegopacheco/ai-playground",
+      "status": "exact_b2_verified",
+      "files": 85,
+      "packSha256": "275accfb56c667cb0eaec81d0c739247acf7b857956355b6af7b359e00422b9a"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-21/0016944-ryoh827-dotfiles.json.gz",
+      "source": "ryoh827/dotfiles",
+      "status": "exact_b2_verified",
+      "files": 8,
+      "packSha256": "04210a908cade7e26e837d00132e4b79c172f4c9052ead28c9266e228266b1cc"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-22/0017642-qianchengjie-skills.json.gz",
+      "source": "qianchengjie/skills",
+      "status": "exact_b2_verified",
+      "files": 11,
+      "packSha256": "a1b262094a69c880a245d674e17e482c3b1d57a7dac3807d01f96d5260a8d07b"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-23/0018045-efe-arv-openclaw.json.gz",
+      "source": "efe-arv/openclaw",
+      "status": "exact_b2_verified",
+      "files": 67,
+      "packSha256": "e7942ed03431223e0849b26fe676e875a12a3d452781795e3438be7b2a7415ac"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-23/0018161-ivanlutsenko-awac-claude-code-plugins.json.gz",
+      "source": "ivanlutsenko/awac-claude-code-plugins",
+      "status": "exact_b2_verified",
+      "files": 51,
+      "packSha256": "528acdb604afea9010b200e0bfbd9514990d19df21e6e2feed5ce3c94da0099c"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-23/0019155-zenprojectgit-claude-code-plugins-plus-skills.json.gz",
+      "source": "zenprojectgit/claude-code-plugins-plus-skills",
+      "status": "exact_b2_verified",
+      "files": 3628,
+      "packSha256": "8010a064b80b83972e0153b4aebf17ad069974acedc37e25776050280b535bb2"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-28/0020363-epilibre-design-spip-skills.json.gz",
+      "source": "epilibre-design/spip-skills",
+      "status": "exact_b2_verified",
+      "files": 7,
+      "packSha256": "9407adf6d1e7f1b80598c67489974d07c92b166b2fe1baeccdff4585ab46ff07"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-30/0023928-syntropic137-syntropic137.json.gz",
+      "source": "syntropic137/syntropic137",
+      "status": "exact_b2_verified",
+      "files": 7,
+      "packSha256": "568d434603e211db9276decd3a54b2a4aa08dc64b851a81fbef8bb632d71d02a"
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-30/0024037-zenml-io-kitaru-skills.json.gz",
+      "source": "zenml-io/kitaru-skills",
+      "status": "exact_b2_verified",
+      "files": 6,
+      "packSha256": "04305b7443f85e4507b428d9b2e893739def4739c410dc4698c70a3820957754"
+    }
+  ]
+}
