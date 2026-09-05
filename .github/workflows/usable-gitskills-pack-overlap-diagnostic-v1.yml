@@ -1,0 +1,30 @@
+name: Usable GitSkills pack overlap diagnostic v1
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/usable-gitskills-pack-overlap-diagnostic-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - run: node scripts/usable-gitskills-pack-overlap-diagnostic-v1.mjs
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-gitskills-pack-overlap-diagnostic.json
+          git commit -m "audit: persist GitSkills pack overlap diagnostic" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
