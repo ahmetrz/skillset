@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-09-05T10:26:21.400Z",
-  "status": "REDUCING",
+  "generatedAt": "2026-09-05T10:29:51.243Z",
+  "status": "AWAITING_USER_CONFLICT_SELECTIONS",
   "guards": {
     "source_inventory_reconciled": true,
     "ingest_complete": true,
     "policy_rescan_complete": true,
-    "near_candidate_pass_complete": false,
+    "near_candidate_pass_complete": true,
     "oversized_lsh_groups_resolved": true,
-    "conflict_registry_complete": false,
+    "conflict_registry_complete": true,
     "conflict_selections_complete": false,
     "destructive_master_build_allowed": false
   },
   "sourceStatus": {
-    "generatedAt": "2026-09-05T10:24:52.935Z",
+    "generatedAt": "2026-09-05T10:27:14.538Z",
     "complete": true,
     "sourceAssets": {
       "manifests": 108,
@@ -1251,10 +1251,10 @@
     "nearPartitions": 20
   },
   "near": {
-    "partitions": 0,
-    "candidates": 0,
-    "nearDuplicates": 0,
-    "coverageCandidates": 0,
+    "partitions": 20,
+    "candidates": 2022926,
+    "nearDuplicates": 1460925,
+    "coverageCandidates": 562001,
     "unresolvedOversizedGroups": 0
   },
   "conflictCount": 37,
