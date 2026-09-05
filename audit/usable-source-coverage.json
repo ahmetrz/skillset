@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-09-05T20:07:58.462Z",
+  "status": "BLOCKED_SOURCE_COVERAGE_MISMATCH",
+  "policy": "No source skill may be excluded by SDLC/social classification. Zero-mask skills are retained as uncategorized.",
+  "expectedTotalSourceRecords": 2066706,
+  "observedUnionSourceRecords": 2053628,
+  "exactUniqueContentHashesAcrossAllSources": 1920912,
+  "tursoOccurrenceRowsRead": 1319828,
+  "writefreeFeatureRowsRead": 1013993,
+  "featureFiles": 108,
+  "expected": {
+    "gitskills-legacy-hf": 1047750,
+    "gitskills-b2": 830231,
+    "skills-sh-b2": 188725
+  },
+  "observed": {
+    "gitskills-b2": 815106,
+    "gitskills-legacy-hf": 1047755,
+    "skills-sh-b2": 190767
+  },
+  "checks": {
+    "gitskills-legacy-hf": {
+      "expected": 1047750,
+      "observed": 1047755,
+      "complete": false
+    },
+    "gitskills-b2": {
+      "expected": 830231,
+      "observed": 815106,
+      "complete": false
+    },
+    "skills-sh-b2": {
+      "expected": 188725,
+      "observed": 190767,
+      "complete": false
+    }
+  },
+  "unknownSystems": [],
+  "hardGate": {
+    "allGitSkillsIncluded": false,
+    "allSkillsShIncluded": false,
+    "noScopeExclusion": true,
+    "usablePipelineAllowed": false
+  }
+}
