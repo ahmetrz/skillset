@@ -1,0 +1,37 @@
+name: Usable skillset skills.sh final source gate v1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/usable-skills-sh-final-gate-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: usable-skills-sh-final-gate-v1
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Build authoritative skills.sh final gate
+        run: node scripts/usable-skills-sh-final-gate-v1.mjs
+      - name: Persist final gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-skills-sh-final-source-gate.json
+          git commit -m "audit: persist authoritative skills.sh final source gate" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
