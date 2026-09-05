@@ -22,12 +22,25 @@ env:
 jobs:
   rescue:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 15
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 13
       matrix:
-        partition: [0,1,2,3]
+        include:
+          - { source: 'raaptechllc/raaptech', label: 'raaptech' }
+          - { source: 'willa-code/wstack', label: 'wstack' }
+          - { source: 'tolgazorlu/stellar-agents', label: 'stellar' }
+          - { source: 'youlfey/enterprise-skills', label: 'enterprise' }
+          - { source: 'zoharvan12/kolbo-code', label: 'kolbo' }
+          - { source: 'syncrescendence/syncrescendence', label: 'syncrescendence' }
+          - { source: 'k-park/ks-dev-proc', label: 'ksdev' }
+          - { source: 'iamzhihuix/droid-account-manage', label: 'droid' }
+          - { source: 'dunksmaster/tokendc', label: 'tokendc' }
+          - { source: 'spartypkp/claude-os-public', label: 'claudeos' }
+          - { source: 'reyanda/dodexa', label: 'dodexa' }
+          - { source: 'wibaek/personal-skills', label: 'personal' }
+          - { source: 'staractive/courses-workshop-plugins', label: 'courses' }
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,10 +59,12 @@ jobs:
       - name: Recover unresolved exact skills.sh packs from B2
         continue-on-error: true
         env:
-          AUDIT_PARTITION: ${{ matrix.partition }}
-          AUDIT_PARTITIONS: '4'
+          AUDIT_PARTITION: '0'
+          AUDIT_PARTITIONS: '1'
           AUDIT_SKIP_MANIFEST_DIR: rescue-skip
           AUDIT_OUT_DIR: rescue-out
+          RESCUE_SOURCE: ${{ matrix.source }}
+          RESCUE_LABEL: ${{ github.run_id }}-${{ matrix.label }}
         run: node scripts/final-audit-skills-b2-exact-rescue-v6.mjs
       - name: Publish rescue diagnostics and features
         if: always()
