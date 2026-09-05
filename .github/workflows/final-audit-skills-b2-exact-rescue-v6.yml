@@ -49,13 +49,10 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-save --no-audit --no-fund @libsql/client @aws-sdk/client-s3
-      - name: Download completed manifests
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Prepare isolated output
         run: |
           rm -rf rescue-skip rescue-out
           mkdir -p rescue-skip rescue-out
-          gh release download "$RELEASE_TAG" --dir rescue-skip --pattern 'manifest-*' || true
       - name: Recover unresolved exact skills.sh packs from B2
         continue-on-error: true
         env:
@@ -66,12 +63,43 @@ jobs:
           RESCUE_SOURCE: ${{ matrix.source }}
           RESCUE_LABEL: ${{ github.run_id }}-${{ matrix.label }}
         run: node scripts/final-audit-skills-b2-exact-rescue-v6.mjs
-      - name: Publish rescue diagnostics and features
+      - name: Handoff exact rescue output
         if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: b2-tail-${{ matrix.label }}
+          path: rescue-out/*
+          if-no-files-found: error
+          compression-level: 0
+
+  collect:
+    needs: rescue
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitskills-migration-run
+      - name: Reset persisted tail assets
         run: |
-          files=(rescue-out/*)
-          if [ -e "${files[0]}" ]; then
-            gh release upload "$RELEASE_TAG" rescue-out/* --clobber
-          fi
+          rm -rf audit/b2-tail-assets
+          mkdir -p audit/b2-tail-assets
+      - name: Collect all source-isolated rescue outputs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: b2-tail-*
+          path: audit/b2-tail-assets
+          merge-multiple: true
+      - name: Validate collected tail assets
+        run: |
+          test "$(find audit/b2-tail-assets -name 'manifest-*.json' | wc -l)" -ge 13
+          test "$(find audit/b2-tail-assets -name 'features-*.ndjson.gz' | wc -l)" -ge 13
+      - name: Persist exact tail assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A audit/b2-tail-assets
+          git commit -m "chore: persist exact skills.sh B2 tail rescue" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
