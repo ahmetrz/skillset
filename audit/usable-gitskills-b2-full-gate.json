@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-09-05T20:49:47.780Z",
+  "status": "ALL_GITSKILLS_B2_REPRESENTATIVES_VERIFIED",
+  "metadataExpectedRepresentativeRecords": 815106,
+  "metadataExpectedPacks": 642,
+  "metadataExpectedShardRefs": 18528,
+  "observedRepresentativeRecords": 815106,
+  "observedDistinctContentHashes": 815099,
+  "duplicatesWithinFullSnapshot": 7,
+  "inScope": 715385,
+  "uncategorized": 99721,
+  "featureFiles": 8,
+  "manifestFiles": 8,
+  "sourceUnits": 642,
+  "failedUnits": 0,
+  "sourceKeysWithRecords": 642,
+  "hardGate": {
+    "all642PacksExtracted": true,
+    "allExpectedRepresentativeRecordsPresent": true,
+    "exactDuplicatesExplicitlyAccountedFor": true,
+    "noScopeExclusion": true,
+    "usablePipelineAllowed": true
+  }
+}
