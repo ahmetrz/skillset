@@ -140,10 +140,15 @@ with gzip.open(RAW,"wt",encoding="utf-8",compresslevel=5) as out:
 units=[]
 bad=[]
 def sub_expected(p):
-    if SUB<0: return int(p["expectedRows"])
+    # The final physical dataset shard may be partial. Clamp planned shard
+    # ranges to the actual parquet row count instead of assuming 100 rows.
     n=0
     for rr in p["ranges"]:
-        a,b=int(rr["start"]),int(rr["end"])
+        a,b=int(rr["start"]),min(int(rr["end"]),cursor)
+        if a>=b: continue
+        if SUB<0:
+            n+=b-a
+            continue
         first=a+((SUB-(a%SUBS))%SUBS)
         if first<b:n+=1+((b-1-first)//SUBS)
     return n
