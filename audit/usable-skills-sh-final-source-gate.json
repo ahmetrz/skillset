@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-05T20:21:46.039Z",
+  "status": "ALL_SKILLS_SH_EXACT_FILES_VERIFIED",
+  "authoritativeSource": "skills_sh_external_exact_v1 + exact B2 anomaly overrides",
+  "repositories": {
+    "expected": 7555,
+    "verified": 7555,
+    "baseExactCountRepos": 7523,
+    "exactB2OverrideRepos": 32
+  },
+  "files": {
+    "expected": 188725,
+    "verified": 188725,
+    "baseNonAnomalyFiles": 176424,
+    "exactB2OverrideFiles": 12301
+  },
+  "anomalyVerification": {
+    "status": "ALL_ANOMALIES_EXACT_B2_VERIFIED",
+    "expectedSources": 32,
+    "completedSources": 32,
+    "missingReport": [],
+    "badReport": []
+  },
+  "hardGate": {
+    "allSkillsShIncluded": true,
+    "noScopeExclusion": true,
+    "usablePipelineAllowed": true
+  }
+}
