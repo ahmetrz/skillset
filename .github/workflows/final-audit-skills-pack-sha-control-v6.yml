@@ -22,12 +22,25 @@ env:
 jobs:
   rescue:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 18
     strategy:
       fail-fast: false
-      max-parallel: 6
+      max-parallel: 13
       matrix:
-        partition: [0,1,2,3,4,5,6,7,8,9,10,11]
+        include:
+          - { source: 'raaptechllc/raaptech', label: 'raaptech' }
+          - { source: 'willa-code/wstack', label: 'wstack' }
+          - { source: 'tolgazorlu/stellar-agents', label: 'stellar' }
+          - { source: 'youlfey/enterprise-skills', label: 'enterprise' }
+          - { source: 'zoharvan12/kolbo-code', label: 'kolbo' }
+          - { source: 'syncrescendence/syncrescendence', label: 'syncrescendence' }
+          - { source: 'k-park/ks-dev-proc', label: 'ksdev' }
+          - { source: 'iamzhihuix/droid-account-manage', label: 'droid' }
+          - { source: 'dunksmaster/tokendc', label: 'tokendc' }
+          - { source: 'spartypkp/claude-os-public', label: 'claudeos' }
+          - { source: 'reyanda/dodexa', label: 'dodexa' }
+          - { source: 'wibaek/personal-skills', label: 'personal' }
+          - { source: 'staractive/courses-workshop-plugins', label: 'courses' }
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,13 +61,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           MANIFEST_DIR: tail-manifests
           RESCUE_OUT: pack-sha-rescue-out
-          AUDIT_PARTITION: ${{ matrix.partition }}
-          AUDIT_PARTITIONS: '12'
-          RESCUE_LABEL: ${{ github.run_id }}
+          AUDIT_PARTITION: '0'
+          AUDIT_PARTITIONS: '1'
+          RESCUE_LABEL: ${{ github.run_id }}-${{ matrix.label }}
+          RESCUE_SOURCE: ${{ matrix.source }}
+          RESCUE_FAST: '1'
         run: node scripts/final-audit-skills-pack-sha-rescue-v7.mjs
       - name: Publish verified feature and provenance shards
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release upload "$RELEASE_TAG" pack-sha-rescue-out/* --clobber
-# isolated tail rescue v7.5
+# source-isolated fast lane v7.6
