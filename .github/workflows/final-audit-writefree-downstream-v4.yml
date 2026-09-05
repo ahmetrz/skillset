@@ -48,11 +48,14 @@ jobs:
           NEAR_PARTITIONS: '20'
           NEAR_PARTITION_MODE: range
         run: node scripts/final-audit-v4-merge.mjs
-      - name: Publish merge products
+      - name: Handoff merge products
         if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release upload "$RELEASE_TAG" v4-merge-out/* --clobber
+        uses: actions/upload-artifact@v4
+        with:
+          name: v4-merge-products
+          path: v4-merge-out/*
+          if-no-files-found: error
+          compression-level: 0
       - name: Expose readiness
         id: state
         if: always()
@@ -79,14 +82,17 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-save --no-audit --no-fund @libsql/client
-      - name: Download assigned new-feature partition
+      - name: Download merge handoff
+        uses: actions/download-artifact@v4
+        with:
+          name: v4-merge-products
+          path: near-input
+      - name: Prepare assigned new-feature partition
         run: |
-          rm -rf near-input near-v4-out
-          mkdir -p near-input near-v4-out
+          rm -rf near-v4-out
+          mkdir -p near-v4-out
           p=$(printf '%02d' '${{ matrix.partition }}')
-          curl -fsSL --retry 4 --retry-delay 1 --retry-all-errors \
-            "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG/near-new-p${p}.ndjson.gz" \
-            -o "near-input/near-new-p${p}.ndjson.gz"
+          test -s "near-input/near-new-p${p}.ndjson.gz"
       - name: Compute near and coverage candidates
         env:
           NEAR_PARTITION: ${{ matrix.partition }}
@@ -98,11 +104,14 @@ jobs:
           p=$(printf '%02d' "$NEAR_PARTITION")
           export NEAR_NEW_FILE="near-input/near-new-p${p}.ndjson.gz"
           node scripts/final-audit-near-range-v6.mjs
-      - name: Publish near shard
+      - name: Handoff near shard
         if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release upload "$RELEASE_TAG" near-v4-out/* --clobber
+        uses: actions/upload-artifact@v4
+        with:
+          name: near-${{ matrix.partition }}
+          path: near-v4-out/*
+          if-no-files-found: error
+          compression-level: 0
 
 
   policy:
@@ -129,10 +138,13 @@ jobs:
           AUDIT_V6_POLICY_INPUT: policy-assets
           AUDIT_V6_POLICY_OUT: policy-out
         run: node scripts/final-audit-policy-summary-v6.mjs
-      - name: Publish compact policy summary
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release upload "$RELEASE_TAG" policy-out/final-audit-v6-policy-summary.json --clobber
+      - name: Handoff compact policy summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-summary
+          path: policy-out/final-audit-v6-policy-summary.json
+          if-no-files-found: error
+          compression-level: 0
 
   finalize:
     needs: [merge, near, policy]
@@ -147,26 +159,38 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-save --no-audit --no-fund @libsql/client
-      - name: Download final derived audit assets
+      - name: Prepare final asset directory
         run: |
           rm -rf final-assets final-out
           mkdir -p final-assets final-out
-          base="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG"
-          curl -fsSL --retry 4 --retry-delay 1 --retry-all-errors "$base/final-audit-v4-status.json" -o final-assets/final-audit-v4-status.json
-          seq -w 0 19 | xargs -P 20 -I{} sh -c 'curl -fsSL --retry 4 --retry-delay 1 --retry-all-errors "$1/near-manifest-p{}-of-20.json" -o "$2/near-manifest-p{}-of-20.json"' _ "$base" final-assets
-          if ! curl -fsSL --retry 4 --retry-delay 1 --retry-all-errors "$base/final-audit-v6-policy-summary.json" -o final-assets/final-audit-v6-policy-summary.json; then
-            grep -E '^features-.*\.ndjson\.gz$' audit/final-audit-v4-release-assets.txt | \
-              xargs -P 16 -I{} sh -c 'curl -fsSL --retry 4 --retry-delay 1 --retry-all-errors "$1/{}" -o "$2/{}"' _ "$base" final-assets
-          fi
+      - name: Download merge handoff
+        uses: actions/download-artifact@v4
+        with:
+          name: v4-merge-products
+          path: final-assets
+      - name: Download near handoffs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: near-*
+          path: final-assets
+          merge-multiple: true
+      - name: Download policy handoff
+        uses: actions/download-artifact@v4
+        with:
+          name: policy-summary
+          path: final-assets
       - name: Build conflict registry and validation
         env:
           AUDIT_V4_INPUT: final-assets
           AUDIT_V4_FINAL_OUT: final-out
         run: node scripts/final-audit-v4-finalize.mjs
-      - name: Publish final derived outputs
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release upload "$RELEASE_TAG" final-out/* --clobber
+      - name: Preserve final derived outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-derived-outputs
+          path: final-out/*
+          if-no-files-found: error
+          compression-level: 0
       - name: Persist user-facing checkpoints
         run: |
           mkdir -p audit
