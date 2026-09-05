@@ -1,33 +1,106 @@
-name: Final audit validation gate v1
+name: Final master skill set v1
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/final-audit-validation-v1.yml'
   workflow_dispatch:
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
-  group: final-audit-validation-v1
+  group: final-master-skill-set-v1
   cancel-in-progress: true
 
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  RELEASE_TAG: final-audit-v4-turbo
+  UPSTREAM_AUDIT_RUN: '33960615125'
+
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 120
     env:
-      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
-      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      NODE_OPTIONS: --max-old-space-size=6144
     steps:
       - uses: actions/checkout@v4
-        with: {ref: gitskills-migration-run}
+        with:
+          ref: gitskills-migration-run
       - uses: actions/setup-node@v4
-        with: {node-version: '22'}
+        with:
+          node-version: '22'
       - run: npm install --no-save --no-audit --no-fund @libsql/client
-      - run: node scripts/final-audit-validation-v1.mjs
-      - run: |
+
+      - name: Prepare exact feature shards
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf master-features master-near final-master-out
+          mkdir -p master-features master-near final-master-out
+          base="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG"
+          grep -E '^features-.*\.ndjson\.gz$' audit/final-audit-v4-release-assets.txt | \
+            xargs -P 20 -I{} sh -c 'curl -fsSL --retry 3 --retry-delay 1 --retry-all-errors "$1/{}" -o "$2/{}"' _ "$base" master-features
+          if [ -d audit/b2-tail-assets ]; then
+            cp audit/b2-tail-assets/features-*.ndjson.gz master-features/ 2>/dev/null || true
+          fi
+          test "$(find master-features -type f -name 'features-*.ndjson.gz' | wc -l)" -gt 0
+
+      - name: Download completed near graph snapshot
+        uses: actions/download-artifact@v4
+        with:
+          pattern: near-*
+          path: master-near
+          merge-multiple: true
+          github-token: ${{ github.token }}
+          run-id: ${{ env.UPSTREAM_AUDIT_RUN }}
+
+      - name: Build no-loss canonical master and taxonomy
+        env:
+          MASTER_FEATURE_DIR: master-features
+          MASTER_NEAR_DIR: master-near
+          MASTER_OUT_DIR: final-master-out
+          AUDIT_DIR: audit
+        run: node scripts/final-master-build-v1.mjs
+
+      - name: Upload full final master package
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-master-skill-set-v1
+          path: final-master-out/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+      - name: Persist final master checkpoints
+        shell: bash
+        env:
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        run: |
+          set -euo pipefail
+          cp final-master-out/final-validation-status.json audit/final-validation-status.json
+          cp final-master-out/final-taxonomy.json audit/final-taxonomy.json
+          cp final-master-out/final-policy-overlay.json audit/final-policy-overlay.json
+          cp final-master-out/final-master-manifest.json audit/final-master-manifest.json
+          node - <<'NODE'
+          const fs=require('fs');
+          const p='audit/final-master-manifest.json';
+          const j=JSON.parse(fs.readFileSync(p,'utf8'));
+          j.workflowRunId=process.env.GITHUB_RUN_ID;
+          j.upstreamAuditRunId=process.env.UPSTREAM_AUDIT_RUN;
+          j.artifactId=process.env.ARTIFACT_ID||null;
+          j.artifactUrl=process.env.ARTIFACT_URL||null;
+          fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n');
+          NODE
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add audit/final-validation-status.json
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "chore: update final audit validation state"
+          git add audit/final-validation-status.json audit/final-taxonomy.json audit/final-policy-overlay.json audit/final-master-manifest.json
+          git commit -m "chore: persist final master skill set outputs" || exit 0
+          git pull --rebase origin gitskills-migration-run
           git push origin HEAD:gitskills-migration-run
