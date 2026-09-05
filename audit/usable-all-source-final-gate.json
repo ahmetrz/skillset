@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-09-05T20:51:18.858Z",
+  "status": "ALL_GITSKILLS_AND_SKILLS_SH_VERIFIED",
+  "policy": "Every acquired GitSkills representative and every exact skills.sh SKILL.md is included. SDLC/social masks are classification only and never exclusion filters.",
+  "gitSkills": {
+    "legacy": {
+      "verified": true,
+      "representatives": 1047755,
+      "rawRows": 1913200,
+      "shards": 19132
+    },
+    "b2": {
+      "verified": true,
+      "representativeRecords": 815106,
+      "distinctContentHashes": 815099,
+      "exactDuplicateRecords": 7,
+      "packs": 642
+    },
+    "totalSourceRepresentativeRecords": 1862861,
+    "preCrossPartitionDistinctUpperBound": 1862854
+  },
+  "skillsSh": {
+    "verified": true,
+    "repositories": 7555,
+    "exactFiles": 188725
+  },
+  "totalSourceRecordsBeforeCrossSourceDedup": 2051586,
+  "hardGate": {
+    "allGitSkillsIncluded": true,
+    "allSkillsShIncluded": true,
+    "noScopeExclusion": true,
+    "usablePipelineAllowed": true
+  },
+  "authoritativeInputs": {
+    "legacy": "full HF parquet range reconstruction",
+    "gitskillsB2": "all 642 acquisition pack ranges reconstructed from HF parquet",
+    "skillsSh": "7,555 current exact source keys with SHA-256 verified B2 overrides for all anomalies"
+  }
+}
