@@ -1,36 +1,70 @@
 {
-  "generatedAt": "2026-09-04T10:58:06.016Z",
+  "generatedAt": "2026-09-05T20:49:47.780Z",
   "status": "VERIFIED",
   "originalGoal": "approximately 3,000,000 unique skills across GitSkills + skills.sh",
   "correction": {
-    "finding": "The skills.sh 1M+ / 1.3M+ figure is an installation-telemetry counter, not a unique-skill inventory count.",
+    "finding": "The skills.sh 1M+ / 1.3M+ figure is installation telemetry, not a unique-skill inventory count. Full source reconstruction also found the prior GitSkills legacy/B2 representative counts were stale.",
     "officialSemantics": [
-      "skills.sh documentation states leaderboard ranking is based on anonymous install telemetry.",
-      "skills.sh API exposes actual skill inventory separately via /api/v1/skills pagination.total."
+      "skills.sh installation telemetry must not be added to unique-skill inventory.",
+      "skills.sh exact acquired corpus is measured from current exact acquisition source keys and SKILL.md files.",
+      "GitSkills source counts are measured from full HF parquet reconstruction plus acquisition-pack metadata."
     ],
-    "consequence": "Do not add the skills.sh install counter to GitSkills representative count. The previous ~3M unique target was a metric-category error."
+    "countCorrections": [
+      {
+        "metric": "gitskills.legacyRepresentatives",
+        "old": 1047750,
+        "new": 1047755,
+        "reason": "full 1,913,200-row / 19,132-shard reconstruction produced five additional dedup_primary records"
+      },
+      {
+        "metric": "gitskills.b2RepresentativeRecords",
+        "old": 830231,
+        "new": 815106,
+        "reason": "sum(gitskills_packs.representatives) across all 642 packs is 815,106 and full reconstruction produced exactly 815,106 records"
+      },
+      {
+        "metric": "gitskills.b2DistinctContentHashes",
+        "old": null,
+        "new": 815099,
+        "reason": "seven exact duplicate records exist across the 642-pack B2 snapshot"
+      }
+    ],
+    "consequence": "Do not use the previous 2,066,706 source-record target or the previous 1,877,981 GitSkills figure as authoritative."
   },
   "verifiedExactSourceRecords": {
     "gitskills": {
-      "legacyRepresentatives": 1047750,
-      "b2Representatives": 830231,
-      "totalRepresentatives": 1877981
+      "legacyRepresentativeRecords": 1047755,
+      "legacyDistinctContentHashes": 1047755,
+      "legacyShards": 19132,
+      "legacyRawRows": 1913200,
+      "b2RepresentativeRecords": 815106,
+      "b2DistinctContentHashes": 815099,
+      "b2ExactDuplicateRecords": 7,
+      "b2Packs": 642,
+      "b2ShardRefs": 18528,
+      "totalRepresentativeRecords": 1862861,
+      "preCrossPartitionDistinctUpperBound": 1862854
     },
     "skillsSh": {
       "exactSkillsInB2": 188725,
       "doneRepos": 7555,
+      "exactVerifiedRepos": 7555,
+      "anomalyReposSha256Verified": 32,
       "notFoundRepos": 406
     },
-    "combinedBeforeCrossSourceDedup": 2066706
+    "combinedSourceRecordsBeforeCrossSourceDedup": 2051586,
+    "preCrossSourceDistinctUpperBound": 2051579
   },
   "correctedAuditTarget": {
-    "sourceRecordsBeforeCrossSourceDedup": 2066706,
-    "note": "188,725 skills.sh exact SKILL.md files are the acquired repo-level exact corpus; this is intentionally broader than the public leaderboard's listed skill inventory."
+    "sourceRecordsBeforeCrossSourceDedup": 2051586,
+    "note": "This is an exact source-record count. Exact cross-source content deduplication is a downstream stage; 2,051,579 is only the pre-cross-source distinct upper bound because cross-platform hash overlap has not yet been removed."
   },
   "evidence": {
-    "skillsShDocs": "https://www.skills.sh/docs",
-    "skillsShApiDocs": "https://www.skills.sh/docs/api",
-    "verifiedAt": "2026-09-04"
+    "legacyGate": "audit/usable-gitskills-legacy-full-gate.json",
+    "b2Gate": "audit/usable-gitskills-b2-full-gate.json",
+    "b2Metadata": "audit/usable-gitskills-b2-metadata-diagnostic.json",
+    "skillsShGate": "audit/usable-skills-sh-final-source-gate.json",
+    "verifiedAt": "2026-09-05"
   },
   "gate": "source_inventory_reconciled=true"
 }
