@@ -25,19 +25,23 @@ const expected={
 const expectedTotal=Object.values(expected).reduce((a,b)=>a+b,0);
 if(expectedTotal!==Number(inv.correctedAuditTarget?.sourceRecordsBeforeCrossSourceDedup||0))throw new Error('inventory_total_mismatch');
 
-const occSeen=new Set(),hashSeen=new Set(),perSystem=new Map();
+const occSeen=new Set(),hashSeen=new Set(),perSystem=new Map(),logicalSeen=new Set(),logicalPerSystem=new Map(),contentPerSystem=new Map();
 function add(r){
-  const sys=String(r.source_system||''),sk=String(r.source_key||''),ik=String(r.item_key||''),h=String(r.content_hash||'').toLowerCase();
+  const sys=String(r.source_system||''),sk=String(r.source_key||''),ik=String(r.item_key||''),h=String(r.content_hash||'').toLowerCase(),repo=String(r.repo||'').trim().toLowerCase(),p=String(r.path||r.item_key||'').replace(/\\\\/g,'/').replace(/^\\.\\//,'').replace(/^\\/+|\\/+$/g,'');
   if(!sys||!sk||!ik||!/^[0-9a-f]{64}$/.test(h))return;
   const oid=keyHash(sys+'\0'+sk+'\0'+ik);
   if(!occSeen.has(oid)){occSeen.add(oid);perSystem.set(sys,(perSystem.get(sys)||0)+1)}
   hashSeen.add(h);
+  if(!contentPerSystem.has(sys))contentPerSystem.set(sys,new Set());contentPerSystem.get(sys).add(h);
+  const logical=sys==='skills-sh-b2'?(repo&&p?repo+'\\0'+p:sk+'\\0'+ik):h;
+  const lid=keyHash(sys+'\\0'+logical);
+  if(!logicalSeen.has(lid)){logicalSeen.add(lid);logicalPerSystem.set(sys,(logicalPerSystem.get(sys)||0)+1)}
 }
 
 let lastRowid=0,tursoRows=0;
 for(;;){
   const rows=(await db.execute({
-    sql:'SELECT rowid rid,source_system,source_key,item_key,content_hash FROM final_audit_occurrence_v1 WHERE rowid>? ORDER BY rowid LIMIT 50000',
+    sql:'SELECT rowid rid,source_system,source_key,item_key,content_hash,repo,path FROM final_audit_occurrence_v1 WHERE rowid>? ORDER BY rowid LIMIT 50000',
     args:[lastRowid]
   })).rows;
   if(!rows.length)break;
@@ -55,22 +59,26 @@ for(const p of files){
   console.log(JSON.stringify({event:'feature_coverage_progress',file:path.basename(p),featureRows,union:occSeen.size,uniqueHashes:hashSeen.size}));
 }
 
-const observed=Object.fromEntries([...perSystem.entries()].sort((a,b)=>a[0].localeCompare(b[0])));
+const observedRawOccurrenceKeys=Object.fromEntries([...perSystem.entries()].sort((a,b)=>a[0].localeCompare(b[0])));
+const observed=Object.fromEntries([...logicalPerSystem.entries()].sort((a,b)=>a[0].localeCompare(b[0])));
+const distinctContentHashesBySystem=Object.fromEntries([...contentPerSystem.entries()].map(([k,v])=>[k,v.size]).sort((a,b)=>a[0].localeCompare(b[0])));
 const checks={};
-for(const [sys,n] of Object.entries(expected))checks[sys]={expected:n,observed:Number(observed[sys]||0),complete:Number(observed[sys]||0)===n};
-const unknownSystems=Object.keys(observed).filter(x=>!(x in expected));
-const complete=Object.values(checks).every(x=>x.complete)&&occSeen.size===expectedTotal&&unknownSystems.length===0;
+for(const [sys,n] of Object.entries(expected)){const metric=sys==='skills-sh-b2'?'repo+path':'distinct_content_hash';const v=sys==='skills-sh-b2'?Number(observed[sys]||0):Number(distinctContentHashesBySystem[sys]||0);checks[sys]={metric,expected:n,observed:v,complete:v===n}}
+const unknownSystems=Object.keys(observedRawOccurrenceKeys).filter(x=>!(x in expected));
+const logicalTotal=Object.entries(checks).reduce((s,[,x])=>s+Number(x.observed||0),0);
+const complete=Object.values(checks).every(x=>x.complete)&&logicalTotal===expectedTotal&&unknownSystems.length===0;
 const result={
   generatedAt:new Date().toISOString(),
   status:complete?'ALL_SOURCE_RECORDS_VERIFIED':'BLOCKED_SOURCE_COVERAGE_MISMATCH',
   policy:'No source skill may be excluded by SDLC/social classification. Zero-mask skills are retained as uncategorized.',
   expectedTotalSourceRecords:expectedTotal,
-  observedUnionSourceRecords:occSeen.size,
+  observedRawOccurrenceKeyUnion:occSeen.size,
+  observedLogicalSourceRecords:logicalTotal,
   exactUniqueContentHashesAcrossAllSources:hashSeen.size,
   tursoOccurrenceRowsRead:tursoRows,
   writefreeFeatureRowsRead:featureRows,
   featureFiles:files.length,
-  expected,observed,checks,unknownSystems,
+  expected,observedLogical:observed,observedRawOccurrenceKeys,distinctContentHashesBySystem,checks,unknownSystems,
   hardGate:{
     allGitSkillsIncluded:checks['gitskills-legacy-hf'].complete&&checks['gitskills-b2'].complete,
     allSkillsShIncluded:checks['skills-sh-b2'].complete,
