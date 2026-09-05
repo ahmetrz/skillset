@@ -1,0 +1,36 @@
+name: Usable GitSkills B2 P0 range diagnostic v1
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/usable-gitskills-b2-p0-diagnostic-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+  TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+  BULK_PARTITIONS: '8'
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: npm install --no-save --no-audit --no-fund @libsql/client
+      - run: pip install --disable-pip-version-check --no-cache-dir pyarrow fsspec requests aiohttp
+      - env:
+          BULK_PLAN_OUT: usable-gitskills-b2-full-plan.json
+        run: node scripts/usable-gitskills-full-plan-v1.mjs
+      - name: Diagnose P0 exact ranges
+        env:
+          BULK_PLAN: usable-gitskills-b2-full-plan.json
+          BULK_PARTITION: '0'
+          BULK_PARTITIONS: '8'
+          BULK_OUT_DIR: usable-gitskills-p0-diagnostic
+        run: python scripts/final-audit-gitskills-parquet-extract-v5.py
