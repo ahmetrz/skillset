@@ -1,0 +1,247 @@
+{
+  "generatedAt": "2026-09-05T20:16:12.550Z",
+  "status": "BLOCKED_SKILLS_SH_MISSING",
+  "expectedRepos": 7555,
+  "expectedSkills": 188725,
+  "observedSkillsInCurrentSourceKeys": 190767,
+  "completeRepos": 7523,
+  "missingRepos": 17,
+  "extraRepos": 15,
+  "missingSkills": 85,
+  "extraSkills": 2127,
+  "tursoRowsRead": 84133,
+  "featureRowsRead": 151965,
+  "featureFiles": 72,
+  "missing": [
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-02/0005283-pink-technologies-cortex.json.gz",
+      "source": "pink-technologies/cortex",
+      "expected": 40,
+      "observed": 36,
+      "missing": 4
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-05/0003335-erbsland-dev-skills.json.gz",
+      "source": "erbsland-dev/skills",
+      "expected": 8,
+      "observed": 7,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-07/0002094-shterneregen-telegram-home-bot.json.gz",
+      "source": "shterneregen/telegram-home-bot",
+      "expected": 8,
+      "observed": 7,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-08/0008739-dynatrace-oss-ai-config-manager.json.gz",
+      "source": "dynatrace-oss/ai-config-manager",
+      "expected": 32,
+      "observed": 31,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-10/0009343-infynno-solutions-software-engineering-skills.json.gz",
+      "source": "infynno-solutions/software-engineering-skills",
+      "expected": 141,
+      "observed": 138,
+      "missing": 3
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-11/0006819-rugved1652-skills.json.gz",
+      "source": "rugved1652/skills",
+      "expected": 24,
+      "observed": 6,
+      "missing": 18
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-13/0010545-kkagiri-tenacityfms.json.gz",
+      "source": "kkagiri/tenacityfms",
+      "expected": 13,
+      "observed": 12,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-17/0013730-warpcode-dotfiles.json.gz",
+      "source": "warpcode/dotfiles",
+      "expected": 48,
+      "observed": 47,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-17/0013824-zhizhunbao-ai-dev-config.json.gz",
+      "source": "zhizhunbao/ai-dev-config",
+      "expected": 129,
+      "observed": 128,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-21/0016573-fabiomatricardi-agents-studies.json.gz",
+      "source": "fabiomatricardi/agents-studies",
+      "expected": 6,
+      "observed": 5,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-22/0017825-wyzzzz-hope-my-skills.json.gz",
+      "source": "wyzzzz-hope/my-skills",
+      "expected": 6,
+      "observed": 5,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-23/0018216-kbarbel640-del-skills.json.gz",
+      "source": "kbarbel640-del/skills",
+      "expected": 6891,
+      "observed": 6879,
+      "missing": 12
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-26/0019638-goldengrape-skills.json.gz",
+      "source": "goldengrape/skills",
+      "expected": 20,
+      "observed": 19,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-29/0020932-1225zhangqian-awesome-cloudbase-examples.json.gz",
+      "source": "1225zhangqian/awesome-cloudbase-examples",
+      "expected": 826,
+      "observed": 824,
+      "missing": 2
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-29/0021110-digirati-co-uk-madoc-platform.json.gz",
+      "source": "digirati-co-uk/madoc-platform",
+      "expected": 45,
+      "observed": 10,
+      "missing": 35
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-30/0023500-fengqiliu-pm-skills.json.gz",
+      "source": "fengqiliu/pm-skills",
+      "expected": 27,
+      "observed": 26,
+      "missing": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-30/0023951-todoe-obsidian-vault-skills.json.gz",
+      "source": "todoe/obsidian-vault-skills",
+      "expected": 14,
+      "observed": 13,
+      "missing": 1
+    }
+  ],
+  "extra": [
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-02/0005084-k0d3x8its-dotfiles.json.gz",
+      "source": "k0d3x8its/dotfiles",
+      "expected": 66,
+      "observed": 68,
+      "extra": 2
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-08/0010142-xilnick-project-constitution-protocol.json.gz",
+      "source": "xilnick/project-constitution-protocol",
+      "expected": 1,
+      "observed": 2,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-09/0007408-laohuad-laohu-ai-visual.json.gz",
+      "source": "laohuad/laohu-ai-visual",
+      "expected": 9,
+      "observed": 10,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-13/0010469-infranodus-skills.json.gz",
+      "source": "infranodus/skills",
+      "expected": 15,
+      "observed": 16,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-16/0011641-tenequm-nanoclaw.json.gz",
+      "source": "tenequm/nanoclaw",
+      "expected": 61,
+      "observed": 70,
+      "extra": 9
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-17/0013756-xluos-one-profile.json.gz",
+      "source": "xluos/one-profile",
+      "expected": 1,
+      "observed": 3,
+      "extra": 2
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-19/0015017-diegopacheco-ai-playground.json.gz",
+      "source": "diegopacheco/ai-playground",
+      "expected": 85,
+      "observed": 86,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-21/0016944-ryoh827-dotfiles.json.gz",
+      "source": "ryoh827/dotfiles",
+      "expected": 8,
+      "observed": 9,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-22/0017642-qianchengjie-skills.json.gz",
+      "source": "qianchengjie/skills",
+      "expected": 11,
+      "observed": 12,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-23/0018045-efe-arv-openclaw.json.gz",
+      "source": "efe-arv/openclaw",
+      "expected": 67,
+      "observed": 130,
+      "extra": 63
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-23/0018161-ivanlutsenko-awac-claude-code-plugins.json.gz",
+      "source": "ivanlutsenko/awac-claude-code-plugins",
+      "expected": 51,
+      "observed": 52,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-23/0019155-zenprojectgit-claude-code-plugins-plus-skills.json.gz",
+      "source": "zenprojectgit/claude-code-plugins-plus-skills",
+      "expected": 3628,
+      "observed": 5669,
+      "extra": 2041
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-28/0020363-epilibre-design-spip-skills.json.gz",
+      "source": "epilibre-design/spip-skills",
+      "expected": 7,
+      "observed": 8,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-30/0023928-syntropic137-syntropic137.json.gz",
+      "source": "syntropic137/syntropic137",
+      "expected": 7,
+      "observed": 8,
+      "extra": 1
+    },
+    {
+      "sourceKey": "b2:skills-sh/exact-b2-v1/bucket-30/0024037-zenml-io-kitaru-skills.json.gz",
+      "source": "zenml-io/kitaru-skills",
+      "expected": 6,
+      "observed": 7,
+      "extra": 1
+    }
+  ],
+  "hardGate": {
+    "allCurrentExactSourceKeysCovered": false,
+    "allSkillsShIncluded": false
+  }
+}
