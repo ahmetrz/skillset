@@ -12,17 +12,19 @@ const b2Ok=b2.status==='ALL_GITSKILLS_B2_REPRESENTATIVES_VERIFIED'&&b2.hardGate?
 const skillsOk=skills.status==='ALL_SKILLS_SH_EXACT_FILES_VERIFIED'&&skills.hardGate?.usablePipelineAllowed===true;
 
 const gitLegacy=Number(legacy.distinctContentHashes||0);
-const gitB2=Number(b2.observedDistinctContentHashes||0);
+const gitB2Records=Number(b2.observedRepresentativeRecords||0);
+const gitB2Distinct=Number(b2.observedDistinctContentHashes||0);
 const skillsFiles=Number(skills.files?.verified||0);
-const sourceRecords=gitLegacy+gitB2+skillsFiles;
+const sourceRecords=gitLegacy+gitB2Records+skillsFiles;
 const result={
   generatedAt:new Date().toISOString(),
   status:legacyOk&&b2Ok&&skillsOk?'ALL_GITSKILLS_AND_SKILLS_SH_VERIFIED':'BLOCKED_SOURCE_PLATFORM_GATE',
   policy:'Every acquired GitSkills representative and every exact skills.sh SKILL.md is included. SDLC/social masks are classification only and never exclusion filters.',
   gitSkills:{
     legacy:{verified:legacyOk,representatives:gitLegacy,rawRows:Number(legacy.rawRowsObserved||0),shards:Number(legacy.sourceUnitsObserved||0)},
-    b2:{verified:b2Ok,representatives:gitB2,packs:Number(b2.sourceUnits||0)},
-    totalSourceRepresentatives:gitLegacy+gitB2
+    b2:{verified:b2Ok,representativeRecords:gitB2Records,distinctContentHashes:gitB2Distinct,exactDuplicateRecords:gitB2Records-gitB2Distinct,packs:Number(b2.sourceUnits||0)},
+    totalSourceRepresentativeRecords:gitLegacy+gitB2Records,
+    preCrossPartitionDistinctUpperBound:gitLegacy+gitB2Distinct
   },
   skillsSh:{verified:skillsOk,repositories:Number(skills.repositories?.verified||0),exactFiles:skillsFiles},
   totalSourceRecordsBeforeCrossSourceDedup:sourceRecords,
