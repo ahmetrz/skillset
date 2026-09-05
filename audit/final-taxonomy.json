@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-09-05T10:54:28.100Z",
+  "schema": {
+    "sdlc": [
+      "requirements_planning",
+      "architecture_design",
+      "dev_environment_dependencies",
+      "implementation_review",
+      "testing_quality",
+      "application_security",
+      "cicd_release",
+      "observability_reliability",
+      "git_workflow",
+      "documentation",
+      "ui_ux"
+    ],
+    "social": [
+      "content_strategy",
+      "copywriting",
+      "visual_design",
+      "video_multimedia",
+      "publishing_distribution",
+      "analytics_growth"
+    ]
+  },
+  "masterGroups": 1235247,
+  "counts": {
+    "sdlc:application_security": 30314,
+    "sdlc:architecture_design": 69855,
+    "sdlc:cicd_release": 207413,
+    "sdlc:dev_environment_dependencies": 81490,
+    "sdlc:documentation": 89751,
+    "sdlc:git_workflow": 122279,
+    "sdlc:implementation_review": 643781,
+    "sdlc:observability_reliability": 209094,
+    "sdlc:requirements_planning": 379172,
+    "sdlc:testing_quality": 373806,
+    "sdlc:ui_ux": 80474,
+    "social:analytics_growth": 217401,
+    "social:content_strategy": 7191,
+    "social:copywriting": 165564,
+    "social:publishing_distribution": 92945,
+    "social:video_multimedia": 306442,
+    "social:visual_design": 23318
+  }
+}

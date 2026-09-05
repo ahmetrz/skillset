@@ -1,0 +1,22 @@
+{
+  "generatedAt": "2026-09-05T10:54:28.108Z",
+  "version": 1,
+  "status": "COMPLETE",
+  "masterType": "canonical no-loss inventory",
+  "canonicalGroups": 1235247,
+  "memberHashes": 1446268,
+  "sourceRecordsBeforeCrossSourceDedup": 2066706,
+  "policyProfile": "user-approved-v1",
+  "files": [
+    "final-master-groups.ndjson.gz",
+    "final-master-members.ndjson.gz",
+    "final-coverage-relations.ndjson.gz",
+    "final-taxonomy.json",
+    "final-policy-overlay.json",
+    "final-validation-status.json",
+    "final-master-manifest.json"
+  ],
+  "workflowRunId": "33961309161",
+  "artifactId": "9968189871",
+  "artifactUrl": "https://github.com/ahmetrz/skillset/actions/runs/33961309161/artifacts/9968189871"
+}
