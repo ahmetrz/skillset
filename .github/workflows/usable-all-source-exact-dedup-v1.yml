@@ -1,0 +1,82 @@
+name: Usable skillset all-source exact dedup v1
+
+on:
+  workflow_run:
+    workflows:
+      - "Usable skillset skills.sh full exact snapshot v1"
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: usable-all-source-exact-dedup-v1
+  cancel-in-progress: true
+
+env:
+  LEGACY_RUN_ID: '33989792326'
+  B2_RUN_ID: '33990668844'
+
+jobs:
+  exact:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: gitskills-migration-run}
+
+      - name: Download full GitSkills legacy features
+        uses: actions/download-artifact@v4
+        with:
+          name: usable-gitskills-legacy-full-features-v1
+          path: all-source-features/legacy
+          github-token: ${{ github.token }}
+          run-id: ${{ env.LEGACY_RUN_ID }}
+
+      - name: Download full GitSkills B2 features
+        uses: actions/download-artifact@v4
+        with:
+          name: usable-gitskills-b2-full-features-v1
+          path: all-source-features/b2
+          github-token: ${{ github.token }}
+          run-id: ${{ env.B2_RUN_ID }}
+
+      - name: Download exact skills.sh features
+        uses: actions/download-artifact@v4
+        with:
+          name: usable-skills-sh-full-features-v1
+          path: all-source-features/skills-sh
+          github-token: ${{ github.token }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Exact deduplicate every source record
+        env:
+          EXACT_INPUT_DIR: all-source-features
+          EXACT_OUT_DIR: usable-exact-out
+          EXACT_GATE_OUT: audit/usable-exact-dedup-gate.json
+          EXACT_SOURCE_RECORDS: '2051586'
+        run: node scripts/usable-all-source-exact-dedup-v1.mjs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usable-all-source-exact-v1
+          path: usable-exact-out/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+      - name: Persist exact dedup gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/usable-exact-dedup-gate.json
+          git commit -m "audit: persist all-source exact dedup gate" || exit 0
+          git pull --rebase origin gitskills-migration-run
+          git push origin HEAD:gitskills-migration-run
