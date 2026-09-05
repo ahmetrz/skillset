@@ -41,9 +41,9 @@ async function mirrorData(u,full){
   const [owner,repo]=String(full).split('/');if(!owner||!repo)return [];
   const info=await gh('/repos/'+encodeURIComponent(owner)+'/'+encodeURIComponent(repo)),branch=String(info.default_branch||'main'),tr=await gh('/repos/'+encodeURIComponent(owner)+'/'+encodeURIComponent(repo)+'/git/trees/'+encodeURIComponent(branch)+'?recursive=1');
   if(tr.truncated)throw new Error('mirror_tree_truncated');
-  const es=(tr.tree||[]).filter(x=>x.type==='blob'&&/(^|\\/)SKILL\\.md$/i.test(String(x.path||'')));
+  const es=(tr.tree||[]).filter(x=>x.type==='blob'&&/(^|\/)SKILL\.md$/i.test(String(x.path||'')));
   if(es.length>1000)throw new Error('mirror_skill_count_oversize_'+es.length);
-  return map(es,8,async e=>{const b=await gh('/repos/'+encodeURIComponent(owner)+'/'+encodeURIComponent(repo)+'/git/blobs/'+e.sha);if(b.encoding!=='base64')throw new Error('mirror_encoding');const bytes=Buffer.from(String(b.content||'').replace(/\\s/g,''),'base64');return {path:norm(e.path),bytes,hash:sha(bytes)}})
+  return map(es,8,async e=>{const b=await gh('/repos/'+encodeURIComponent(owner)+'/'+encodeURIComponent(repo)+'/git/blobs/'+e.sha);if(b.encoding!=='base64')throw new Error('mirror_encoding');const bytes=Buffer.from(String(b.content||'').replace(/\s/g,''),'base64');return {path:norm(e.path),bytes,hash:sha(bytes)}})
 }
 function currentCandidates(u,files,occ){const out=[],seen=new Set(),add=xs=>{if(xs.length!==u.n)return;const k=xs.map(x=>x.path+'\0'+x.hash).sort().join('\u0001');if(!seen.has(k)){seen.add(k);out.push(xs)}};add(files);const hs=new Set(occ.map(o=>String(o.content_hash||'')).filter(Boolean)),matched=files.filter(f=>hs.has(f.hash));add(matched);if(u.n<=3&&files.length<=12)for(const xs of choose(files,u.n))add(xs);console.log(JSON.stringify({event:'current_probe',source:u.source,expected:u.n,current:files.length,occurrenceRows:occ.length,occurrenceHashes:hs.size,matched:matched.length}));return out}
 function htmlHints(html){const a=[];for(const m of String(html||'').matchAll(/["']([^"'<>]{1,240}SKILL\.md)["']/gi)){const p=norm(m[1].replace(/\\u002F/g,'/').replace(/\\\//g,'/'));if(p&&/(^|\/)SKILL\.md$/i.test(p)&&!a.includes(p))a.push(p)}return a}
