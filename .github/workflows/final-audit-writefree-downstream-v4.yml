@@ -39,6 +39,10 @@ jobs:
           base="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG"
           grep -E '^(features-.*\.ndjson\.gz|manifest-.*\.json)$' audit/final-audit-v4-release-assets.txt | \
             xargs -P 16 -I{} sh -c 'curl -fsSL --retry 4 --retry-delay 1 --retry-all-errors "$1/{}" -o "$2/{}"' _ "$base" v4-assets
+          if [ -d audit/b2-tail-assets ]; then
+            cp audit/b2-tail-assets/features-*.ndjson.gz v4-assets/ 2>/dev/null || true
+            cp audit/b2-tail-assets/manifest-*.json v4-assets/ 2>/dev/null || true
+          fi
       - name: Merge readiness and create near partitions
         id: runmerge
         continue-on-error: true
@@ -133,6 +137,9 @@ jobs:
           base="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG"
           grep -E '^features-.*\.ndjson\.gz$' audit/final-audit-v4-release-assets.txt | \
             xargs -P 16 -I{} sh -c 'curl -fsSL --retry 4 --retry-delay 1 --retry-all-errors "$1/{}" -o "$2/{}"' _ "$base" policy-assets
+          if [ -d audit/b2-tail-assets ]; then
+            cp audit/b2-tail-assets/features-*.ndjson.gz policy-assets/ 2>/dev/null || true
+          fi
       - name: Precompute conflict policy summary
         env:
           AUDIT_V6_POLICY_INPUT: policy-assets
