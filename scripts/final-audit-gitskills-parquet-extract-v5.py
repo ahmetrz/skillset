@@ -159,5 +159,5 @@ for p in packs:
 shutil.rmtree(tmpdir,ignore_errors=True)
 summary={"partition":PART,"subpart":SUB,"subparts":SUBS,"packs":units,"parquetFiles":[x["filename"] for x in needed_files],"selectedRows":sum(selected_rows.values()),"skills":sum(skills.values()),"bad":bad}
 UNIT.write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
-print(json.dumps({"event":"bulk_extract_complete","partition":PART,"packs":len(packs),"files":len(needed_files),"selectedRows":summary["selectedRows"],"skills":summary["skills"],"bad":len(bad)}),flush=True)
+print(json.dumps({"event":"bulk_extract_complete","partition":PART,"packs":len(packs),"files":len(needed_files),"selectedRows":summary["selectedRows"],"skills":summary["skills"],"bad":len(bad),"badDetails":bad[:20]}),flush=True)
 if bad: raise SystemExit(3)
