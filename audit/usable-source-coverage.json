@@ -1,9 +1,10 @@
 {
-  "generatedAt": "2026-09-05T20:07:58.462Z",
+  "generatedAt": "2026-09-05T20:12:09.828Z",
   "status": "BLOCKED_SOURCE_COVERAGE_MISMATCH",
   "policy": "No source skill may be excluded by SDLC/social classification. Zero-mask skills are retained as uncategorized.",
   "expectedTotalSourceRecords": 2066706,
-  "observedUnionSourceRecords": 2053628,
+  "observedRawOccurrenceKeyUnion": 2053628,
+  "observedLogicalSourceRecords": 2053621,
   "exactUniqueContentHashesAcrossAllSources": 1920912,
   "tursoOccurrenceRowsRead": 1319828,
   "writefreeFeatureRowsRead": 1013993,
@@ -13,23 +14,36 @@
     "gitskills-b2": 830231,
     "skills-sh-b2": 188725
   },
-  "observed": {
+  "observedLogical": {
+    "gitskills-b2": 815099,
+    "gitskills-legacy-hf": 1047755,
+    "skills-sh-b2": 190767
+  },
+  "observedRawOccurrenceKeys": {
     "gitskills-b2": 815106,
     "gitskills-legacy-hf": 1047755,
     "skills-sh-b2": 190767
   },
+  "distinctContentHashesBySystem": {
+    "gitskills-b2": 815099,
+    "gitskills-legacy-hf": 1047755,
+    "skills-sh-b2": 133005
+  },
   "checks": {
     "gitskills-legacy-hf": {
+      "metric": "distinct_content_hash",
       "expected": 1047750,
       "observed": 1047755,
       "complete": false
     },
     "gitskills-b2": {
+      "metric": "distinct_content_hash",
       "expected": 830231,
-      "observed": 815106,
+      "observed": 815099,
       "complete": false
     },
     "skills-sh-b2": {
+      "metric": "repo+path",
       "expected": 188725,
       "observed": 190767,
       "complete": false
