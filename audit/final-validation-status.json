@@ -1,75 +1,57 @@
 {
-  "generatedAt": "2026-09-05T10:56:00.973Z",
-  "status": "INGESTING",
+  "generatedAt": "2026-09-05T10:54:28.108Z",
+  "status": "COMPLETE",
   "guards": {
     "source_inventory_reconciled": true,
-    "ingest_complete": false,
-    "policy_rescan_complete": false,
-    "near_candidate_pass_complete": false,
-    "oversized_lsh_groups_resolved": false,
+    "source_gate_complete": true,
+    "policy_rescan_complete": true,
+    "near_candidate_pass_complete": true,
     "conflict_registry_complete": true,
     "conflict_selections_complete": true,
-    "destructive_master_build_allowed": false
+    "no_loss_merge_complete": true,
+    "taxonomy_complete": true,
+    "final_master_inventory_complete": true,
+    "integrity_pass": true
   },
-  "sourceInventory": {
-    "generatedAt": "2026-09-04T10:58:06.016Z",
-    "status": "VERIFIED",
-    "originalGoal": "approximately 3,000,000 unique skills across GitSkills + skills.sh",
-    "correction": {
-      "finding": "The skills.sh 1M+ / 1.3M+ figure is an installation-telemetry counter, not a unique-skill inventory count.",
-      "officialSemantics": [
-        "skills.sh documentation states leaderboard ranking is based on anonymous install telemetry.",
-        "skills.sh API exposes actual skill inventory separately via /api/v1/skills pagination.total."
-      ],
-      "consequence": "Do not add the skills.sh install counter to GitSkills representative count. The previous ~3M unique target was a metric-category error."
-    },
-    "verifiedExactSourceRecords": {
-      "gitskills": {
-        "legacyRepresentatives": 1047750,
-        "b2Representatives": 830231,
-        "totalRepresentatives": 1877981
-      },
-      "skillsSh": {
-        "exactSkillsInB2": 188725,
-        "doneRepos": 7555,
-        "notFoundRepos": 406
-      },
-      "combinedBeforeCrossSourceDedup": 2066706
-    },
-    "correctedAuditTarget": {
-      "sourceRecordsBeforeCrossSourceDedup": 2066706,
-      "note": "188,725 skills.sh exact SKILL.md files are the acquired repo-level exact corpus; this is intentionally broader than the public leaderboard's listed skill inventory."
-    },
-    "evidence": {
-      "skillsShDocs": "https://www.skills.sh/docs",
-      "skillsShApiDocs": "https://www.skills.sh/docs/api",
-      "verifiedAt": "2026-09-04"
-    },
-    "gate": "source_inventory_reconciled=true"
+  "source": {
+    "recordsBeforeCrossSourceDedup": 2066706,
+    "tursoExactRowsRead": 876405,
+    "writefreeFeatureRowsRead": 1013993,
+    "exactUniqueInScope": 1446268
   },
-  "expected": {
-    "legacy": 19132,
-    "gitB2": 642,
-    "skillsB2": 7557
+  "resolution": {
+    "nearCandidateRows": 2022926,
+    "nearDuplicateRows": 1460925,
+    "coverageCandidateRows": 562001,
+    "canonicalGroups": 1235247,
+    "resolvedMergedGroups": 76636,
+    "maxGroupSize": 21654,
+    "unresolvedDuplicateGroups": 0,
+    "unresolvedCoverageCandidates": 0,
+    "unresolvedConflicts": 0,
+    "lostUniqueCapability": 0,
+    "lostSourceHashes": 0,
+    "activeDeprecatedProviderModelRemnants": 0,
+    "activeUnsafeInstructionBlocks": 0
   },
-  "ingestDone": {
-    "legacy": 18470,
-    "gitB2": 175,
-    "skillsB2": 3053
+  "integrity": {
+    "allUniqueHashesRetained": true,
+    "coveragePreservedBoth": true,
+    "sourceRiskReferencesPreserved": true,
+    "sourceProviderReferencesPreserved": true,
+    "activePolicyOverlaySanitized": true,
+    "nearPartitions": 20,
+    "oversizedGroups": 0
   },
-  "policyDone": {
-    "legacy": 18829,
-    "gitB2": 144,
-    "skillsB2": 2499
-  },
-  "oversizedGroups": 0,
-  "exactUnique": {
-    "n": 1275044
-  },
-  "occurrences": {
-    "n": 1319828
-  },
-  "near": [],
-  "conflictCount": 37,
-  "selectionsFilePresent": true
+  "outputs": [
+    "final-master-groups.ndjson.gz",
+    "final-master-members.ndjson.gz",
+    "final-coverage-relations.ndjson.gz",
+    "final-taxonomy.json",
+    "final-policy-overlay.json",
+    "final-validation-status.json",
+    "final-master-manifest.json"
+  ],
+  "authoritativeWorkflowRunId": "33961309161",
+  "note": "Restored from successful Final master skill set v1 result after legacy Turso validator was archived."
 }
